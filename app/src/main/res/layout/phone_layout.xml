@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swlayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </android.support.v7.widget.RecyclerView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fb_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        app:backgroundTint="#4CAF50"
+        app:rippleColor="#388E3C"
+        app:elevation="8dp"
+        app:pressedTranslationZ="20dp"
+        android:layout_margin="50dp"
+        android:src="@drawable/ic_float_add"
+        />
+    <TextView
+        android:id="@+id/tv_slidebar"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="A"
+        android:textColor="#80000000"
+        android:textSize="30sp"
+        android:padding="20dp"
+        android:visibility="gone"
+        android:background="#20000000"
+        />
+    <com.lingxiao.mvp.huanxinmvp.widget.SlidebarView
+        android:id="@+id/slidebar"
+        android:layout_width="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_height="match_parent" />
+</RelativeLayout>
