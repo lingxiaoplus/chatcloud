@@ -87,6 +87,7 @@
         <activity
             android:name="com.avos.avoscloud.feedback.ThreadActivity" >
         </activity>
+        <receiver android:name=".receiver.NetworkReceiver"></receiver>
     </application>
 
 </manifest>

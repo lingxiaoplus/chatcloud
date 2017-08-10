@@ -3,7 +3,10 @@ package com.lingxiao.mvp.huanxinmvp;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -30,6 +33,7 @@ import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.lingxiao.mvp.huanxinmvp.google.activity.CaptureActivity;
+import com.lingxiao.mvp.huanxinmvp.receiver.NetworkReceiver;
 import com.lingxiao.mvp.huanxinmvp.view.AddFriendActivity;
 import com.lingxiao.mvp.huanxinmvp.view.BaseActivity;
 import com.lingxiao.mvp.huanxinmvp.view.WebViewActivity;
@@ -37,6 +41,7 @@ import com.lingxiao.mvp.huanxinmvp.view.fragment.BaseFragment;
 import com.lingxiao.mvp.huanxinmvp.view.fragment.FragmentFactory;
 import com.lingxiao.mvp.huanxinmvp.view.fragment.MessageFragment;
 import com.lingxiao.mvp.huanxinmvp.view.fragment.PhoneFragment;
+import com.liuguangqiang.cookie.CookieBar;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -64,6 +69,43 @@ public class MainActivity extends BaseActivity {
     private static final int REQUEST_TAKE_PHOTO_PERMISSION = 200;
     private String scanResult;
 
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 2:
+                    //当前WiFi连接可用
+                    new CookieBar.Builder(MainActivity.this)
+                            .setTitle("恭喜")
+                            .setMessage("当前WiFi连接可用")
+                            .setIcon(R.mipmap.ic_net_success)
+                            .setBackgroundColor(R.color.colorPrimary)
+                            .show();
+                    break;
+                case 3:
+                    //当前移动网络连接可用
+                    new CookieBar.Builder(MainActivity.this)
+                            .setTitle("提示")
+                            .setMessage("当前使用的是移动网络")
+                            .setIcon(R.mipmap.ic_net_prompting)
+                            .setBackgroundColor(R.color.net_pre)
+                            .show();
+                    break;
+                case 4:
+                    //当前没有网络连接，请确保你已经打开网络
+                    new CookieBar.Builder(MainActivity.this)
+                            .setTitle("提示")
+                            .setMessage("当前没有网络连接，请确保你已经打开网络")
+                            .setBackgroundColor(R.color.net_pre)
+                            .setIcon(R.mipmap.ic_net_prompting)
+                            .show();
+                    break;
+            }
+        }
+    };
+    private NetworkReceiver mNetworkChangeListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +113,14 @@ public class MainActivity extends BaseActivity {
         initView();
         initBottomNavigationBar();
         initFirstFragment();
+
+        //注册监听网络变化的广播接受者
+        mNetworkChangeListener = new NetworkReceiver(mHandler);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+        filter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
+        filter.addAction("android.net.wifi.STATE_CHANGE");
+        registerReceiver(mNetworkChangeListener,filter);
     }
 
     private void initBottomNavigationBar() {
@@ -294,6 +344,14 @@ public class MainActivity extends BaseActivity {
             scanResult = bundle.getString(CaptureActivity.INTENT_EXTRA_KEY_QR_SCAN);
             //说明返回数据了，弹窗提示是否打开链接
             showisOpenDialog(scanResult);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mNetworkChangeListener != null){
+            unregisterReceiver(mNetworkChangeListener);
         }
     }
 }

@@ -54,5 +54,7 @@ dependencies {
     compile 'com.facebook.fresco:fresco:0.12.0'
     // 支持 WebP （静态图+动图），需要添加
     compile 'com.facebook.fresco:webpsupport:0.12.0'
+    //snackbar
+    compile 'com.liuguangqiang.cookie:library:0.2'
     testCompile 'junit:junit:4.12'
 }

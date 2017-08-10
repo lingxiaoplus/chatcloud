@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -14,7 +16,10 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.hyphenate.EMError;
 import com.hyphenate.util.DateUtils;
+import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.event.ExitEvent;
+import com.lingxiao.mvp.huanxinmvp.receiver.NetworkReceiver;
+import com.liuguangqiang.cookie.CookieBar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -32,6 +37,7 @@ public class BaseActivity extends AppCompatActivity{
     private LocalBroadcastManager manager;
     private MyExitReciver reciver;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +45,8 @@ public class BaseActivity extends AppCompatActivity{
         reciver = new MyExitReciver();
         //注册
         manager.registerReceiver(reciver,new IntentFilter("com.lingxiao.finishactivity"));
+
+
     }
     public void StartActivity(Class clzz,boolean isFinish){
         startActivity(new Intent(getApplicationContext(),clzz));
