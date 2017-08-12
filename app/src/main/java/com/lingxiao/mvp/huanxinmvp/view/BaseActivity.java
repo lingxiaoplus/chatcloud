@@ -18,6 +18,7 @@ import com.hyphenate.EMError;
 import com.hyphenate.util.DateUtils;
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.event.ExitEvent;
+import com.lingxiao.mvp.huanxinmvp.global.ActivityManager;
 import com.lingxiao.mvp.huanxinmvp.receiver.NetworkReceiver;
 import com.liuguangqiang.cookie.CookieBar;
 
@@ -46,6 +47,7 @@ public class BaseActivity extends AppCompatActivity{
         //注册
         manager.registerReceiver(reciver,new IntentFilter("com.lingxiao.finishactivity"));
 
+        ActivityManager.getAppManager().addActivity(this);
 
     }
     public void StartActivity(Class clzz,boolean isFinish){

@@ -17,4 +17,9 @@
     <color name="laser_color">#0F0</color>
     <color name="corner_color">#00FF00</color>
     <!-- QRCode scanner color end -->
+
+    <!--涟漪效果颜色-->
+    <color name="grey">#AAAAAA</color>
+    <color name="white">#FFFFFF</color>
+
 </resources>

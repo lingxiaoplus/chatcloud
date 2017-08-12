@@ -1,6 +1,13 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'bugly'
+bugly {
+    appId = 'b6f6f2432e' // 注册时分配的App ID
+    appKey = 'cbbfeb36-c29b-441e-a5ca-773c8649b3f9' // 注册时分配的App Key
+}
 android {
+    sourceSets {
+        main.jniLibs.srcDirs = ['libs']
+    }
     //为了解决部分第三方库重复打包了META-INF的问题
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
@@ -13,7 +20,8 @@ android {
     buildToolsVersion "26.0.0"
     defaultConfig {
         applicationId "com.lingxiao.mvp.huanxinmvp"
-        minSdkVersion 19
+        //原来是19
+        minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -56,5 +64,6 @@ dependencies {
     compile 'com.facebook.fresco:webpsupport:0.12.0'
     //snackbar
     compile 'com.liuguangqiang.cookie:library:0.2'
+    compile 'com.tencent.bugly:crashreport:latest.release' //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
     testCompile 'junit:junit:4.12'
 }

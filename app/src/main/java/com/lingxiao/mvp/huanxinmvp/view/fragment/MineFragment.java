@@ -17,6 +17,7 @@ import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.lingxiao.mvp.huanxinmvp.view.BaseActivity;
 import com.lingxiao.mvp.huanxinmvp.view.LoginActivity;
 import com.lingxiao.mvp.huanxinmvp.view.MineView;
+import com.tencent.bugly.crashreport.CrashReport;
 
 /**
  * Created by lingxiao on 17-6-29.
@@ -43,6 +44,7 @@ public class MineFragment extends BaseFragment implements MineView{
         View view = View.inflate(getContext(),R.layout.fragment_mine,null);
         tv_mine_name = (TextView) view.findViewById(R.id.tv_mine_name);
         bt_logout = (Button) view.findViewById(R.id.bt_logout);
+
         tv_mine_name.setText(EMClient.getInstance().getCurrentUser());
         bt_logout.setOnClickListener(new View.OnClickListener() {
             @Override

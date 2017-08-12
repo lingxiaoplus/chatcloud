@@ -32,6 +32,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
+import com.lingxiao.mvp.huanxinmvp.global.ActivityManager;
 import com.lingxiao.mvp.huanxinmvp.google.activity.CaptureActivity;
 import com.lingxiao.mvp.huanxinmvp.receiver.NetworkReceiver;
 import com.lingxiao.mvp.huanxinmvp.view.AddFriendActivity;
@@ -69,28 +70,35 @@ public class MainActivity extends BaseActivity {
     private static final int REQUEST_TAKE_PHOTO_PERMISSION = 200;
     private String scanResult;
 
+    public boolean isSnackBar; //根据条件判断是否弹出提示
+
     private Handler mHandler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.what){
                 case 2:
-                    //当前WiFi连接可用
-                    new CookieBar.Builder(MainActivity.this)
-                            .setTitle("恭喜")
-                            .setMessage("当前WiFi连接可用")
-                            .setIcon(R.mipmap.ic_net_success)
-                            .setBackgroundColor(R.color.colorPrimary)
-                            .show();
+                    Log.i("main", "isSnackBar"+isSnackBar);
+                    if (isSnackBar){
+                        //当前WiFi连接可用
+                        new CookieBar.Builder(MainActivity.this)
+                                .setTitle("恭喜")
+                                .setMessage("当前WiFi连接可用")
+                                .setIcon(R.mipmap.ic_net_success)
+                                .setBackgroundColor(R.color.colorPrimary)
+                                .show();
+                    }
                     break;
                 case 3:
-                    //当前移动网络连接可用
-                    new CookieBar.Builder(MainActivity.this)
-                            .setTitle("提示")
-                            .setMessage("当前使用的是移动网络")
-                            .setIcon(R.mipmap.ic_net_prompting)
-                            .setBackgroundColor(R.color.net_pre)
-                            .show();
+                    if (isSnackBar){
+                        //当前移动网络连接可用
+                        new CookieBar.Builder(MainActivity.this)
+                                .setTitle("提示")
+                                .setMessage("当前使用的是移动网络")
+                                .setIcon(R.mipmap.ic_net_prompting)
+                                .setBackgroundColor(R.color.net_pre)
+                                .show();
+                    }
                     break;
                 case 4:
                     //当前没有网络连接，请确保你已经打开网络
@@ -121,6 +129,7 @@ public class MainActivity extends BaseActivity {
         filter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
         filter.addAction("android.net.wifi.STATE_CHANGE");
         registerReceiver(mNetworkChangeListener,filter);
+        isSnackBar = true;
     }
 
     private void initBottomNavigationBar() {
@@ -347,6 +356,14 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isSnackBar = false;
+        Log.i("main", "onPause: isSnackBar = false");
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -354,4 +371,24 @@ public class MainActivity extends BaseActivity {
             unregisterReceiver(mNetworkChangeListener);
         }
     }
+
+    /*//监听返回键按两次退出，这里不需要
+    private long PressedTime = 0;
+    @Override
+    public void onBackPressed() {
+        long nowTime = System.currentTimeMillis();
+        if ((nowTime - PressedTime) > 3000){
+            //当前移动网络连接可用
+            new CookieBar.Builder(MainActivity.this)
+                    .setTitle("提示")
+                    .setMessage("再按一次退出应用")
+                    .setIcon(R.mipmap.ic_net_prompting)
+                    .setLayoutGravity(Gravity.BOTTOM)
+                    .setBackgroundColor(R.color.colorPrimary)
+                    .show();
+            PressedTime = nowTime;
+        }else {
+            ActivityManager.getAppManager().AppExit(this);
+        }
+    }*/
 }

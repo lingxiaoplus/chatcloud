@@ -10,7 +10,8 @@
     card_view:cardMaxElevation="10dp"
     android:layout_margin="5dp"
     android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+    android:paddingBottom="10dp"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <RelativeLayout
         android:layout_width="match_parent"

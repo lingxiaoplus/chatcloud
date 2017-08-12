@@ -1,5 +1,9 @@
 package com.lingxiao.mvp.huanxinmvp.view;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +20,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.hyphenate.chat.EMMessage;
+import com.lingxiao.mvp.huanxinmvp.MainActivity;
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.adapter.ChatAdapter;
 import com.lingxiao.mvp.huanxinmvp.presenter.ChatPresenter;
@@ -43,6 +48,7 @@ public class ChatActivity extends BaseActivity implements ChatView,View.OnClickL
         setContentView(R.layout.activity_chat);
         chatPresenter = new ChatPresenterImpl(this);
         username = getIntent().getStringExtra("name");
+        getPermission();
         initView();
     }
 
@@ -115,10 +121,15 @@ public class ChatActivity extends BaseActivity implements ChatView,View.OnClickL
 
     @Override
     public void onUpdateList() {
-        adapter.notifyDataSetChanged();
         if (adapter.getItemCount()>0){
             recyChat.smoothScrollToPosition(adapter.getItemCount()-1);
         }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -126,7 +137,7 @@ public class ChatActivity extends BaseActivity implements ChatView,View.OnClickL
         String msg = editChat.getText().toString();
         switch (v.getId()){
             case R.id.bt_send:
-                //通过chatpresenter出力发送消息的逻辑
+                //通过chatpresenter处理发送消息的逻辑
                 chatPresenter.sendMessage(username,msg);
                 editChat.setText("");
                 Log.i("username", "onClick: ");
@@ -137,5 +148,19 @@ public class ChatActivity extends BaseActivity implements ChatView,View.OnClickL
     @Subscribe(threadMode = ThreadMode.MAIN)
     void onGetMessageEvent(List<EMMessage> emMessages){
         chatPresenter.getChatHistoryMsg(username);
+    }
+
+    //获取摄像头权限
+    private void getPermission(){
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_LOGS)
+                != PackageManager.PERMISSION_GRANTED) {
+            //申请权限，REQUEST_TAKE_PHOTO_PERMISSION是自定义的常量
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_LOGS},
+                    200);
+        } else {
+            //有权限，直接拍照
+        }
     }
 }

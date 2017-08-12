@@ -1,6 +1,7 @@
 package com.lingxiao.mvp.huanxinmvp.view.fragment;
 
 import android.content.Intent;
+import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,6 +32,7 @@ public class FindFragment extends BaseFragment implements FindView{
     private RecyclerView rv_find;
     private FindAdapter adapter;
     private LinearLayoutManager manager;
+    private TabLayout tabLayout;
 
     @Override
     public void initData() {
@@ -42,6 +44,7 @@ public class FindFragment extends BaseFragment implements FindView{
         View view = View.inflate(getContext(), R.layout.fragment_find,null);
         sf_find = (SwipeRefreshLayout) view.findViewById(R.id.sf_find);
         rv_find = (RecyclerView) view.findViewById(R.id.rv_find);
+        tabLayout = view.findViewById(R.id.tablayout_find);
         adapter = new FindAdapter(null);
         manager = new LinearLayoutManager(getContext());
         rv_find.setLayoutManager(manager);
@@ -68,6 +71,11 @@ public class FindFragment extends BaseFragment implements FindView{
                 findPresenter.newsUpDate(currentPage);
             }
         });
+
+        tabLayout.addTab(tabLayout.newTab().setText("文艺"));
+        tabLayout.addTab(tabLayout.newTab().setText("科技"));
+        tabLayout.addTab(tabLayout.newTab().setText("社会"));
+        tabLayout.addTab(tabLayout.newTab().setText("生活"));
         return view;
     }
 
