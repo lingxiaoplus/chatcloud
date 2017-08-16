@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -69,7 +70,7 @@ public class MainActivity extends BaseActivity {
 
     private static final int REQUEST_TAKE_PHOTO_PERMISSION = 200;
     private String scanResult;
-
+    private Menu mMenu;
     public boolean isSnackBar; //根据条件判断是否弹出提示
 
     private Handler mHandler = new Handler(){
@@ -113,6 +114,7 @@ public class MainActivity extends BaseActivity {
         }
     };
     private NetworkReceiver mNetworkChangeListener;
+    private MenuItem menuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,6 +172,17 @@ public class MainActivity extends BaseActivity {
                     //initFragment(fragment,TAG[position]);
                     transaction.add(R.id.fl_main,fragment,position+"").commit();
                 }
+                Log.i("main", "position="+position+"\n"+"menuitem="+mMenu);
+                if (position != 1 && mMenu != null){
+                    for (int i = 0; i < mMenu.size(); i++) {
+                        mMenu.getItem(i).setVisible(false);
+                    }
+                    Log.i("main", "菜单隐藏执行了 ");
+                }else {
+                    for (int i = 0; i < mMenu.size(); i++) {
+                        mMenu.getItem(i).setVisible(true);
+                    }
+                }
             }
 
             @Override
@@ -209,10 +222,15 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        Log.i("main", "onOptionsItemSelected: 菜单创建了");
         getMenuInflater().inflate(R.menu.toolbar,menu);
+        mMenu = menu;
+        //创建之后先将菜单隐藏
+        for (int i = 0; i < mMenu.size(); i++) {
+            mMenu.getItem(i).setVisible(false);
+        }
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){

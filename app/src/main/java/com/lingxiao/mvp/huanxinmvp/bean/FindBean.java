@@ -12,7 +12,7 @@ public class FindBean {
         public ArrayList<DetailMsg> list;
 
     }
-    public class DetailMsg{
+    public static class DetailMsg{
         public String title;    //标题
         public String headpic; //图片
         public String brief;   //简介
@@ -20,8 +20,9 @@ public class FindBean {
         public siteInfo site_info;      //信息来源
         public String update_time;   //时间
         public String pub_date;
+        public String expar_time;
     }
-    public class siteInfo{
+    public static class siteInfo{
         public String name;
         public String pic;
     }

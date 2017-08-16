@@ -36,7 +36,8 @@ public class FindFragment extends BaseFragment implements FindView{
 
     @Override
     public void initData() {
-        findPresenter.newsUpDate(10);
+        //findPresenter.newsUpDate(10);
+        findPresenter.initNews();
     }
 
     @Override
@@ -89,13 +90,13 @@ public class FindFragment extends BaseFragment implements FindView{
                 sf_find.setRefreshing(false);
             }
         });
-        findPresenter.newsUpDate(currentPage);
+        //findPresenter.newsUpDate(currentPage);
     }
 
     @Override
     public void onInitNews(ArrayList<FindBean.DetailMsg> newsList) {
+        //findPresenter.initNews();
         adapter.setMsgArrayList(newsList);
         adapter.notifyDataSetChanged();
-        findPresenter.initNews();
     }
 }

@@ -63,7 +63,10 @@ public class AddFriendActivity extends BaseActivity implements AddFriendView{
         //找到包含searchview的菜单项
         MenuItem item = menu.findItem(R.id.menu_search);
         //searchView = (SearchView) item.getActionView();
-
+        //隐藏菜单项
+        menu.findItem(R.id.menu_add).setVisible(false);
+        menu.findItem(R.id.menu_photo).setVisible(false);
+        menu.findItem(R.id.menu_suggest).setVisible(false);
         //设置搜索框提示
         searchView.setQueryHint("搜索好友");
         //给searchview添加搜索文字的变化监听
