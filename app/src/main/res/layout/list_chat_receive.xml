@@ -25,6 +25,6 @@
             android:textSize="20sp"
             android:gravity="center_vertical"
             android:layout_marginLeft="5dp"
-            android:background="@drawable/ae1"/>
+            android:background="@drawable/skin_aio_friend_bubble_nor"/>
     </LinearLayout>
 </LinearLayout>

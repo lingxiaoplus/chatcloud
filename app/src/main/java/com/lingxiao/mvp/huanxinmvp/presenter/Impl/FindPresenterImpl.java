@@ -36,12 +36,14 @@ public class FindPresenterImpl implements FindPresenter{
 
     private int isInsert = 0; //判断是否需要存储到数据库
     private long exparTime;
+    private ArrayList<FindBean.DetailMsg> cacheList;
+
     public FindPresenterImpl(FindView findView){
         this.findView = findView;
     }
     @Override
     public void newsUpDate(final int currentPage) {
-        HttpUtils.doGet(Content.news_url+initPage+currentPage, new Callback() {
+        HttpUtils.doGet(Content.art_url+initPage+currentPage, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
 
@@ -56,6 +58,9 @@ public class FindPresenterImpl implements FindPresenter{
                 //写缓存
                 //CacheUtils.setCache(Content.news_url,result);
                 //cacheNewsDao = CacheNewsDao.getInstance(UIUtils.getContext());
+                if (cacheList != null){
+                    cacheNewsDao.deleteAll();
+                }
                 cacheNewsDao.insert(newsList);
                 Log.i("main", "刷新新闻内容");
             }
@@ -74,7 +79,7 @@ public class FindPresenterImpl implements FindPresenter{
     public void initNews() {
         //初始化新闻
         //String result = CacheUtils.getCache(Content.news_url);
-        ArrayList<FindBean.DetailMsg> cacheList = new ArrayList<>();
+        cacheList = new ArrayList<>();
         cacheNewsDao = CacheNewsDao.getInstance(UIUtils.getContext());
         if (cacheList != null){
             //newsList = parsingJson(cacheList);

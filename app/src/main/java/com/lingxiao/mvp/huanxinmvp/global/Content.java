@@ -7,10 +7,23 @@ package com.lingxiao.mvp.huanxinmvp.global;
 public class Content {
     public static final String KEY_USERNAME = "key_username";
     public static final String KEY_PSD = "key_psd";
-    public static final String news_url = "http://reader.smartisan.com" +
+    public static final String NEWS_URL = "http://reader.smartisan.com" +
             "/index.php?r=find" +
-            "/GetArticleList" +
-            "&cate_id=10&" +
+            "/GetArticleList&";
+    //文艺
+    public static final String art_url = NEWS_URL +"cate_id=10&" +
+            "art_id=&" +
+            "page_size=";
+    //科技15
+    public static final String science_url = NEWS_URL +"cate_id=15&" +
+            "art_id=&" +
+            "page_size=";
+    //社会16
+    public static final String society_url = NEWS_URL+
+            "cate_id=16&" +
+            "art_id=&page_size=20";
+    //生活11
+    public static final String life_url = NEWS_URL +"cate_id=11&" +
             "art_id=&" +
             "page_size=";
 }

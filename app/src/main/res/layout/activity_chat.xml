@@ -30,7 +30,6 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:contentPadding="5dp"
         app:contentPaddingTop="5dp">
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,20 +51,38 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:gravity="center"
-                android:layout_width="35dp"
+                android:layout_width="30dp"
                 android:layout_gravity="center"
-                android:layout_height="35dp"
+                android:layout_height="30dp"
                 android:padding="10dp"
                 android:background="@drawable/btn_face_selector"/>
-            <Button
-                android:id="@+id/bt_send"
+
+            <FrameLayout
+                android:layout_width="70dp"
+                android:layout_height="50dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_gravity="center"
-                android:text="发送"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp" />
+                >
+                <ImageView
+                    android:id="@+id/iv_chat_add"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_chat_add"/>
+                <Button
+                    android:id="@+id/bt_send"
+                    android:text="发送"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     />
+            </FrameLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
+    <FrameLayout
+        android:id="@+id/fr_emoji"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </FrameLayout>
 </LinearLayout>

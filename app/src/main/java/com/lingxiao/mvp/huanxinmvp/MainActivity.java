@@ -222,7 +222,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.i("main", "onOptionsItemSelected: 菜单创建了");
         getMenuInflater().inflate(R.menu.toolbar,menu);
         mMenu = menu;
         //创建之后先将菜单隐藏

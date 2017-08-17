@@ -12,6 +12,7 @@ import com.lingxiao.mvp.huanxinmvp.MainActivity;
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.LogoutPresenterImpl;
 import com.lingxiao.mvp.huanxinmvp.presenter.LogoutPresenter;
+import com.lingxiao.mvp.huanxinmvp.utils.DataCleanUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.lingxiao.mvp.huanxinmvp.view.BaseActivity;
@@ -27,7 +28,7 @@ public class MineFragment extends BaseFragment implements MineView{
 
     private LogoutPresenter presenter;
     private ProgressDialog dialog;
-    private TextView tv_mine_name;
+    private TextView tv_mine_name,tv_mine_cache;
     private Button bt_logout;
 
     @Override
@@ -44,7 +45,7 @@ public class MineFragment extends BaseFragment implements MineView{
         View view = View.inflate(getContext(),R.layout.fragment_mine,null);
         tv_mine_name = (TextView) view.findViewById(R.id.tv_mine_name);
         bt_logout = (Button) view.findViewById(R.id.bt_logout);
-
+        tv_mine_cache = view.findViewById(R.id.tv_mine_cache);
         tv_mine_name.setText(EMClient.getInstance().getCurrentUser());
         bt_logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +64,8 @@ public class MineFragment extends BaseFragment implements MineView{
                 presenter.logOut();
             }
         });
+
+        tv_mine_cache.setText("3.6MB");
         return view;
     }
 

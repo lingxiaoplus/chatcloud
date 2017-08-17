@@ -64,6 +64,8 @@ dependencies {
     compile 'com.facebook.fresco:webpsupport:0.12.0'
     //snackbar
     compile 'com.liuguangqiang.cookie:library:0.2'
+    //表情包
+    compile 'com.tb.emoji:yykEmoji:1.0.0'
     compile 'com.tencent.bugly:crashreport:latest.release' //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
     testCompile 'junit:junit:4.12'
 }
