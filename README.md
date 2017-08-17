@@ -24,6 +24,7 @@ eventbus 应用内各个线程之间的通讯
 # 开发记录：
 
 v1.0.1
+
 全局material design实现
 
 RecyclerView + CardView 展示新闻列表
