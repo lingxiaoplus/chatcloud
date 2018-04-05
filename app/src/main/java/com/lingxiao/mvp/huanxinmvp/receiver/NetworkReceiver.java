@@ -18,9 +18,16 @@ import android.util.Log;
 
 public class NetworkReceiver extends BroadcastReceiver{
     private Handler mHandler;
+
+
     public NetworkReceiver(Handler mHandler){
         this.mHandler = mHandler;
     }
+
+    public NetworkReceiver() {
+        super();
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Message message = new Message();

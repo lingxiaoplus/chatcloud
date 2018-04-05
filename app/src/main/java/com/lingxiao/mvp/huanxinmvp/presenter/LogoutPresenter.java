@@ -6,4 +6,5 @@ package com.lingxiao.mvp.huanxinmvp.presenter;
 
 public interface LogoutPresenter {
     void logOut();
+    void getUserInfo();
 }

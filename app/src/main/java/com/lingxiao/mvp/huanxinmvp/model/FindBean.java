@@ -1,4 +1,4 @@
-package com.lingxiao.mvp.huanxinmvp.bean;
+package com.lingxiao.mvp.huanxinmvp.model;
 
 import java.util.ArrayList;
 

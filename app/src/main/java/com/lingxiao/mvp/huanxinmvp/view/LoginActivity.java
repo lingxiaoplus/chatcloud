@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -21,6 +22,8 @@ import com.lingxiao.mvp.huanxinmvp.presenter.LoginPresenter;
 import com.lingxiao.mvp.huanxinmvp.utils.PreUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
+
+import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Created by lingxiao on 17-6-28.
@@ -140,4 +143,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             prog.setIcon(R.mipmap.ic_launcher);
         }
     }
+
+
 }

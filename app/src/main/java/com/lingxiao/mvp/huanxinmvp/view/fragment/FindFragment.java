@@ -6,19 +6,15 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.TextView;
 
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.adapter.FindAdapter;
-import com.lingxiao.mvp.huanxinmvp.adapter.ViewPagerAdapter;
-import com.lingxiao.mvp.huanxinmvp.bean.FindBean;
+import com.lingxiao.mvp.huanxinmvp.model.FindBean;
 import com.lingxiao.mvp.huanxinmvp.listener.MyRecycleListener;
 import com.lingxiao.mvp.huanxinmvp.presenter.FindPresenter;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.FindPresenterImpl;
 import com.lingxiao.mvp.huanxinmvp.utils.ThreadUtils;
-import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.lingxiao.mvp.huanxinmvp.view.FindView;
 import com.lingxiao.mvp.huanxinmvp.view.WebViewActivity;
 

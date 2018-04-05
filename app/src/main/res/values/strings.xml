@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">环信即时通讯mvp</string>
+    <string name="app_name">环聊</string>
     <string name="title_activity_add_friend">AddFriendActivity</string>
 
     <string name="encode_qrcode">生成二维码</string>

@@ -8,11 +8,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.hyphenate.EMError;
 import com.hyphenate.util.DateUtils;
@@ -96,7 +99,7 @@ public class BaseActivity extends AppCompatActivity{
         EventBus.getDefault().unregister(this);
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
-    void onGetExitEvent(ExitEvent exitEvent){
+    public void onGetExitEvent(ExitEvent exitEvent){
         String msg = null;
         switch (exitEvent.exitType){
             case EMError.USER_REMOVED:
@@ -131,6 +134,25 @@ public class BaseActivity extends AppCompatActivity{
                 finish();
             }
         }
+    }
+
+    /**
+     * @param windowToken View，一般为edittext  getWindowToken()
+     * @param flag 软键盘隐藏时的控制参数  一般为0即可
+     * @param isShow 显示还是隐藏
+     */
+    public void toggleSoftInput(View windowToken, int flag, boolean isShow){
+        //隐藏软键盘
+        InputMethodManager input = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        if (null != input){
+            if (isShow){
+                windowToken.requestFocus();
+                input.showSoftInput(windowToken,0);
+            }else {
+                input.hideSoftInputFromWindow(windowToken.getWindowToken(),flag);
+            }
+        }
+
     }
 
 }

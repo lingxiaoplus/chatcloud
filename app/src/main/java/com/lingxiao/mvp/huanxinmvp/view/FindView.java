@@ -1,6 +1,6 @@
 package com.lingxiao.mvp.huanxinmvp.view;
 
-import com.lingxiao.mvp.huanxinmvp.bean.FindBean;
+import com.lingxiao.mvp.huanxinmvp.model.FindBean;
 
 import java.util.ArrayList;
 

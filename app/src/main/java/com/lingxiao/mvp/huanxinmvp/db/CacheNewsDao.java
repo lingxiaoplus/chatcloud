@@ -5,10 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.lingxiao.mvp.huanxinmvp.bean.FindBean;
+import com.lingxiao.mvp.huanxinmvp.model.FindBean;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by lingxiao on 2017/8/15.

@@ -1,6 +1,5 @@
 package com.lingxiao.mvp.huanxinmvp.adapter;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -9,13 +8,10 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.lingxiao.mvp.huanxinmvp.R;
-import com.lingxiao.mvp.huanxinmvp.bean.FindBean;
+import com.lingxiao.mvp.huanxinmvp.model.FindBean;
 import com.lingxiao.mvp.huanxinmvp.utils.StringUtils;
-import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
-import com.lingxiao.mvp.huanxinmvp.view.WebViewActivity;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by lingxiao on 17-7-16.

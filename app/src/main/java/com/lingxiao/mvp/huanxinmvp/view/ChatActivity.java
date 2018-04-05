@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hyphenate.chat.EMMessage;
 import com.lingxiao.mvp.huanxinmvp.MainActivity;
@@ -29,6 +30,7 @@ import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.adapter.ChatAdapter;
 import com.lingxiao.mvp.huanxinmvp.presenter.ChatPresenter;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.ChatPresenterImpl;
+import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 import com.sqk.emojirelease.Emoji;
 import com.sqk.emojirelease.EmojiUtil;
 import com.sqk.emojirelease.FaceFragment;
@@ -110,6 +112,7 @@ public class ChatActivity extends BaseActivity implements ChatView,View.OnClickL
                 }
             }
         });
+
         //初始化recycle
         recyChat.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ChatAdapter(null);
@@ -154,6 +157,7 @@ public class ChatActivity extends BaseActivity implements ChatView,View.OnClickL
     @Override
     public void onClick(View v) {
         String msg = editChat.getText().toString();
+        FragmentTransaction transation = getSupportFragmentManager().beginTransaction();
         switch (v.getId()){
             case R.id.bt_send:
                 //通过chatpresenter处理发送消息的逻辑
@@ -163,7 +167,7 @@ public class ChatActivity extends BaseActivity implements ChatView,View.OnClickL
                 break;
             case R.id.bt_face:
                 faceNum++;
-                FragmentTransaction transation = getSupportFragmentManager().beginTransaction();
+
                 if (faceNum == 1){
                     btnFace
                             .setBackground(getResources()
@@ -179,8 +183,8 @@ public class ChatActivity extends BaseActivity implements ChatView,View.OnClickL
                                 .add(R.id.fr_emoji,faceFragment)
                                 .commit();
                         //btnFace.setPressed(true);
-
                     }
+                    toggleSoftInput(editChat,0,false);
                 }else {
                     btnFace.setBackground(getResources().getDrawable(R.drawable.ic_face_normal));
                     transation
@@ -188,6 +192,7 @@ public class ChatActivity extends BaseActivity implements ChatView,View.OnClickL
                             .commit();
                     faceNum = 0;
                 }
+
                 Log.i("main", "onClick: 没有添加进来"+faceNum);
                 break;
         }

@@ -86,7 +86,7 @@ public class MessageFragment extends BaseFragment implements MessageView{
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    void onGetMessageEvent(List<EMMessage> list){
+    public void onGetMessageEvent(List<EMMessage> list){
         messagePresenter.getMessages();
     }
     @Override

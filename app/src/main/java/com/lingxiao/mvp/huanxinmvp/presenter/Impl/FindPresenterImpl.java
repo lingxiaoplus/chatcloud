@@ -3,21 +3,16 @@ package com.lingxiao.mvp.huanxinmvp.presenter.Impl;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.lingxiao.mvp.huanxinmvp.bean.FindBean;
+import com.lingxiao.mvp.huanxinmvp.model.FindBean;
 import com.lingxiao.mvp.huanxinmvp.db.CacheNewsDao;
-import com.lingxiao.mvp.huanxinmvp.db.CacheNewsInfo;
 import com.lingxiao.mvp.huanxinmvp.global.Content;
 import com.lingxiao.mvp.huanxinmvp.presenter.FindPresenter;
-import com.lingxiao.mvp.huanxinmvp.utils.CacheUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.HttpUtils;
-import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.lingxiao.mvp.huanxinmvp.view.FindView;
 
 import java.io.IOException;
-import java.nio.file.attribute.PosixFileAttributes;
 import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;

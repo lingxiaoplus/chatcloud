@@ -140,14 +140,17 @@ public class MainActivity extends BaseActivity {
         badgeItem = new BadgeItem();
         upDateBadgeItem();
         //右上角的圆圈文字 显示出来
-        item.setBadgeItem(badgeItem);        bm_bar.addItem(item);
+        item.setBadgeItem(badgeItem);
+        bm_bar.addItem(item);
         item = new BottomNavigationItem(R.drawable.ic_phone,itemStr[1]);
         bm_bar.addItem(item);
         item = new BottomNavigationItem(R.drawable.ic_find,itemStr[2]);
         bm_bar.addItem(item);
         item = new BottomNavigationItem(R.drawable.ic_mine,itemStr[3]);
         bm_bar.addItem(item);
+
         //bottom总体状态的颜色
+        bm_bar.setBarBackgroundColor(R.color.white);
         bm_bar.setActiveColor(R.color.colorPrimary);
         //未选中颜色
         bm_bar.setInActiveColor(R.color.colorBottomNav);
