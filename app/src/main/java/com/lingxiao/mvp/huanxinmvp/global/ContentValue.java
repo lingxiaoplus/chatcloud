@@ -34,4 +34,15 @@ public class ContentValue {
     public static final String AGE = "age";
     public static final String PROTRAIT = "protrait";
     public static final String SEX = "sex";
+
+    /**
+     * 通话状态
+     */
+    public static final int CALL_CONNECTING = 1;
+    public static final int CALL_CONNECTED = 2;
+    public static final int CALL_ACCEPTED = 3;
+    public static final int CALL_DISCONNECTED = 4;
+    public static final int CALL_NETWORK_UNSTABLE = 5;
+    public static final int CALL_NETWORK_NORMAL = 6;
+    public static final int CALL_ERROR = 7;
 }

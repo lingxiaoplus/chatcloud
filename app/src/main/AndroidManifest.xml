@@ -19,6 +19,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" /> <!-- 震动权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" /> <!-- 使用照相机权限 -->
     <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 自动聚焦权限 -->
 
@@ -79,17 +80,23 @@
         <activity
             android:name=".view.AddFriendActivity"
             android:label="@string/title_activity_add_friend"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".google.activity.CaptureActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"/>
-        <activity android:name=".view.WebViewActivity"
-            android:theme="@style/MyMainTheme"/>
-        <!--腾讯云反馈组件-->
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name="com.avos.avoscloud.feedback.ThreadActivity" >
-        </activity>
-        <receiver android:name=".receiver.NetworkReceiver"></receiver>
+            android:name=".view.WebViewActivity"
+            android:theme="@style/MyMainTheme" />
+        <!-- 腾讯云反馈组件 -->
+        <activity android:name="com.avos.avoscloud.feedback.ThreadActivity" />
+
+        <receiver android:name=".receiver.NetworkReceiver" />
+
+        <activity
+            android:name=".view.CallPhoneActivity"
+            android:theme="@style/FullScreen"></activity>
+        <activity android:name=".view.AcceptCallActivity"
+            android:theme="@style/FullScreen"></activity>
     </application>
 
 </manifest>

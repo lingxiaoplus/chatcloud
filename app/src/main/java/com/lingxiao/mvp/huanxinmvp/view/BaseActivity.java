@@ -18,10 +18,12 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.hyphenate.EMError;
+import com.hyphenate.chat.EMClient;
 import com.hyphenate.util.DateUtils;
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.event.ExitEvent;
 import com.lingxiao.mvp.huanxinmvp.global.ActivityManager;
+import com.lingxiao.mvp.huanxinmvp.receiver.CallReceiver;
 import com.lingxiao.mvp.huanxinmvp.receiver.NetworkReceiver;
 import com.liuguangqiang.cookie.CookieBar;
 
@@ -40,6 +42,7 @@ public class BaseActivity extends AppCompatActivity{
     private ProgressDialog progressDialog;
     private LocalBroadcastManager manager;
     private MyExitReciver reciver;
+    private CallReceiver mCallReceiver;
 
 
     @Override
@@ -51,8 +54,21 @@ public class BaseActivity extends AppCompatActivity{
         manager.registerReceiver(reciver,new IntentFilter("com.lingxiao.finishactivity"));
 
         ActivityManager.getAppManager().addActivity(this);
-
+        regCallReceiver();
     }
+
+    /**
+     * 注册电话监听
+     */
+    private void regCallReceiver() {
+        IntentFilter callFilter = new
+                IntentFilter(EMClient.getInstance()
+                .callManager()
+                .getIncomingCallBroadcastAction());
+        mCallReceiver = new CallReceiver();
+        registerReceiver(mCallReceiver, callFilter);
+    }
+
     public void StartActivity(Class clzz,boolean isFinish){
         startActivity(new Intent(getApplicationContext(),clzz));
         if (isFinish){
@@ -84,6 +100,10 @@ public class BaseActivity extends AppCompatActivity{
         //注销广播接受者
         if (reciver != null){
             manager.unregisterReceiver(reciver);
+        }
+
+        if (mCallReceiver != null){
+            unregisterReceiver(mCallReceiver);
         }
     }
 
