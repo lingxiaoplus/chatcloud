@@ -34,6 +34,7 @@ import com.lingxiao.mvp.huanxinmvp.event.PhoneChangedEvent;
 import com.lingxiao.mvp.huanxinmvp.utils.DBUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ThreadUtils;
 import com.lingxiao.mvp.huanxinmvp.view.ChatActivity;
+import com.raizlabs.android.dbflow.config.FlowManager;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import org.greenrobot.eventbus.EventBus;
@@ -82,6 +83,9 @@ public class MyApplication extends Application{
         EMClient.getInstance().addConnectionListener(new MyConnectionListener());
         //初始化fresco
         Fresco.initialize(this);
+
+        //初始化dbflow
+        FlowManager.init(this);
 
         CrashReport.initCrashReport(getApplicationContext(), "b6f6f2432e", false);
     }

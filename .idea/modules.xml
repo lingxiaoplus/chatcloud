@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Huanxinmvp.iml" filepath="$PROJECT_DIR$/Huanxinmvp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/chatcloud.iml" filepath="$PROJECT_DIR$/chatcloud.iml" />
     </modules>
   </component>
 </project>

@@ -82,12 +82,6 @@ public class MainActivity extends BaseActivity {
                     Log.i("main", "isSnackBar"+isSnackBar);
                     if (isSnackBar){
                         //当前WiFi连接可用
-                        new CookieBar.Builder(MainActivity.this)
-                                .setTitle("恭喜")
-                                .setMessage("当前WiFi连接可用")
-                                .setIcon(R.mipmap.ic_net_success)
-                                .setBackgroundColor(R.color.colorPrimary)
-                                .show();
                     }
                     break;
                 case 3:

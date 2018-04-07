@@ -22,7 +22,7 @@ public class FragmentFactory {
                     fragment = new FindFragment();
                     break;
                 case 3:
-                    fragment = new MineFragment();
+                    fragment = new UserCardFragment();
                     break;
             }
             mHashMap.put(pos,fragment);

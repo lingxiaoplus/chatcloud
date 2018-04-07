@@ -3,16 +3,18 @@ package com.lingxiao.mvp.huanxinmvp.presenter.Impl;
 import com.avos.avoscloud.AVUser;
 import com.hyphenate.chat.EMClient;
 import com.lingxiao.mvp.huanxinmvp.callback.MyEmCallBack;
-import com.lingxiao.mvp.huanxinmvp.presenter.LogoutPresenter;
-import com.lingxiao.mvp.huanxinmvp.view.MineView;
+import com.lingxiao.mvp.huanxinmvp.model.UserModel;
+import com.lingxiao.mvp.huanxinmvp.presenter.UserCardPresenter;
+import com.lingxiao.mvp.huanxinmvp.view.UserCardView;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 /**
  * Created by lingxiao on 17-7-16.
  */
 
-public class LogoutPresenterImpl implements LogoutPresenter{
-    private MineView mineView;
-    public LogoutPresenterImpl(MineView mineView){
+public class UserCardPresenterImpl implements UserCardPresenter {
+    private UserCardView mineView;
+    public UserCardPresenterImpl(UserCardView mineView){
         this.mineView = mineView;
     }
     @Override
@@ -32,7 +34,10 @@ public class LogoutPresenterImpl implements LogoutPresenter{
 
     @Override
     public void getUserInfo() {
-        final AVUser user = new AVUser();// 新建 AVUser 对象实例
-
+        UserModel model = SQLite
+                .select()
+                .from(UserModel.class)
+                .querySingle();
+        mineView.onGetUserInfo(model);
     }
 }

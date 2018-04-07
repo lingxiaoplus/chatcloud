@@ -5,4 +5,5 @@
     <dimen name="avatar_size">60dp</dimen>
     <dimen name="slide_text_size">12sp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="len_4">40</dimen>
 </resources>

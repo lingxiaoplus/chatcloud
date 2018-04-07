@@ -5,7 +5,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.lingxiao.mvp.huanxinmvp.model.FindBean;
 import com.lingxiao.mvp.huanxinmvp.db.CacheNewsDao;
-import com.lingxiao.mvp.huanxinmvp.global.Content;
+import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.presenter.FindPresenter;
 import com.lingxiao.mvp.huanxinmvp.utils.HttpUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
@@ -38,7 +38,7 @@ public class FindPresenterImpl implements FindPresenter{
     }
     @Override
     public void newsUpDate(final int currentPage) {
-        HttpUtils.doGet(Content.art_url+initPage+currentPage, new Callback() {
+        HttpUtils.doGet(ContentValue.art_url+initPage+currentPage, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
 
@@ -51,7 +51,7 @@ public class FindPresenterImpl implements FindPresenter{
                 newsList = parsingJson(result);
                 findView.onNewsUpdate(newsList,currentPage);
                 //写缓存
-                //CacheUtils.setCache(Content.news_url,result);
+                //CacheUtils.setCache(ContentValue.news_url,result);
                 //cacheNewsDao = CacheNewsDao.getInstance(UIUtils.getContext());
                 if (cacheList != null){
                     cacheNewsDao.deleteAll();
@@ -73,7 +73,7 @@ public class FindPresenterImpl implements FindPresenter{
     @Override
     public void initNews() {
         //初始化新闻
-        //String result = CacheUtils.getCache(Content.news_url);
+        //String result = CacheUtils.getCache(ContentValue.news_url);
         cacheList = new ArrayList<>();
         cacheNewsDao = CacheNewsDao.getInstance(UIUtils.getContext());
         if (cacheList != null){

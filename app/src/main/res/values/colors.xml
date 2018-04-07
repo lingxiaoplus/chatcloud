@@ -21,5 +21,6 @@
     <!--涟漪效果颜色-->
     <color name="grey">#AAAAAA</color>
     <color name="white">#FFFFFF</color>
+    <color name="white_alpha_192">@color/white</color>
 
 </resources>

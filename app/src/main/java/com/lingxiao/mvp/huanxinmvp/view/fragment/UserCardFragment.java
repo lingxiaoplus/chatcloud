@@ -6,26 +6,30 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel;
-import com.lingxiao.mvp.huanxinmvp.presenter.Impl.LogoutPresenterImpl;
-import com.lingxiao.mvp.huanxinmvp.presenter.LogoutPresenter;
+import com.lingxiao.mvp.huanxinmvp.presenter.Impl.UserCardPresenterImpl;
+import com.lingxiao.mvp.huanxinmvp.presenter.UserCardPresenter;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 import com.lingxiao.mvp.huanxinmvp.view.BaseActivity;
 import com.lingxiao.mvp.huanxinmvp.view.LoginActivity;
-import com.lingxiao.mvp.huanxinmvp.view.MineView;
+import com.lingxiao.mvp.huanxinmvp.view.UserCardView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by lingxiao on 17-6-29.
  */
 
-public class MineFragment extends BaseFragment implements MineView {
+public class UserCardFragment extends BaseFragment implements UserCardView {
 
     @BindView(R.id.cv_mine_info)
     CardView cvInfo;
@@ -33,23 +37,26 @@ public class MineFragment extends BaseFragment implements MineView {
     CardView cvTheme;
     @BindView(R.id.cv_mine_setting)
     CardView cvSetting;
+    @BindView(R.id.tv_mine_username)
+    TextView tvMineUsername;
+    @BindView(R.id.img_mine_protrait)
+    CircleImageView headImgView;
 
-    private LogoutPresenter presenter;
+    private UserCardPresenter presenter;
     private ProgressDialog dialog;
 
     @Override
     public void initData() {
-
+        presenter.getUserInfo();
     }
 
     @Override
     public View initView() {
-        presenter = new LogoutPresenterImpl(this);
+        presenter = new UserCardPresenterImpl(this);
         dialog = new ProgressDialog(getContext());
         dialog.setCancelable(false);
-        //View view = UIUtils.inflateView(R.layout.fragment_mine);
-        View view = View.inflate(getContext(), R.layout.fragment_mine, null);
-
+        //View view = UIUtils.inflateView(R.layout.fragment_user_card);
+        View view = View.inflate(getContext(), R.layout.fragment_user_card, null);
         return view;
     }
 
@@ -65,7 +72,14 @@ public class MineFragment extends BaseFragment implements MineView {
 
     @Override
     public void onGetUserInfo(UserModel model) {
-
+        try {
+            tvMineUsername.setText(model.getUsername());
+            Glide.with(getActivity())
+                    .load(model.getProtrait())
+                    .into(headImgView);
+        } catch (Exception e){
+            ToastUtils.showToast("获取信息失败，请重新登录");
+        }
     }
 
     @Override
@@ -77,7 +91,7 @@ public class MineFragment extends BaseFragment implements MineView {
     }
 
     @OnClick(R.id.cv_mine_info)
-    public void changeInfo(View v){
-        ToastUtils.showToast("点击了信息");
+    public void changeInfo(View v) {
+
     }
 }

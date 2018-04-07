@@ -17,7 +17,7 @@ android {
         abortOnError false
     }
     compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.lingxiao.mvp.huanxinmvp"
         //原来是19
@@ -41,34 +41,41 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:26.+'
+    implementation 'com.android.support:appcompat-v7:26.+'
     // LeanCloud 基础包
     //cardview
     //eventbus
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.google.android.gms:play-services-gcm:9.4.0'
-    compile 'com.hyphenate:hyphenate-sdk:3.3.0'
-    compile 'cn.leancloud.android:avoscloud-sdk:v3.+'
-    compile 'com.android.support:design:26.+'
-    compile 'com.ashokvarma.android:bottom-navigation-bar:1.2.0'
-    compile 'com.android.support:cardview-v7:26.+'
-    compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile 'com.google.zxing:core:3.3.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.google.android.gms:play-services-gcm:9.4.0'
+    implementation 'com.hyphenate:hyphenate-sdk:3.3.0'
+    implementation 'cn.leancloud.android:avoscloud-sdk:v3.+'
+    implementation 'com.android.support:design:26.+'
+    implementation 'com.ashokvarma.android:bottom-navigation-bar:1.2.0'
+    implementation 'com.android.support:cardview-v7:26.+'
+    implementation 'org.greenrobot:eventbus:3.0.0'
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
+    implementation 'com.google.zxing:core:3.3.0'
     // LeanCloud 用户反馈包
-    compile ('cn.leancloud.android:avoscloud-feedback:v3.+@aar')
-    compile 'com.squareup.okhttp3:okhttp:3.4.1'
-    compile 'com.google.code.gson:gson:2.7'
+    implementation ('cn.leancloud.android:avoscloud-feedback:v3.+@aar')
+    implementation 'com.squareup.okhttp3:okhttp:3.4.1'
+    implementation 'com.google.code.gson:gson:2.7'
     // 其他依赖
-    compile 'com.facebook.fresco:fresco:0.12.0'
+    implementation 'com.facebook.fresco:fresco:0.12.0'
     // 支持 WebP （静态图+动图），需要添加
-    compile 'com.facebook.fresco:webpsupport:0.12.0'
+    implementation 'com.facebook.fresco:webpsupport:0.12.0'
     //snackbar
-    compile 'com.liuguangqiang.cookie:library:0.2'
+    implementation 'com.liuguangqiang.cookie:library:0.2'
     //表情包
-    compile 'com.tb.emoji:yykEmoji:1.0.0'
-    compile 'com.tencent.bugly:crashreport:latest.release' //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
+    implementation 'com.tb.emoji:yykEmoji:1.1.0'
+    implementation 'com.tencent.bugly:crashreport:latest.release' //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    //dbflow
+    implementation "com.github.Raizlabs.DBFlow:dbflow-core:$rootProject.ext.dbFlowVersion"
+    implementation "com.github.Raizlabs.DBFlow:dbflow:$rootProject.ext.dbFlowVersion"
+    annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:$rootProject.ext.dbFlowVersion"
+
+    //glide
+    implementation "com.github.bumptech.glide:glide:$rootProject.ext.glideVersion"
     testCompile 'junit:junit:4.12'
 }

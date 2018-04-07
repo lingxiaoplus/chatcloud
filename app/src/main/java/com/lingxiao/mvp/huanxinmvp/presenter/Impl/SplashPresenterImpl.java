@@ -20,8 +20,9 @@ public class SplashPresenterImpl implements SplashPresenter{
     @Override
     public void checkLogin() {
         //检测是否登录过
-        // isLoggedInBefore 之前登陆过    isConnected 已经跟环信的服务器建立了连接
-        if (EMClient.getInstance().isConnected() && EMClient.getInstance().isLoggedInBefore()){
+        // isLoggedInBefore 之前登陆过
+        // isConnected 已经跟环信的服务器建立了连接EMClient.getInstance().isConnected()
+        if (EMClient.getInstance().isLoggedInBefore()){
             splashView.onGetLoginState(true);
         }else{
             splashView.onGetLoginState(false);

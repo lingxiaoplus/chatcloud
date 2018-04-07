@@ -13,7 +13,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
+import android.text.style.ImageSpan;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -224,15 +228,24 @@ public class ChatActivity extends BaseActivity implements ChatView,View.OnClickL
 
     @Override
     public void onEmojiClick(Emoji emoji) {
-        if (emoji != null) {
-            int index = editChat.getSelectionStart();
-            Editable editable = editChat.getEditableText();
-            if (index < 0) {
-                editable.append(emoji.getContent());
-            } else {
-                editable.insert(index, emoji.getContent());
+
+            // 得到SpannableString对象,主要用于拆分字符串
+            try {
+                SpannableStringBuilder builder = EmojiUtil
+                        .handlerTextToEmojiSpannable(emoji.getContent()
+                                ,getApplicationContext());
+                if (emoji != null) {
+                    int index = editChat.getSelectionStart();
+                    Editable editable = editChat.getEditableText();
+                    if (index < 0) {
+                        editable.append(builder);
+                        //editable.append(emoji.getContent());
+                    } else {
+                        editable.insert(index, builder);
+                    }}
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        }
         //displayTextView();
     }
 
