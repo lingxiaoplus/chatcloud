@@ -18,6 +18,7 @@ import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 import com.lingxiao.mvp.huanxinmvp.view.BaseActivity;
 import com.lingxiao.mvp.huanxinmvp.view.LoginActivity;
 import com.lingxiao.mvp.huanxinmvp.view.UserCardView;
+import com.lingxiao.mvp.huanxinmvp.view.UserInfoActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -83,6 +84,11 @@ public class UserCardFragment extends BaseFragment implements UserCardView {
     }
 
     @Override
+    public void onChangeUserInfo(int type, boolean result) {
+
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         if (dialog != null) {
@@ -92,6 +98,6 @@ public class UserCardFragment extends BaseFragment implements UserCardView {
 
     @OnClick(R.id.cv_mine_info)
     public void changeInfo(View v) {
-
+        StartActivity(UserInfoActivity.class);
     }
 }

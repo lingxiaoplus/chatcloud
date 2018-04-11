@@ -34,6 +34,7 @@ public class ContentValue {
     public static final String AGE = "age";
     public static final String PROTRAIT = "protrait";
     public static final String SEX = "sex";
+    public static final String NICKNAME = "nickname";
 
     /**
      * 通话状态
@@ -45,4 +46,20 @@ public class ContentValue {
     public static final int CALL_NETWORK_UNSTABLE = 5;
     public static final int CALL_NETWORK_NORMAL = 6;
     public static final int CALL_ERROR = 7;
+
+    /**
+     * 更改的类型
+     */
+    public static final int CHANGE_PROTRAIT = 1;
+    public static final int CHANGE_NAME = 2;
+    public static final int CHANGE_SEX = 3;
+    public static final int CHANGE_DESC = 4;
+    public static final int CHANGE_PHONE = 5;
+    public static final int CHANGE_AGE = 6;
+
+    /**
+     * 七牛桶
+     */
+    public static final String BUCKET = "smailchat";
+    public static final String QINIU_BASE_URL = "http://chat.lingxiaosuse.cn/";
 }

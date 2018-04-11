@@ -24,7 +24,6 @@
     <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 自动聚焦权限 -->
 
     <uses-permission android:name="android.permission.READ_LOGS" />
-
     <application
         android:name=".global.MyApplication"
         android:allowBackup="true"
@@ -94,9 +93,24 @@
 
         <activity
             android:name=".view.CallPhoneActivity"
-            android:theme="@style/FullScreen"></activity>
-        <activity android:name=".view.AcceptCallActivity"
-            android:theme="@style/FullScreen"></activity>
+            android:theme="@style/FullScreen" />
+        <activity
+            android:name=".view.AcceptCallActivity"
+            android:theme="@style/FullScreen" />
+        <activity android:name=".view.UserInfoActivity"
+            android:theme="@style/MyMainTheme"></activity>
+
+        <!--图片选择器-->
+        <activity android:name="com.donkingliang.imageselector.ImageSelectorActivity"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:configChanges="orientation|keyboardHidden|screenSize"/>
+        <activity android:name="com.donkingliang.imageselector.PreviewActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+        <activity
+            android:name="com.donkingliang.imageselector.ClipImageActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <!--end 图片选择器-->
     </application>
 
 </manifest>

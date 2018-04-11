@@ -9,4 +9,5 @@ import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 public interface UserCardView {
     void onLogOut(boolean isSuccess,String errormsg);
     void onGetUserInfo(UserModel model);
+    void onChangeUserInfo(int type,boolean result);
 }

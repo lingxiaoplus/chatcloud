@@ -46,6 +46,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">#666</item>
+        <item name="android:layout_centerVertical">true</item>
     </style>
     <!--popwindow anim-->
     <style name="contextMenuAnim" parent="@android:style/Animation.Activity">

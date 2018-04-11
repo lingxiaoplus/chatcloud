@@ -22,4 +22,10 @@
         <attr name="label_text" format="string"/>
         <attr name="label_text_size" format="float"/>
     </declare-styleable>
+
+    <!--signlcardview-->
+    <declare-styleable name="SignalCardLayout">
+        <attr name="left_text" format="string"/>
+        <attr name="right_text" format="string"/>
+    </declare-styleable>
 </resources>

@@ -1,6 +1,7 @@
 package com.lingxiao.mvp.huanxinmvp.view.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
 import com.lingxiao.mvp.huanxinmvp.R;
+import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -76,6 +78,12 @@ public abstract class BaseFragment extends Fragment{
             }
         }
 
+    }
+
+
+    public void StartActivity(Class clazz){
+        Intent intent = new Intent(UIUtils.getContext(),clazz);
+        startActivity(intent);
     }
 
     @Override

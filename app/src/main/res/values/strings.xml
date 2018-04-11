@@ -6,4 +6,7 @@
     <string name="dencode_qrcode">扫描二维码</string>
     <string name="code_text">请输入生成二维码的文本信息</string>
     <string name="qrcodetext">这里显示扫描结果</string>
+
+    <string name="AccessKey">V_ZleIlYzHPjekmAuRvDkkXLdV_MDkk69VZWM12f</string>
+    <string name="SecretKey">U8SndxcceqMZGIKvhfPL3gEPkYRN_NhrP75cJlOH</string>
 </resources>

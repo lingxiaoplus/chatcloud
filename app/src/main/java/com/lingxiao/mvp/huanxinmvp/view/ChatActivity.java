@@ -236,7 +236,7 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
         //Log.i("username", "onClick: ");
     }
 
-    @OnClick()
+    @OnClick(R.id.bt_face)
     public void onClickEmoji(){
         FragmentTransaction transation = getSupportFragmentManager().beginTransaction();
         faceNum++;
@@ -295,8 +295,12 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
                     intent.putExtra("type",0);
                     intent.putExtra("name",username);
                     startActivity(intent);
-                }else if (position == 2){
-
+                }else if (position == 1){
+                    //视频
+                    intent = new Intent(UIUtils.getContext(),CallPhoneActivity.class);
+                    intent.putExtra("type",1);
+                    intent.putExtra("name",username);
+                    startActivity(intent);
                 }
                 mPopWindow.dismiss();
             }

@@ -45,7 +45,7 @@ public class AcceptCallActivity extends BaseActivity implements AcceptCallView {
     private void initData() {
         String from = intent.getStringExtra("from");
         String type = intent.getStringExtra("type");
-        ToastUtils.showToast(type);
+        ToastUtils.showToast("类型："+type);
         tvAcceptName.setText(from);
     }
 

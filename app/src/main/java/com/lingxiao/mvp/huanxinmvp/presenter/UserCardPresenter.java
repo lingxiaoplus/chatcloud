@@ -7,4 +7,5 @@ package com.lingxiao.mvp.huanxinmvp.presenter;
 public interface UserCardPresenter {
     void logOut();
     void getUserInfo();
+    void changeUserInfo(int type,String path,String name,int integers);
 }

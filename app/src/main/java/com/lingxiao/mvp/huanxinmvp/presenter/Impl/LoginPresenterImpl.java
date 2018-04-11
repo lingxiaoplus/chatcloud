@@ -32,9 +32,11 @@ public class LoginPresenterImpl implements LoginPresenter{
                     model.setObjId(avUser.getObjectId());
                     model.setDesc(avUser.getString(ContentValue.DESCRIPTION));
                     model.setProtrait(avUser.getString(ContentValue.PROTRAIT));
+                    model.setNickname(avUser.getString(ContentValue.NICKNAME));
                     model.setAge(avUser.getInt(ContentValue.AGE));
                     model.setObjId(avUser.getObjectId());
                     model.setPhone(avUser.getMobilePhoneNumber());
+                    model.setToken(avUser.getSessionToken());
                     model.save();
                     EMClient.getInstance().login(username, pwd, new MyEmCallBack() {
                         @Override
