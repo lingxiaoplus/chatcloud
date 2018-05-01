@@ -5,11 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.AcceptCallActivity">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.hyphenate.media.EMOppositeSurfaceView
+            android:id="@+id/oppo_surface"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <com.hyphenate.media.EMLocalSurfaceView
+            android:id="@+id/local_surface"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"/>
+    </FrameLayout>
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_accept_head"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/ic_head"
+        android:src="@drawable/ic_img_protrait"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"/>
     <TextView
@@ -27,15 +41,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="100dp">
-        <com.github.czy1121.view.RoundButton
+        <android.support.design.widget.FloatingActionButton
             android:id="@+id/bt_accept_end"
-            android:layout_width="200dp"
-            android:layout_height="30dp"
-            android:text="结束通话"
-            android:textSize="18sp"
-            android:textColor="@color/white"
-            app:btnCornerRadius="10dp"
-            app:btnSolidColor="@color/colorPrimary"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:backgroundTint="@color/red_300"
+            app:rippleColor="@color/red_500"
+            app:elevation="8dp"
+            app:pressedTranslationZ="20dp"
+            android:src="@drawable/ic_img_callend"
             android:layout_gravity="center"
             android:visibility="invisible"
             />
@@ -44,27 +58,28 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
+            android:layout_margin="15dp"
             >
-            <com.github.czy1121.view.RoundButton
+            <android.support.design.widget.FloatingActionButton
                 android:id="@+id/bt_accept_ensure"
-                android:layout_width="100dp"
-                android:layout_height="30dp"
-                android:text="接听"
-                android:textSize="18sp"
-                android:textColor="@color/white"
-                app:btnCornerRadius="10dp"
-                app:btnSolidColor="@color/colorPrimary"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:backgroundTint="@color/green_300"
+                app:rippleColor="@color/green_500"
+                app:elevation="8dp"
+                app:pressedTranslationZ="20dp"
+                android:src="@drawable/ic_img_callstart"
                 android:layout_marginRight="30dp"
                 />
-            <com.github.czy1121.view.RoundButton
+            <android.support.design.widget.FloatingActionButton
                 android:id="@+id/bt_accept_cancel"
-                android:layout_width="100dp"
-                android:layout_height="30dp"
-                android:text="挂断"
-                android:textSize="18sp"
-                android:textColor="@color/white"
-                app:btnCornerRadius="10dp"
-                app:btnSolidColor="@color/colorPrimary"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:backgroundTint="@color/red_300"
+                app:rippleColor="@color/red_500"
+                app:elevation="8dp"
+                app:pressedTranslationZ="20dp"
+                android:src="@drawable/ic_img_callend"
                 android:layout_marginLeft="30dp"
                 />
         </LinearLayout>

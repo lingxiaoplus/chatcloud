@@ -5,25 +5,34 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lingxiao.mvp.huanxinmvp.R;
+import com.lingxiao.mvp.huanxinmvp.model.ContactsModel;
+import com.lingxiao.mvp.huanxinmvp.model.UserModel;
+import com.lingxiao.mvp.huanxinmvp.utils.ChineseCharToEnUtil;
+import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.StringUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by lingxiao on 17-7-12.
  */
 
 public class PhoneRecycleAdapter extends RecyclerView.Adapter<PhoneRecycleAdapter.ViewHolder>{
-    private ArrayList<String> contacts;
-    public void setContacts(ArrayList<String> contacts){
+    private List<ContactsModel> contacts;
+    public void setContacts(List<ContactsModel> contacts){
         this.contacts = contacts;
     }
-    public PhoneRecycleAdapter(ArrayList<String> contacts){
+    public PhoneRecycleAdapter(List<ContactsModel> contacts){
         this.contacts = contacts;
     }
     @Override
@@ -35,15 +44,24 @@ public class PhoneRecycleAdapter extends RecyclerView.Adapter<PhoneRecycleAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        final String contactStr = contacts.get(position);
-        holder.textSelect.setText(StringUtils.getFirstChar(contactStr));
-        holder.textName.setText(contactStr);
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        ContactsModel model = contacts.get(position);
+        holder.textSelect.setText(ChineseCharToEnUtil
+                .getFirstChar(model.nickName));
+        holder.textName.setText(model.nickName);
+        Glide.with(UIUtils.getContext())
+                .load(model.protrait)
+                .skipMemoryCache(true) // 不使用内存缓存
+                .diskCacheStrategy(DiskCacheStrategy.NONE) // 不使用磁盘缓存
+                .into(holder.imgHead);
+
         if (position == 0){
             holder.textSelect.setVisibility(View.GONE);
         }else {
-            String current = StringUtils.getFirstChar(contactStr);
-            String last = StringUtils.getFirstChar(contacts.get(position-1));
+            String current = ChineseCharToEnUtil
+                    .getFirstChar(model.nickName);
+            String last = ChineseCharToEnUtil
+                    .getFirstChar(contacts.get(position-1).nickName);
             if (current.equals(last)){
                 holder.textSelect.setVisibility(View.GONE);
             }else {
@@ -55,7 +73,7 @@ public class PhoneRecycleAdapter extends RecyclerView.Adapter<PhoneRecycleAdapte
             @Override
             public void onClick(View v) {
                 if (onItemClickListener != null){
-                    onItemClickListener.onClick(v,contactStr);
+                    onItemClickListener.onClick(v,contacts.get(position).contactUserName);
                 }
             }
         });
@@ -65,7 +83,7 @@ public class PhoneRecycleAdapter extends RecyclerView.Adapter<PhoneRecycleAdapte
             @Override
             public boolean onLongClick(View v) {
                 if (onItemClickListener != null){
-                    onItemClickListener.onLongClick(v,contactStr);
+                    onItemClickListener.onLongClick(v,contacts.get(position).contactUserName);
                     return true;
                 }
                 return false;
@@ -92,13 +110,15 @@ public class PhoneRecycleAdapter extends RecyclerView.Adapter<PhoneRecycleAdapte
     class ViewHolder extends RecyclerView.ViewHolder{
         TextView textSelect;
         TextView textName;
+        ImageView imgHead;
         public ViewHolder(View itemView) {
             super(itemView);
             textSelect = (TextView) itemView.findViewById(R.id.tv_section);
             textName = (TextView) itemView.findViewById(R.id.tv_username);
+            imgHead = itemView.findViewById(R.id.iv_head);
         }
     }
-    public ArrayList<String> getContacts(){
+    public List<ContactsModel> getContacts(){
         return contacts;
     }
 }

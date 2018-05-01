@@ -54,6 +54,9 @@ public class AddFriendActivity extends BaseActivity implements AddFriendView{
         searchView = (SearchView) findViewById(R.id.tv_search_title);
         iv_nodata = (ImageView) findViewById(R.id.iv_nodata);
         rv_addfriend = (RecyclerView) findViewById(R.id.rv_addfriend);
+
+        searchView.setFocusable(true);
+        searchView.setFocusableInTouchMode(true);
     }
 
     @Override

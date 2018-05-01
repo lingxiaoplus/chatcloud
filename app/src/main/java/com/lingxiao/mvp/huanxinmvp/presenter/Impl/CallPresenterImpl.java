@@ -23,6 +23,7 @@ public class CallPresenterImpl implements CallPresenter{
          */
         try {//单参数
             EMClient.getInstance().callManager().makeVoiceCall(username);
+            getCallStatus();
         } catch (EMServiceNotReadyException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -34,6 +35,7 @@ public class CallPresenterImpl implements CallPresenter{
     public void callVideo(String username) {
         try {//单参数
             EMClient.getInstance().callManager().makeVideoCall(username);
+            getCallStatus();
         } catch (EMServiceNotReadyException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

@@ -1,103 +1,106 @@
 package com.lingxiao.mvp.huanxinmvp.view.fragment;
 
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.lingxiao.mvp.huanxinmvp.R;
-import com.lingxiao.mvp.huanxinmvp.adapter.FindAdapter;
-import com.lingxiao.mvp.huanxinmvp.model.FindBean;
-import com.lingxiao.mvp.huanxinmvp.listener.MyRecycleListener;
-import com.lingxiao.mvp.huanxinmvp.presenter.FindPresenter;
-import com.lingxiao.mvp.huanxinmvp.presenter.Impl.FindPresenterImpl;
-import com.lingxiao.mvp.huanxinmvp.utils.ThreadUtils;
-import com.lingxiao.mvp.huanxinmvp.view.FindView;
-import com.lingxiao.mvp.huanxinmvp.view.WebViewActivity;
+import com.lingxiao.mvp.huanxinmvp.event.SkinChangeEvent;
+import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
+import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 
-import java.util.ArrayList;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by lingxiao on 17-6-29.
  */
 
-public class FindFragment extends BaseFragment implements FindView{
-    private FindPresenter findPresenter;
-    private SwipeRefreshLayout sf_find;
-    private RecyclerView rv_find;
-    private FindAdapter adapter;
-    private LinearLayoutManager manager;
-    private TabLayout tabLayout;
-    private ViewPager vp_find;
-    private String[] tabStr = new String[]{"文艺","科技","社会","生活"};
+public class FindFragment extends BaseFragment {
+
+    @BindView(R.id.tablayout_find)
+    TabLayout tabLayout;
+    @BindView(R.id.vp_find)
+    ViewPager vpFind;
+    private String[] tabStr = new String[]{"文艺", "科技", "社会", "生活"};
+    private NewsFragment newsFragment;
 
     @Override
     public void initData() {
-        //findPresenter.newsUpDate(10);
-        findPresenter.initNews();
+        for (int i = 0; i < tabStr.length; i++) {
+
+            tabLayout.addTab(tabLayout.newTab().setText(tabStr[i]));
+        }
+
+        PagerAdapter adapter = new PagerAdapter(getFragmentManager());
+        vpFind.setAdapter(adapter);
+        tabLayout.setupWithViewPager(vpFind);
     }
 
     @Override
     public View initView() {
-        View view = View.inflate(getContext(), R.layout.fragment_find,null);
+        View view = View.inflate(getContext(), R.layout.fragment_find, null);
 
-        View vpRootVIew = View.inflate(getContext(),R.layout.pager_item,null);
-        tabLayout = view.findViewById(R.id.tablayout_find);
-        //vp_find = view.findViewById(R.id.vp_find);
-        sf_find = (SwipeRefreshLayout) view.findViewById(R.id.sf_find);
-        rv_find = (RecyclerView) view.findViewById(R.id.rv_find);
-        adapter = new FindAdapter(null);
-        manager = new LinearLayoutManager(getContext());
-        rv_find.setLayoutManager(manager);
-        rv_find.setAdapter(adapter);
-        findPresenter = new FindPresenterImpl(this);
-        sf_find.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                findPresenter.newsUpDate(0);
-            }
-        });
-        adapter.setOnFindClickListener(new FindAdapter.onFindClickListener() {
-            @Override
-            public void onFindClick(View v ,String url) {
-                Intent intent = new Intent(mActivity, WebViewActivity.class);
-                intent.putExtra("findUrl",url);
-                mActivity.startActivity(intent);
-            }
-        });
+        //View vpRootVIew = View.inflate(getContext(),R.layout.pager_item,null);
+        //tabLayout = view.findViewById(R.id.tablayout_find);
 
-        rv_find.setOnScrollListener(new MyRecycleListener(manager) {
-            @Override
-            public void onLoadMore(int currentPage) {
-                findPresenter.newsUpDate(currentPage);
-            }
-        });
-        for (int i = 0; i < tabStr.length; i++) {
-            tabLayout.addTab(tabLayout.newTab().setText(tabStr[i]));
-        }
         return view;
     }
 
-    @Override
-    public void onNewsUpdate(ArrayList<FindBean.DetailMsg> newsList,int currentPage) {
-        adapter.setMsgArrayList(newsList);
-        ThreadUtils.runOnMainThread(new Runnable() {
-            @Override
-            public void run() {
-                adapter.notifyDataSetChanged();
-                sf_find.setRefreshing(false);
+    private class PagerAdapter extends FragmentPagerAdapter{
+
+        public PagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            newsFragment = new NewsFragment();
+            Bundle bundle = new Bundle();
+            if (position == 0){
+                bundle.putString("url",ContentValue.art_url);
+            }else if (position == 1){
+                bundle.putString("url",ContentValue.science_url);
+            }else if (position == 2){
+                bundle.putString("url",ContentValue.society_url);
+            }else {
+                bundle.putString("url",ContentValue.life_url);
             }
-        });
-        //findPresenter.newsUpDate(currentPage);
+            newsFragment.setArguments(bundle);
+            return newsFragment;
+        }
+
+        @Override
+        public int getCount() {
+            return tabStr.length;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabStr[position];
+        }
     }
 
     @Override
-    public void onInitNews(ArrayList<FindBean.DetailMsg> newsList) {
-        //findPresenter.initNews();
-        adapter.setMsgArrayList(newsList);
-        adapter.notifyDataSetChanged();
+    protected boolean isRegisterEventBus() {
+        return true;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onChangeSkin(SkinChangeEvent event) {
+        ToastUtils.showToast("换肤了:"+event);
+        LogUtils.i("换肤了fragment");
+        tabLayout.setBackgroundColor(getResources().getColor(event.color));
     }
 }

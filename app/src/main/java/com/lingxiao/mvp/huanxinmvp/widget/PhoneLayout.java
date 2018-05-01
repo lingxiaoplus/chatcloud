@@ -52,6 +52,26 @@ public class PhoneLayout extends RelativeLayout{
         slidebar = (SlidebarView) findViewById(R.id.slidebar);
         swlayout = (SwipeRefreshLayout) findViewById(R.id.swlayout);
         fb_button = (FloatingActionButton) findViewById(R.id.fb_button);
+        swlayout.setColorSchemeResources(
+                R.color.colorPrimary,
+                R.color.colorAccent,
+                R.color.btnNormal);
+        recycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0){
+                    fb_button.hide();
+                }else {
+                    fb_button.show();
+                }
+            }
+        });
     }
 
     public void setAdapter(RecyclerView.Adapter adapter){

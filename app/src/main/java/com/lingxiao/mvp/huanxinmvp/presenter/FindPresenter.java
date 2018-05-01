@@ -6,6 +6,6 @@ package com.lingxiao.mvp.huanxinmvp.presenter;
 
 public interface FindPresenter {
     //新闻条目
-    void newsUpDate(int currentPage);
-    void initNews();
+    void newsUpDate(int currentPage,String url);
+    void initNews(String url);
 }

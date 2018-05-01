@@ -3,24 +3,18 @@ package com.lingxiao.mvp.huanxinmvp.view;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Canvas;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
-import android.text.style.ImageSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -32,22 +26,32 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.donkingliang.imageselector.utils.ImageSelectorUtils;
 import com.hyphenate.chat.EMMessage;
-import com.lingxiao.mvp.huanxinmvp.MainActivity;
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.adapter.BaseRecyAdapter;
 import com.lingxiao.mvp.huanxinmvp.adapter.ChatAdapter;
 import com.lingxiao.mvp.huanxinmvp.adapter.PopWindowAdapter;
+import com.lingxiao.mvp.huanxinmvp.event.AudioEvent;
+import com.lingxiao.mvp.huanxinmvp.event.MessageEvent;
+import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
+import com.lingxiao.mvp.huanxinmvp.model.ContactsModel;
+import com.lingxiao.mvp.huanxinmvp.model.ContactsModel_Table;
+import com.lingxiao.mvp.huanxinmvp.model.UserModel;
+import com.lingxiao.mvp.huanxinmvp.model.UserModel_Table;
 import com.lingxiao.mvp.huanxinmvp.presenter.ChatPresenter;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.ChatPresenterImpl;
+import com.lingxiao.mvp.huanxinmvp.utils.PermissionHelper;
+import com.lingxiao.mvp.huanxinmvp.utils.SoundUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.sqk.emojirelease.Emoji;
 import com.sqk.emojirelease.EmojiUtil;
 import com.sqk.emojirelease.FaceFragment;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -63,8 +67,6 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
 
     @BindView(R.id.tb_chat)
     Toolbar toolbar;
-    @BindView(R.id.tv_char_name)
-    TextView chatName;
     @BindView(R.id.et_chat)
     EditText editChat;
     @BindView(R.id.bt_face)
@@ -83,6 +85,8 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
     private FaceFragment faceFragment;
     private int faceNum = 0;
     private PopupWindow mPopWindow;
+    private ContactsModel contactModel;
+    private int REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +95,11 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
         ButterKnife.bind(this);
         chatPresenter = new ChatPresenterImpl(this);
         username = getIntent().getStringExtra("name");
+        contactModel = SQLite
+                .select()
+                .from(ContactsModel.class)
+                .where(ContactsModel_Table.contactUserName.eq(username))
+                .querySingle();
         getPermission();
         initView();
 
@@ -98,13 +107,12 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
     }
 
     private void initView() {
-        toolbar.setTitle("");
+        toolbar.setTitle(contactModel.nickName);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        chatName.setText(username);
         btnSend.setVisibility(View.INVISIBLE);
         //设置文本框监听
         editChat.addTextChangedListener(new TextWatcher() {
@@ -140,6 +148,27 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
         adapter = new ChatAdapter(null);
         recyChat.setAdapter(adapter);
         chatPresenter.getChatHistoryMsg(username);
+
+        adapter.setOnItemClickListener(new ChatAdapter.OnItemClickListener() {
+            @Override
+            public void onTextClick(View view, int position, String msg) {
+                ToastUtils.showToast("文字信息："+msg);
+            }
+
+            @Override
+            public void onPictureClick(View view, int position, String picPath) {
+                ToastUtils.showToast("图片信息："+picPath);
+                Intent intent = new Intent(getApplicationContext(),LocalPicActivity.class);
+                intent.putExtra("path",picPath);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onVoiceClick(View view, int position, String voicePath,int len) {
+                ToastUtils.showToast("语音信息："+voicePath);
+                SoundUtils.playSoundByMedia(voicePath);
+            }
+        });
     }
 
     @Override
@@ -176,7 +205,7 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
 
     //订阅消息
     @Subscribe(threadMode = ThreadMode.MAIN)
-    void onGetMessageEvent(List<EMMessage> emMessages){
+    public void onGetMessageEvent(List<EMMessage> emMessages){
         chatPresenter.getChatHistoryMsg(username);
     }
 
@@ -234,6 +263,8 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
         chatPresenter.sendMessage(username,msg);
         editChat.setText("");
         //Log.i("username", "onClick: ");
+        //发送消息通知更新
+        EventBus.getDefault().post(new MessageEvent(username,msg));
     }
 
     @OnClick(R.id.bt_face)
@@ -288,19 +319,27 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
         adapter.setOnItemClickListener(new BaseRecyAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View View, int position) {
-                Intent intent = null;
-                if (position == 0){
-                    //打电话
-                    intent = new Intent(UIUtils.getContext(),CallPhoneActivity.class);
-                    intent.putExtra("type",0);
+                Intent intent = intent = new Intent(UIUtils.getContext(),CallPhoneActivity.class);;
+                if (position == 0 || position == 1){
+                    //打电话  视频
+                    intent.putExtra("type",position);
                     intent.putExtra("name",username);
+                    intent.putExtra("protrait",contactModel.protrait);
                     startActivity(intent);
-                }else if (position == 1){
-                    //视频
-                    intent = new Intent(UIUtils.getContext(),CallPhoneActivity.class);
-                    intent.putExtra("type",1);
-                    intent.putExtra("name",username);
-                    startActivity(intent);
+                }else if (position == 2){
+                    //发送语音消息
+                    boolean result = PermissionHelper.getInstance(UIUtils.getContext()
+                    ,ChatActivity.this,"授权使用录音权限",
+                            "没有此权限，无法开启这个功能，为了更好的为您服务,请同意开启权限"
+                            ,Manifest.permission.RECORD_AUDIO).getPermission();
+                    if (result){
+                        StartActivity(AudioActivity.class,false);
+                    }
+                }else if (position == 3){
+                    //发送图片消息
+                    //单选并剪裁
+                    ImageSelectorUtils.openPhoto(ChatActivity.this,
+                            REQUEST_CODE);
                 }
                 mPopWindow.dismiss();
             }
@@ -318,5 +357,27 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
         mPopWindow.setFocusable(true);
         //mPopWindow.showAsDropDown(rootview);
         mPopWindow.showAtLocation(rootview, Gravity.BOTTOM, 0, 0);
+    }
+
+    @Override
+    protected boolean isRegisterEventBus() {
+        return true;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void getAudioEvent(AudioEvent event){
+        chatPresenter.sendVoiceMessage(username,event.audioPath, (int) event.time);
+        adapter.notifyDataSetChanged();
+        ToastUtils.showToast("语音发送成功！");
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && data != null) {
+            //获取选择器返回的数据
+            ArrayList<String> images = data.getStringArrayListExtra(
+                    ImageSelectorUtils.SELECT_RESULT);
+            chatPresenter.sendPicMessage(username,false,images.get(0));
+        }
     }
 }

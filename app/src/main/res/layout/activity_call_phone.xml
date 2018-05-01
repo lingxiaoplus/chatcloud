@@ -5,11 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:id="@+id/local_surfaceview"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            >
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/opposite_surfaceview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </FrameLayout>
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_call_head"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/ic_head"
+        android:src="@drawable/ic_img_protrait"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"/>
     <TextView
@@ -22,27 +39,18 @@
         android:layout_below="@id/img_call_head"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"/>
-    <FrameLayout
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/bt_call_end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="100dp">
-        <com.github.czy1121.view.RoundButton
-            android:id="@+id/bt_call_cancel"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
-            android:text="挂断"
-            android:textSize="18sp"
-            android:textColor="@color/white"
-            app:btnCornerRadius="10dp"
-            app:btnSolidColor="@color/colorPrimary"
-            />
-    </FrameLayout>
-    <RelativeLayout
-        android:id="@+id/opposite_surfaceview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
+        android:layout_marginBottom="80dp"
+        app:backgroundTint="@color/red_300"
+        app:rippleColor="@color/red_500"
+        app:elevation="8dp"
+        app:pressedTranslationZ="20dp"
+        android:src="@drawable/ic_img_callend"
         />
 </RelativeLayout>

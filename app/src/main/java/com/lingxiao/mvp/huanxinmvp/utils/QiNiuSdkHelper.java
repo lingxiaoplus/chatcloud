@@ -1,5 +1,6 @@
 package com.lingxiao.mvp.huanxinmvp.utils;
 
+import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.utils.QiNiuHelper.Auth;
 import com.qiniu.android.common.FixedZone;
@@ -43,7 +44,8 @@ public class QiNiuSdkHelper {
      * @param token  //从服务端sdk获取
      * @param picName //指定图片名字
      */
-    public void upload(String path,String picName,String token){
+    public void upload(String path, final String picName, String token){
+
         uploadManager.put(path, picName, token,
                 new UpCompletionHandler() {
                     @Override
@@ -53,7 +55,16 @@ public class QiNiuSdkHelper {
                             if (listener != null){
                                 listener.onSuccess(ContentValue.QINIU_BASE_URL+key);
                             }
-                            LogUtils.i("Upload Success");
+                            //上传成功后将key值上传到自己的服务器
+                            Auth.create(UIUtils
+                                    .getContext()
+                                    .getResources()
+                                    .getString(R.string.AccessKey), UIUtils
+                                    .getContext()
+                                    .getResources()
+                                    .getString(R.string.SecretKey))
+                                    .uploadToken(key);
+                            LogUtils.i("Upload Success"+"picName: "+picName+"  key："+key);
                         } else {
                             if (listener != null){
                                 listener.onFaild("图片上传失败");

@@ -25,3 +25,7 @@
 #-renamesourcefileattribute SourceFile
 -dontwarn com.tencent.bugly.**
 -keep public class com.tencent.bugly.**{*;}
+
+-keep class com.mob.**{*;}
+-keep class cn.smssdk.**{*;}
+-dontwarn com.mob.**

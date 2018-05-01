@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@drawable/touchable_background">
 <android.support.v7.widget.CardView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    card_view:cardCornerRadius="10dp"
-    card_view:cardElevation="5dp"
-    card_view:contentPadding="8dp"
-    card_view:cardMaxElevation="10dp"
-    android:layout_margin="5dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
+    style="@style/cardStyle"
     >
 <RelativeLayout
     android:layout_width="match_parent"
@@ -26,7 +18,9 @@
         android:layout_height="40dp"
         android:padding="1dp"
         android:layout_marginLeft="5dp"
-        android:src="@drawable/ic_head"/>
+        android:layout_centerVertical="true"
+        app:srcCompat="@drawable/ic_img_protrait"
+        />
     <LinearLayout
         android:layout_toRightOf="@id/iv_search_head"
         android:layout_width="wrap_content"
@@ -50,15 +44,14 @@
             android:layout_marginLeft="5dp"
             android:textSize="16sp"/>
     </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_add"
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/img_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:background="@drawable/btn_login_selector"
-        android:text="添加好友"
-        android:textColor="#fff"/>
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        app:srcCompat="@drawable/ic_img_add"/>
 </RelativeLayout>
 </android.support.v7.widget.CardView>
 </LinearLayout>

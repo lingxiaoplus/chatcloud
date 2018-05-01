@@ -36,6 +36,7 @@
             android:id="@+id/et_login_psd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="textPassword"
             android:hint="请输入密码"/>
     </android.support.design.widget.TextInputLayout>
     <Button
@@ -62,6 +63,7 @@
             android:textColor="?attr/colorPrimary"
             android:textSize="16sp"/>
         <TextView
+            android:visibility="invisible"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

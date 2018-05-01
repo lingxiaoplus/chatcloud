@@ -20,11 +20,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        app:backgroundTint="#4CAF50"
-        app:rippleColor="#388E3C"
+        app:backgroundTint="@color/colorPrimary"
+        app:rippleColor="@color/colorPrimaryDark"
         app:elevation="8dp"
         app:pressedTranslationZ="20dp"
-        android:layout_margin="50dp"
+        android:layout_margin="30dp"
         android:src="@drawable/ic_float_add"
         />
     <TextView

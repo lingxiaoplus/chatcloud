@@ -22,7 +22,7 @@ public class WebViewActivity extends BaseActivity {
 
     private WebView wv_code;
     private ProgressBar pb_code;
-    private String url,findUrl;
+    private String url,findUrl,title;
     private TextView tv_title_bar;
     private Toolbar tb_web;
 
@@ -35,6 +35,8 @@ public class WebViewActivity extends BaseActivity {
 
         url = getIntent().getStringExtra("url");
         findUrl = getIntent().getStringExtra("findUrl");
+        title = getIntent().getStringExtra("title");
+        tv_title_bar.setText(title);
         WebSettings settings = wv_code.getSettings();
         settings.setBuiltInZoomControls(true); //显示缩放按钮
         settings.setUseWideViewPort(true); 	//支持双击缩放
@@ -51,14 +53,14 @@ public class WebViewActivity extends BaseActivity {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 pb_code.setVisibility(View.VISIBLE);
-                tv_title_bar.setText("Loading...");
+                //tv_title_bar.setText("Loading...");
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 pb_code.setVisibility(View.GONE);
-                tv_title_bar.setText("Complete");
+                //tv_title_bar.setText("Complete");
             }
 
             @Override

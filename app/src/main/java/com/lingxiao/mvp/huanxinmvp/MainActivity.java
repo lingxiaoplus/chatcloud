@@ -8,22 +8,17 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -31,26 +26,35 @@ import com.ashokvarma.bottomnavigation.BadgeItem;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.avos.avoscloud.feedback.FeedbackAgent;
+import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
-import com.lingxiao.mvp.huanxinmvp.global.ActivityManager;
+import com.lingxiao.mvp.huanxinmvp.event.SkinChangeEvent;
+import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.google.activity.CaptureActivity;
+import com.lingxiao.mvp.huanxinmvp.model.VersionModel;
 import com.lingxiao.mvp.huanxinmvp.receiver.NetworkReceiver;
+import com.lingxiao.mvp.huanxinmvp.utils.HttpUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.SpUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.lingxiao.mvp.huanxinmvp.view.AddFriendActivity;
 import com.lingxiao.mvp.huanxinmvp.view.BaseActivity;
 import com.lingxiao.mvp.huanxinmvp.view.WebViewActivity;
 import com.lingxiao.mvp.huanxinmvp.view.fragment.BaseFragment;
 import com.lingxiao.mvp.huanxinmvp.view.fragment.FragmentFactory;
-import com.lingxiao.mvp.huanxinmvp.view.fragment.MessageFragment;
-import com.lingxiao.mvp.huanxinmvp.view.fragment.PhoneFragment;
 import com.liuguangqiang.cookie.CookieBar;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class MainActivity extends BaseActivity {
 
@@ -126,6 +130,24 @@ public class MainActivity extends BaseActivity {
         filter.addAction("android.net.wifi.STATE_CHANGE");
         registerReceiver(mNetworkChangeListener,filter);
         isSnackBar = true;
+
+        //检测版本
+        HttpUtils.doGet(ContentValue.UPDATEURL, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
+                Gson gson = new Gson();
+                VersionModel modle = gson.fromJson(result, VersionModel.class);
+                SpUtils.putInt(UIUtils.getContext(), ContentValue.VERSION_CODE, modle.getVersionCode());
+                SpUtils.putString(UIUtils.getContext(), ContentValue.VERSION_DES, modle.getVersionDes());
+                SpUtils.putString(UIUtils.getContext(), ContentValue.DOWNLOAD_URL, modle.getDownloadUrl());
+            }
+        });
     }
 
     private void initBottomNavigationBar() {
@@ -259,7 +281,7 @@ public class MainActivity extends BaseActivity {
         }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
-    void onMessageEvent(List<EMMessage> emMessages){
+    public void onMessageEvent(List<EMMessage> emMessages){
         upDateBadgeItem();
     }
 
@@ -387,6 +409,19 @@ public class MainActivity extends BaseActivity {
         if (mNetworkChangeListener != null){
             unregisterReceiver(mNetworkChangeListener);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onChangeSkin(SkinChangeEvent event) {
+        ToastUtils.showToast("换肤了:"+event.color);
+        bm_bar.setActiveColor(event.color);
+        LogUtils.i("换肤了act： event:"+event.color +
+                "bm:"+bm_bar.getActiveColor());
+    }
+
+    @Override
+    protected boolean isRegisterEventBus() {
+        return true;
     }
 
     /*//监听返回键按两次退出，这里不需要

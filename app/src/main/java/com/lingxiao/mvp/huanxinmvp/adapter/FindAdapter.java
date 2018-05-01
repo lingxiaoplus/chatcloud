@@ -4,11 +4,11 @@ import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.model.FindBean;
+import com.lingxiao.mvp.huanxinmvp.utils.GlideHelper;
 import com.lingxiao.mvp.huanxinmvp.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -34,12 +34,12 @@ public class FindAdapter extends RecyclerView.Adapter<FindAdapter.FindHolder>{
 
     @Override
     public void onBindViewHolder(FindAdapter.FindHolder holder, final int position) {
-        Uri headPic = Uri.parse(msgArrayList.get(position).headpic);
-        Uri from = Uri.parse(msgArrayList.get(position).site_info.pic);
         holder.title.setText(msgArrayList.get(position).title);
         holder.message.setText(msgArrayList.get(position).brief);
-        holder.headPic.setImageURI(headPic);
-        holder.fromPic.setImageURI(from);
+
+        GlideHelper.loadImageView(msgArrayList.get(position).headpic,holder.headPic);
+        GlideHelper.loadImageView(msgArrayList.get(position).site_info.pic,holder.fromPic);
+
         holder.from.setText(msgArrayList.get(position).site_info.name);
         String date = StringUtils.strToDate(msgArrayList.get(position).pub_date);
         holder.time.setText(date);
@@ -47,7 +47,7 @@ public class FindAdapter extends RecyclerView.Adapter<FindAdapter.FindHolder>{
             @Override
             public void onClick(View v) {
                 if (listener != null){
-                    listener.onFindClick(v,msgArrayList.get(position).origin_url);
+                    listener.onFindClick(v,msgArrayList.get(position).origin_url,position);
                 }
             }
         });
@@ -59,11 +59,11 @@ public class FindAdapter extends RecyclerView.Adapter<FindAdapter.FindHolder>{
     }
     class FindHolder extends RecyclerView.ViewHolder{
         TextView title,message,from,time;
-        SimpleDraweeView headPic,fromPic;
+        ImageView headPic,fromPic;
         public FindHolder(View itemView) {
             super(itemView);
-            headPic = (SimpleDraweeView) itemView.findViewById(R.id.iv_find_pic);
-            fromPic = (SimpleDraweeView) itemView.findViewById(R.id.iv_find_who);
+            headPic = itemView.findViewById(R.id.iv_find_pic);
+            fromPic = itemView.findViewById(R.id.iv_find_who);
             title = (TextView) itemView.findViewById(R.id.tv_find_title);
             message = (TextView) itemView.findViewById(R.id.tv_find_message);
             from = (TextView) itemView.findViewById(R.id.tv_find_who);
@@ -72,7 +72,7 @@ public class FindAdapter extends RecyclerView.Adapter<FindAdapter.FindHolder>{
     }
     private onFindClickListener listener;
     public interface onFindClickListener{
-        void onFindClick(View v,String url);
+        void onFindClick(View v,String url,int position);
     };
     public void setOnFindClickListener(onFindClickListener listener){
         this.listener = listener;

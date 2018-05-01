@@ -29,7 +29,7 @@ public class ActivityManager {
     }
 
     /**
-     * 添加Activity到堆栈
+     * 添加Activity到堆栈   4053
      */
     public void addActivity(Activity activity) {
         if (activityStack == null) {

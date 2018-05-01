@@ -11,6 +11,7 @@ import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.presenter.UserCardPresenter;
 import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.QiNiuHelper.Auth;
+import com.lingxiao.mvp.huanxinmvp.utils.QiNiuHelper.StringMap;
 import com.lingxiao.mvp.huanxinmvp.utils.QiNiuSdkHelper;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.lingxiao.mvp.huanxinmvp.view.UserCardView;
@@ -108,7 +109,7 @@ public class UserCardPresenterImpl implements UserCardPresenter,QiNiuSdkHelper.u
                 @Override
                 public void done(AVException e) {
                     if (e == null){
-                        AVUser.getCurrentUser().setMobilePhoneNumber(path);
+                        AVUser.getCurrentUser().put(ContentValue.NICKNAME,path);
                         AVUser.getCurrentUser().saveInBackground();
                         model.setNickname(path);
                         model.save();
@@ -123,7 +124,7 @@ public class UserCardPresenterImpl implements UserCardPresenter,QiNiuSdkHelper.u
                 @Override
                 public void done(AVException e) {
                     if (e == null){
-                        AVUser.getCurrentUser().put(ContentValue.NICKNAME,path);
+                        AVUser.getCurrentUser().put(ContentValue.DESCRIPTION,path);
                         AVUser.getCurrentUser().saveInBackground();
                         model.setDesc(path);
                         model.save();
@@ -137,7 +138,10 @@ public class UserCardPresenterImpl implements UserCardPresenter,QiNiuSdkHelper.u
     }
 
     private String getToken(String key){
-        //这句就是生成token
+        //这句就是生成token  bucket:key 允许覆盖同名文件
+        //insertOnly 如果希望只能上传指定key的文件，
+        //并且不允许修改，那么可以将下面的 insertOnly 属性值设为 1
+        LogUtils.i("七牛云的bucket和key："+ContentValue.BUCKET+"   "+key);
         String token = Auth.create(UIUtils
                 .getContext()
                 .getResources()
@@ -145,7 +149,8 @@ public class UserCardPresenterImpl implements UserCardPresenter,QiNiuSdkHelper.u
                 .getContext()
                 .getResources()
                 .getString(R.string.SecretKey))
-                .uploadToken(ContentValue.BUCKET,key);
+                .uploadToken(ContentValue.BUCKET,
+                        key,3600, new StringMap().put("insertOnly", 0));
         return token;
     }
 

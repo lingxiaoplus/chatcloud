@@ -13,9 +13,10 @@ import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Handler;
+import android.os.Vibrator;
 
 import com.avos.avoscloud.AVOSCloud;
-import com.facebook.drawee.backends.pipeline.Fresco;
+import com.example.skinlibrary.SkinLib;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMError;
@@ -32,10 +33,11 @@ import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.event.ExitEvent;
 import com.lingxiao.mvp.huanxinmvp.event.PhoneChangedEvent;
 import com.lingxiao.mvp.huanxinmvp.utils.DBUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.SpUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ThreadUtils;
 import com.lingxiao.mvp.huanxinmvp.view.ChatActivity;
+import com.mob.MobSDK;
 import com.raizlabs.android.dbflow.config.FlowManager;
-import com.tencent.bugly.crashreport.CrashReport;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -81,13 +83,15 @@ public class MyApplication extends Application{
 
         //注册一个监听状态的listener
         EMClient.getInstance().addConnectionListener(new MyConnectionListener());
-        //初始化fresco
-        Fresco.initialize(this);
 
         //初始化dbflow
         FlowManager.init(this);
 
-        CrashReport.initCrashReport(getApplicationContext(), "b6f6f2432e", false);
+        //初始化skin皮肤
+        SkinLib.init(this);
+
+        //初始化mob短信验证
+        MobSDK.init(this,"255ed51d720ec","a4a3fcb876482f2cf4c6065b6f32b8ca");
     }
 
     private void initGetMsgListener() {
@@ -96,12 +100,27 @@ public class MyApplication extends Application{
             public void onMessageReceived(List<EMMessage> list) {
                 //收到消息
                 EventBus.getDefault().post(list);
-                if (isInBackground()){
-                    soundPool.play(backgroundSound,1,1,0,0,1);
-                    sendNotify(list.get(0));
-                }else {
-                    soundPool.play(foregroundSound,1,1,0,0,1);
+                boolean messageRemind = SpUtils.getBoolean(mContext,ContentValue.MESSAGE_REMIND,true);
+                boolean messageVoice = SpUtils.getBoolean(mContext,ContentValue.MESSAGE_VOICE,true);
+                boolean messageShake = SpUtils.getBoolean(mContext,ContentValue.MESSAGE_SNAKE,true);
+                if (messageRemind){
+                    //语音提示
+                    if (messageVoice){
+                        if (isInBackground()){
+                            soundPool.play(backgroundSound,1,1,0,0,1);
+                            sendNotify(list.get(0));
+                        }else {
+                            soundPool.play(foregroundSound,1,1,0,0,1);
+                        }
+                    }
+                    //震动
+                    if (messageShake){
+                        Vibrator vibrator = (Vibrator)mContext
+                                .getSystemService(mContext.VIBRATOR_SERVICE);
+                        vibrator.vibrate(1000); //震动时间
+                    }
                 }
+
             }
 
             @Override
@@ -145,7 +164,7 @@ public class MyApplication extends Application{
         Intent main = new Intent(getApplicationContext(), MainActivity.class);
         Intent chat = new Intent(getApplicationContext(), ChatActivity.class);
 
-        chat.putExtra("contact",msg.getUserName());
+        chat.putExtra("name",msg.getUserName());
         Intent[] intents = new Intent[]{main,chat};
         //延期意图  处理通知的点击事件
         PendingIntent pendingIntent = PendingIntent.getActivities(
@@ -172,7 +191,9 @@ public class MyApplication extends Application{
     private void initEasyMobe() {
         EMOptions options = new EMOptions();
         // 默认添加好友时，是不需要验证的，改成需要验证
-        //options.setAcceptInvitationAlways(false);
+        boolean isaccept = SpUtils
+                .getBoolean(this,ContentValue.FRIEND,true);
+        options.setAcceptInvitationAlways(isaccept);
 
         int pid = android.os.Process.myPid();
         String processAppName = getAppName(pid);

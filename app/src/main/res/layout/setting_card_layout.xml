@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="@drawable/touchable_background_normal"
+    android:padding="10dp">
+    <TextView
+        android:id="@+id/tv_card_title"
+        style="@style/textTitle"
+        android:text="检查更新" />
+
+    <TextView
+        android:id="@+id/tv_card_message"
+        style="@style/textMsg"
+        android:layout_below="@id/tv_card_title"
+        android:text="新版本提示更新" />
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/switch_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:checked="true"
+        android:clickable="false"
+        android:focusable="false" />
+</RelativeLayout>

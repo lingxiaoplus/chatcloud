@@ -17,8 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -37,6 +36,9 @@ public abstract class BaseFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = initView();
         unbinder = ButterKnife.bind(this, view);
+        if (isRegisterEventBus()){
+            EventBus.getDefault().register(this);
+        }
         return view;
     }
 
@@ -90,5 +92,17 @@ public abstract class BaseFragment extends Fragment{
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        if (isRegisterEventBus()){
+            EventBus.getDefault().unregister(this);
+        }
+    }
+
+    /**
+     * 是否注册事件分发
+     *
+     * @return true绑定EventBus事件分发，默认不绑定，子类需要绑定的话复写此方法返回true.
+     */
+    protected boolean isRegisterEventBus() {
+        return false;
     }
 }

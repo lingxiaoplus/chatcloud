@@ -9,7 +9,9 @@ import com.lingxiao.mvp.huanxinmvp.callback.MyEmCallBack;
 import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.presenter.LoginPresenter;
+import com.lingxiao.mvp.huanxinmvp.utils.SpUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.lingxiao.mvp.huanxinmvp.view.LoginView;
 
 /**
@@ -38,6 +40,8 @@ public class LoginPresenterImpl implements LoginPresenter{
                     model.setPhone(avUser.getMobilePhoneNumber());
                     model.setToken(avUser.getSessionToken());
                     model.save();
+                    SpUtils.putString(UIUtils.getContext(),
+                            ContentValue.OBJECTID,avUser.getObjectId());
                     EMClient.getInstance().login(username, pwd, new MyEmCallBack() {
                         @Override
                         public void success() {

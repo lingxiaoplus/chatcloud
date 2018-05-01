@@ -47,4 +47,8 @@ public class SignalCardLayout extends CardView{
         //leftView.setText(left);
         rightView.setText(right);
     }
+
+    public String getRightText(){
+        return rightView.getText().toString();
+    }
 }

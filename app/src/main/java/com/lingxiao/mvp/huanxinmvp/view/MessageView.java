@@ -11,4 +11,5 @@ import java.util.List;
 public interface MessageView {
     void onGetAllMessages(List<EMConversation> conversationList);
     void onClearAllUnreadMark();
+    void onDelete(boolean result,String msg);
 }

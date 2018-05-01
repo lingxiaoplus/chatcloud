@@ -6,10 +6,13 @@ import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
+import com.lingxiao.mvp.huanxinmvp.model.UserModel;
+import com.lingxiao.mvp.huanxinmvp.model.UserModel_Table;
 import com.lingxiao.mvp.huanxinmvp.presenter.AddFriendPresenter;
 import com.lingxiao.mvp.huanxinmvp.utils.DBUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ThreadUtils;
 import com.lingxiao.mvp.huanxinmvp.view.AddFriendView;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,8 @@ import java.util.List;
 
 public class AddFriendPresenterImpl implements AddFriendPresenter{
     private AddFriendView addFriendView;
+    private List<UserModel> modelList;
+    private List<String> userList = new ArrayList<>();
     public AddFriendPresenterImpl(AddFriendView addFriendView){
         this.addFriendView = addFriendView;
     }
@@ -54,15 +59,23 @@ public class AddFriendPresenterImpl implements AddFriendPresenter{
         final String currentuser = EMClient.getInstance().getCurrentUser();
         //到服务端查询表  后面的参数是表名
         AVQuery<AVUser> avQuery = new AVQuery<>("_User");
-        avQuery.whereStartsWith("username",keyword)
+        avQuery.whereStartsWith("nickname",keyword)
                 .whereNotEqualTo("username",currentuser)
                 .findInBackground(new FindCallback<AVUser>() {
                     @Override
                     public void done(List<AVUser> list, AVException e) {
                         if (e == null && list != null && list.size()>0){
                             //从数据库中拿到已经是好友的集合
-                            ArrayList<String> users = DBUtils.initContact(currentuser);
-                            addFriendView.onQuerySuccess(list,users,true,null);
+                            //ArrayList<String> users = DBUtils.initContact(currentuser);
+                            modelList = SQLite
+                                    .select()
+                                    .from(UserModel.class)
+                                    .where(UserModel_Table.username.isNot(currentuser))
+                                    .queryList();
+                            for (int i = 0; i < modelList.size(); i++) {
+                                userList.add(modelList.get(i).username);
+                            }
+                            addFriendView.onQuerySuccess(list,userList,true,null);
                         }else {
                             if (e == null){
                                 //查询成功但是没有数据

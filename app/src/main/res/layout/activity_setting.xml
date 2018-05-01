@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:setting_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_setting"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView
+                style="@style/cardStyle"
+                android:layout_marginTop="8dp"
+                card_view:cardCornerRadius="5dp"
+                card_view:cardElevation="5dp"
+                card_view:contentPadding="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="常规"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="16sp" />
+
+                    <com.lingxiao.mvp.huanxinmvp.widget.SettingCardView
+                        android:id="@+id/set_upadte"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        setting_view:title="检查更新"
+                        setting_view:message="有新版本时提示更新"
+                        setting_view:switchcompat="true">
+                    </com.lingxiao.mvp.huanxinmvp.widget.SettingCardView>
+                    <com.lingxiao.mvp.huanxinmvp.widget.SettingCardView
+                        android:id="@+id/set_friend"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        setting_view:title="好友申请"
+                        setting_view:message="开启后自动同意好友申请"
+                        setting_view:switchcompat="true">
+                    </com.lingxiao.mvp.huanxinmvp.widget.SettingCardView>
+                    <com.lingxiao.mvp.huanxinmvp.widget.SettingCardView
+                        android:id="@+id/set_clearHistory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        setting_view:title="清空聊天记录"
+                        setting_view:message="清除本地和云端聊天数据"
+                        setting_view:visable="false">
+                    </com.lingxiao.mvp.huanxinmvp.widget.SettingCardView>
+
+                    <com.lingxiao.mvp.huanxinmvp.widget.SettingCardView
+                        android:id="@+id/set_about"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        setting_view:title="关于"
+                        setting_view:message="版本号："
+                        setting_view:visable="false">
+                    </com.lingxiao.mvp.huanxinmvp.widget.SettingCardView>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                style="@style/cardStyle"
+                android:layout_marginTop="8dp"
+                card_view:cardCornerRadius="5dp"
+                card_view:cardElevation="5dp"
+                card_view:contentPadding="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="消息提醒"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="16sp" />
+
+                    <com.lingxiao.mvp.huanxinmvp.widget.SettingCardView
+                        android:id="@+id/set_message_remind"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        setting_view:title="新消息提醒"
+                        setting_view:switchcompat="true">
+                    </com.lingxiao.mvp.huanxinmvp.widget.SettingCardView>
+
+                    <com.lingxiao.mvp.huanxinmvp.widget.SettingCardView
+                        android:id="@+id/set_voice"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        setting_view:title="语音提醒"
+                        setting_view:switchcompat="true">
+                    </com.lingxiao.mvp.huanxinmvp.widget.SettingCardView>
+                    <com.lingxiao.mvp.huanxinmvp.widget.SettingCardView
+                        android:id="@+id/set_shake"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        setting_view:title="震动"
+                        setting_view:switchcompat="true">
+                    </com.lingxiao.mvp.huanxinmvp.widget.SettingCardView>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+            <net.qiujuer.genius.ui.widget.Button
+                android:id="@+id/set_logout"
+                android:layout_width="200dp"
+                android:layout_height="@dimen/len_48"
+                android:text="退出登录"
+                android:gravity="center"
+                android:layout_margin="10dp"
+                app:gTouchColor="@color/colorAccentAlpha"
+                android:background="@drawable/sel_btn_bg_black_alpha_44"
+                app:gTouchCornerRadius="22dp"
+                app:gTouchEffect="ripple"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/white_alpha_192"
+                />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

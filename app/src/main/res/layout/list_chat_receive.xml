@@ -15,7 +15,7 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/ic_head"
+            android:src="@drawable/ic_img_protrait"
             android:layout_margin="5dp"/>
         <TextView
             android:id="@+id/tv_message"

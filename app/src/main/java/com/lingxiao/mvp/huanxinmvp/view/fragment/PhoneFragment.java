@@ -15,8 +15,11 @@ import android.widget.TextView;
 import com.lingxiao.mvp.huanxinmvp.MainActivity;
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.adapter.PhoneRecycleAdapter;
+import com.lingxiao.mvp.huanxinmvp.model.ContactsModel;
+import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.PhonePresenterImpl;
 import com.lingxiao.mvp.huanxinmvp.presenter.PhonePresenter;
+import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 import com.lingxiao.mvp.huanxinmvp.view.AddFriendActivity;
 import com.lingxiao.mvp.huanxinmvp.view.BaseActivity;
@@ -25,6 +28,7 @@ import com.lingxiao.mvp.huanxinmvp.view.PhoneView;
 import com.lingxiao.mvp.huanxinmvp.widget.PhoneLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 通讯录详情页
@@ -39,6 +43,7 @@ public class PhoneFragment extends BaseFragment implements PhoneView{
 
     @Override
     public void initData() {
+        phonePresenter.initContact();
     }
 
     @Override
@@ -46,7 +51,8 @@ public class PhoneFragment extends BaseFragment implements PhoneView{
         super.onViewCreated(view, savedInstanceState);
         phoneLayout = (PhoneLayout) view.findViewById(R.id.phonelayout);
         phonePresenter = new PhonePresenterImpl(this);
-        phonePresenter.initContact();
+        phoneLayout.setRefreshing(true);
+
     }
 
     @Override
@@ -56,7 +62,8 @@ public class PhoneFragment extends BaseFragment implements PhoneView{
     }
 
     @Override
-    public void onInitContact(ArrayList<String> contactList) {
+    public void onInitContact(List<ContactsModel> contactList) {
+        phoneLayout.setRefreshing(false);
         //获取到数据后，设置adapter
         adapter = new PhoneRecycleAdapter(contactList);
         phoneLayout.setAdapter(adapter);
@@ -106,10 +113,11 @@ public class PhoneFragment extends BaseFragment implements PhoneView{
                 baseActivity.StartActivity(AddFriendActivity.class,false);
             }
         });
+
     }
 
     @Override
-    public void onUpdateContact(ArrayList<String> contactList, boolean isUpadteSuccess, String errorMsg) {
+    public void onUpdateContact(List<ContactsModel> contactList, boolean isUpadteSuccess, String errorMsg) {
         phoneLayout.setRefreshing(false);
         if(isUpadteSuccess){
             adapter.setContacts(contactList);

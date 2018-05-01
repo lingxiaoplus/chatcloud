@@ -24,6 +24,7 @@
     <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 自动聚焦权限 -->
 
     <uses-permission android:name="android.permission.READ_LOGS" />
+
     <application
         android:name=".global.MyApplication"
         android:allowBackup="true"
@@ -34,7 +35,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".view.SplashActivity"
-            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+            android:theme="@style/FullScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -71,7 +72,9 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".view.RegistActivity" />
+        <activity
+            android:name=".view.RegistActivity"
+            android:theme="@style/NoTitleTranslucentTheme" />
         <activity android:name=".view.LoginActivity" />
         <activity
             android:name=".view.ChatActivity"
@@ -93,24 +96,49 @@
 
         <activity
             android:name=".view.CallPhoneActivity"
-            android:theme="@style/FullScreen" />
+            android:theme="@style/FullScreen"
+            />
         <activity
             android:name=".view.AcceptCallActivity"
+            android:launchMode="singleTop"
             android:theme="@style/FullScreen" />
-        <activity android:name=".view.UserInfoActivity"
-            android:theme="@style/MyMainTheme"></activity>
+        <activity
+            android:name=".view.UserInfoActivity"
+            android:theme="@style/MyMainTheme" />
 
-        <!--图片选择器-->
-        <activity android:name="com.donkingliang.imageselector.ImageSelectorActivity"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        android:configChanges="orientation|keyboardHidden|screenSize"/>
-        <activity android:name="com.donkingliang.imageselector.PreviewActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:configChanges="orientation|keyboardHidden|screenSize"/>
+        <!-- 图片选择器 -->
+        <activity
+            android:name="com.donkingliang.imageselector.ImageSelectorActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name="com.donkingliang.imageselector.PreviewActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name="com.donkingliang.imageselector.ClipImageActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <!--end 图片选择器-->
+        <!-- end 图片选择器 -->
+        <activity
+            android:name=".view.SkinActivity"
+            android:theme="@style/MyMainTheme" />
+        <activity
+            android:name=".view.AudioActivity"
+            android:theme="@style/NoTitleTranslucentTheme" />
+        <activity
+            android:name=".view.LocalPicActivity"
+            android:theme="@style/FullScreenTheme" />
+        <activity
+            android:name=".view.SettingActivity"
+            android:theme="@style/MyMainTheme" />
+
+        <service
+            android:name=".NotifyService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".view.regist.RegistInfoActivity"
+            android:theme="@style/NoTitleTranslucentTheme"></activity>
     </application>
 
 </manifest>

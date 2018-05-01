@@ -2,15 +2,22 @@ package com.lingxiao.mvp.huanxinmvp.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.TextView;
 
-import com.github.czy1121.view.RoundButton;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.media.EMLocalSurfaceView;
+import com.hyphenate.media.EMOppositeSurfaceView;
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
+import com.lingxiao.mvp.huanxinmvp.model.UserModel;
+import com.lingxiao.mvp.huanxinmvp.model.UserModel_Table;
 import com.lingxiao.mvp.huanxinmvp.presenter.AcceptCallPresenter;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.AcceptCallPresenterImpl;
+import com.lingxiao.mvp.huanxinmvp.utils.GlideHelper;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,13 +31,18 @@ public class AcceptCallActivity extends BaseActivity implements AcceptCallView {
     @BindView(R.id.tv_accept_name)
     TextView tvAcceptName;
     @BindView(R.id.bt_accept_ensure)
-    RoundButton btAcceptEnsure;
+    FloatingActionButton btAcceptEnsure;
     @BindView(R.id.bt_accept_cancel)
-    RoundButton btAcceptCancel;
+    FloatingActionButton btAcceptCancel;
     @BindView(R.id.bt_accept_end)
-    RoundButton btAcceptEnd;
+    FloatingActionButton btAcceptEnd;
+    @BindView(R.id.oppo_surface)
+    EMOppositeSurfaceView oppoSurface;
+    @BindView(R.id.local_surface)
+    EMLocalSurfaceView localSurface;
     private Intent intent;
     private AcceptCallPresenter presenter;
+    private UserModel userModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +52,38 @@ public class AcceptCallActivity extends BaseActivity implements AcceptCallView {
         presenter = new AcceptCallPresenterImpl(this);
         intent = getIntent();
         initData();
+        presenter.callListener();
     }
 
     private void initData() {
-        String from = intent.getStringExtra("from");
-        String type = intent.getStringExtra("type");
-        ToastUtils.showToast("类型："+type);
-        tvAcceptName.setText(from);
+        try {
+            String from = intent.getStringExtra("from");
+            String type = intent.getStringExtra("type");
+            ToastUtils.showToast("类型：" + type);
+
+            userModel = SQLite
+                    .select()
+                    .from(UserModel.class)
+                    .where(UserModel_Table.username.eq(from))
+                    .querySingle();
+            tvAcceptName.setText(userModel.getNickname());
+            if (type.equals("voice")) {
+                GlideHelper.loadImageView(userModel.getProtrait(), imgAcceptHead);
+            } else {
+                imgAcceptHead.setVisibility(View.INVISIBLE);
+                initSurfaceView();
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    //栈顶复用
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        initData();
     }
 
     @OnClick(R.id.bt_accept_ensure)
@@ -58,10 +95,12 @@ public class AcceptCallActivity extends BaseActivity implements AcceptCallView {
     public void onCancel() {
         presenter.cancelCall();
     }
+
     @OnClick(R.id.bt_accept_end)
-    public void onEnd(){
+    public void onEnd() {
         presenter.endCall();
     }
+
     @Override
     public void onAnswerCall(boolean result, String msg) {
         if (result) {
@@ -76,7 +115,7 @@ public class AcceptCallActivity extends BaseActivity implements AcceptCallView {
     @Override
     public void onRejectCall(boolean result, String msg) {
         if (result) {
-            presenter.callListener();
+            finish();
         } else {
             ToastUtils.showToast(msg);
         }
@@ -85,7 +124,7 @@ public class AcceptCallActivity extends BaseActivity implements AcceptCallView {
     @Override
     public void onEndCall(boolean result, String msg) {
         if (result) {
-            presenter.callListener();
+            finish();
         } else {
             ToastUtils.showToast(msg);
         }
@@ -93,8 +132,13 @@ public class AcceptCallActivity extends BaseActivity implements AcceptCallView {
 
     @Override
     public void onGetCallStatus(int status) {
-        if (status == ContentValue.CALL_DISCONNECTED){
+        if (status == ContentValue.CALL_DISCONNECTED) {
             finish();
         }
+    }
+
+
+    private void initSurfaceView() {
+        EMClient.getInstance().callManager().setSurfaceView(localSurface, oppoSurface);
     }
 }

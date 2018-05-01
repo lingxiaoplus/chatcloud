@@ -28,4 +28,17 @@
         <attr name="left_text" format="string"/>
         <attr name="right_text" format="string"/>
     </declare-styleable>
+
+    <!--设置界面的组合控件
+        title 大标题
+        message内容
+        switch 开关
+        visable 开关是否可见
+    -->
+    <declare-styleable name="SettingCardView">
+        <attr name="title" format="string"/>
+        <attr name="message" format="string"/>
+        <attr name="switchcompat" format="boolean"/>
+        <attr name="visable" format="boolean"/>
+    </declare-styleable>
 </resources>

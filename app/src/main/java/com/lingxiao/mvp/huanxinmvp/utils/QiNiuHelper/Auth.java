@@ -1,5 +1,6 @@
 package com.lingxiao.mvp.huanxinmvp.utils.QiNiuHelper;
 
+import com.avos.avoscloud.okhttp.Response;
 import com.qiniu.android.http.Client;
 
 import java.net.URI;

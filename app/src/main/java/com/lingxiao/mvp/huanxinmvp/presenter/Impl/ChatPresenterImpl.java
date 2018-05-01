@@ -4,6 +4,8 @@ import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.chat.EMTextMessageBody;
+import com.lingxiao.mvp.huanxinmvp.model.MessageModel;
 import com.lingxiao.mvp.huanxinmvp.presenter.ChatPresenter;
 import com.lingxiao.mvp.huanxinmvp.utils.ThreadUtils;
 import com.lingxiao.mvp.huanxinmvp.view.ChatView;
@@ -33,6 +35,7 @@ public class ChatPresenterImpl implements ChatPresenter{
                 EMClient.getInstance()
                         .chatManager()
                         .getConversation(username);
+
         if (conversation != null){
             //设置所有消息为已读
             conversation.markAllMessagesAsRead();
@@ -47,6 +50,18 @@ public class ChatPresenterImpl implements ChatPresenter{
             //把最后一条数据添加进来
             msgList.add(lastMsg);
             chatView.onGetHistoryMsg(msgList);
+
+            /*for (EMMessage msg:emMessages) {
+                //获取消息的类型
+                MessageModel model = new MessageModel();
+                final EMMessage.Type type = msg.getType();
+                if (type == EMMessage.Type.TXT){
+                    EMTextMessageBody emMessageBody = (EMTextMessageBody) msg.getBody();
+                    model.setType(0);
+                    model.setContent(emMessageBody.getMessage());
+                    model.setCreateTime(msg.getMsgTime());
+                }
+            }*/
         }
         return msgList;
     }
@@ -54,6 +69,30 @@ public class ChatPresenterImpl implements ChatPresenter{
     @Override
     public void sendMessage(final String username, String message) {
         final EMMessage emMessage = EMMessage.createTxtSendMessage(message,username);
+        messageStatusResolve(emMessage);
+    }
+
+    @Override
+    public void sendVoiceMessage(String toChatUsername, String filePath, int length) {
+        //filePath为语音文件路径，length为录音时间(秒)
+        EMMessage message = EMMessage.
+                createVoiceSendMessage(filePath, length, toChatUsername);
+        messageStatusResolve(message);
+    }
+
+    @Override
+    public void sendPicMessage(String toChatUsername, boolean originImg, String filePath) {
+        //imagePath为图片本地路径，false为不发送原图（默认超过100k的图片会压缩后发给对方），
+        // 需要发送原图传true
+        EMMessage emMessage =
+                EMMessage.createImageSendMessage(
+                        filePath,
+                        originImg,
+                        toChatUsername);
+        messageStatusResolve(emMessage);
+    }
+
+    private void messageStatusResolve(final EMMessage emMessage){
         msgList.add(emMessage);
         //添加消息发送状态的监听
         emMessage.setMessageStatusCallback(new EMCallBack() {

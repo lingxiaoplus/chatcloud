@@ -35,6 +35,7 @@ public class ContentValue {
     public static final String PROTRAIT = "protrait";
     public static final String SEX = "sex";
     public static final String NICKNAME = "nickname";
+    public static final String OBJECTID = "objectid";
 
     /**
      * 通话状态
@@ -62,4 +63,24 @@ public class ContentValue {
      */
     public static final String BUCKET = "smailchat";
     public static final String QINIU_BASE_URL = "http://chat.lingxiaosuse.cn/";
+
+
+    /**
+     * 设置
+     */
+    public static final String UPDATE = "update";
+    public static final String FRIEND = "friend";
+    public static final String MESSAGE_REMIND = "message_remind";
+    public static final String MESSAGE_VOICE = "message_voice";
+    public static final String MESSAGE_SNAKE = "message_snake";
+
+    /**
+     * 版本更新
+     */
+    public static final String VERSION_CODE = "version_code";
+    public static final String DOWNLOAD_URL = "download_url";
+    public static final String VERSION_DES = "version_des";
+    public static final String UPDATEURL = "http://chat.lingxiaosuse.cn/update/update.json";
+
+
 }

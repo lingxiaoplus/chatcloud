@@ -19,7 +19,7 @@
                 android:id="@+id/img_mine_protrait"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/ic_head"/>
+                app:srcCompat="@drawable/ic_img_protrait"/>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

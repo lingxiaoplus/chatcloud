@@ -5,5 +5,18 @@
     <dimen name="avatar_size">60dp</dimen>
     <dimen name="slide_text_size">12sp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="len_4">40</dimen>
+    <dimen name="len_4">4dp</dimen>
+
+    <!--头像高度-->
+    <dimen name="portraitMinSize">36dp</dimen>
+    <dimen name="portraitSize">40dp</dimen>
+    <dimen name="portraitMaxSize">64dp</dimen>
+
+    <!--状态栏高度-->
+    <dimen name="statusBarSize">25dp</dimen>
+    <!--状态栏和标题栏高度一起-->
+    <dimen name="actionBarWithStatusBarSize">73dp</dimen>
+
+    <!--名字字体的大小-->
+    <dimen name="fontNameSize">15sp</dimen>
 </resources>

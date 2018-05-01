@@ -2,23 +2,33 @@ package com.lingxiao.mvp.huanxinmvp.view.fragment;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lingxiao.mvp.huanxinmvp.R;
+import com.lingxiao.mvp.huanxinmvp.event.SkinChangeEvent;
+import com.lingxiao.mvp.huanxinmvp.event.UserChangedEvent;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.UserCardPresenterImpl;
 import com.lingxiao.mvp.huanxinmvp.presenter.UserCardPresenter;
+import com.lingxiao.mvp.huanxinmvp.utils.SkinUtil;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.lingxiao.mvp.huanxinmvp.view.BaseActivity;
 import com.lingxiao.mvp.huanxinmvp.view.LoginActivity;
+import com.lingxiao.mvp.huanxinmvp.view.SettingActivity;
+import com.lingxiao.mvp.huanxinmvp.view.SkinActivity;
 import com.lingxiao.mvp.huanxinmvp.view.UserCardView;
 import com.lingxiao.mvp.huanxinmvp.view.UserInfoActivity;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,6 +52,10 @@ public class UserCardFragment extends BaseFragment implements UserCardView {
     TextView tvMineUsername;
     @BindView(R.id.img_mine_protrait)
     CircleImageView headImgView;
+    @BindView(R.id.iv_mine_theme)
+    AppCompatImageView ivTheme;
+    @BindView(R.id.iv_mine_setting)
+    AppCompatImageView ivSetting;
 
     private UserCardPresenter presenter;
     private ProgressDialog dialog;
@@ -74,11 +88,13 @@ public class UserCardFragment extends BaseFragment implements UserCardView {
     @Override
     public void onGetUserInfo(UserModel model) {
         try {
-            tvMineUsername.setText(model.getUsername());
+            tvMineUsername.setText(model.getNickname());
             Glide.with(getActivity())
                     .load(model.getProtrait())
+                    .skipMemoryCache(true) // 不使用内存缓存
+                    .diskCacheStrategy(DiskCacheStrategy.NONE) // 不使用磁盘缓存
                     .into(headImgView);
-        } catch (Exception e){
+        } catch (Exception e) {
             ToastUtils.showToast("获取信息失败，请重新登录");
         }
     }
@@ -99,5 +115,38 @@ public class UserCardFragment extends BaseFragment implements UserCardView {
     @OnClick(R.id.cv_mine_info)
     public void changeInfo(View v) {
         StartActivity(UserInfoActivity.class);
+    }
+
+    @OnClick(R.id.cv_mine_theme)
+    public void changeTheme() {
+        StartActivity(SkinActivity.class);
+    }
+
+    @OnClick(R.id.cv_mine_setting)
+    public void startSetting(){
+        StartActivity(SettingActivity.class);
+    }
+
+    /*@Subscribe(threadMode = ThreadMode.MAIN)
+    public void onChangeSkin(SkinChangeEvent event) {
+        //换肤
+        SkinUtil.changeSVGColor(ivTheme,R.drawable.ic_img_theme,
+                event.color, UIUtils.getContext());
+        SkinUtil.changeSVGColor(ivSetting,R.drawable.ic_img_setting,
+                event.color, UIUtils.getContext());
+    }*/
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onChangeInfo(UserChangedEvent event) {
+        tvMineUsername.setText(event.nickname);
+        Glide.with(getActivity())
+                .load(event.protrait)
+                .skipMemoryCache(true) // 不使用内存缓存
+                .diskCacheStrategy(DiskCacheStrategy.NONE) // 不使用磁盘缓存
+                .into(headImgView);
+    }
+
+    @Override
+    protected boolean isRegisterEventBus() {
+        return true;
     }
 }

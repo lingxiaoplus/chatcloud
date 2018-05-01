@@ -12,5 +12,14 @@ public interface RegistView {
      * pswd 密码
      * erroMsg 错误信息
      */
-    void onGetRegistState(String username,String pswd,boolean isRegist,String erroMsg);
+    void onGetRegistState(String objcectId,String username,String pswd,boolean isRegist,String erroMsg);
+
+    /**
+     * 发送验证码
+     * @param result  发送结果
+     * @param msg    返回的信息
+     */
+    void onGetCode(boolean result,String msg);
+
+    void onSubmitCode(boolean result,int msg);
 }

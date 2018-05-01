@@ -37,8 +37,8 @@ public class FindPresenterImpl implements FindPresenter{
         this.findView = findView;
     }
     @Override
-    public void newsUpDate(final int currentPage) {
-        HttpUtils.doGet(ContentValue.art_url+initPage+currentPage, new Callback() {
+    public void newsUpDate(final int currentPage,String url) {
+        HttpUtils.doGet(url+initPage+currentPage, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
 
@@ -54,9 +54,9 @@ public class FindPresenterImpl implements FindPresenter{
                 //CacheUtils.setCache(ContentValue.news_url,result);
                 //cacheNewsDao = CacheNewsDao.getInstance(UIUtils.getContext());
                 if (cacheList != null){
-                    cacheNewsDao.deleteAll();
+                    //cacheNewsDao.deleteAll();
                 }
-                cacheNewsDao.insert(newsList);
+                //cacheNewsDao.insert(newsList);
                 Log.i("main", "刷新新闻内容");
             }
         });
@@ -71,10 +71,10 @@ public class FindPresenterImpl implements FindPresenter{
     }
 
     @Override
-    public void initNews() {
+    public void initNews(String url) {
         //初始化新闻
         //String result = CacheUtils.getCache(ContentValue.news_url);
-        cacheList = new ArrayList<>();
+        /*cacheList = new ArrayList<>();
         cacheNewsDao = CacheNewsDao.getInstance(UIUtils.getContext());
         if (cacheList != null){
             //newsList = parsingJson(cacheList);
@@ -83,10 +83,11 @@ public class FindPresenterImpl implements FindPresenter{
             Log.i("main", "读取缓存新闻");
         }else {
             if (newsList == null){
-                newsUpDate(initPage);
+                newsUpDate(initPage,url);
                 Log.i("main", "没有读取缓存新闻，更新新闻 ");
             }
-        }
+        }*/
+        newsUpDate(initPage,url);
         findView.onInitNews(newsList);
         Log.i("main", "初始化新闻内容");
     }

@@ -7,4 +7,5 @@ package com.lingxiao.mvp.huanxinmvp.presenter;
 public interface MessagePresenter {
     void getMessages();
     void clearAllUnreadMark();
+    void deleteMessages(String username,int pos);
 }

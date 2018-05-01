@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -17,13 +16,12 @@ import android.widget.TextView;
 
 import com.lingxiao.mvp.huanxinmvp.MainActivity;
 import com.lingxiao.mvp.huanxinmvp.R;
+import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.LoginPresenterImpl;
 import com.lingxiao.mvp.huanxinmvp.presenter.LoginPresenter;
-import com.lingxiao.mvp.huanxinmvp.utils.PreUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.SpUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
-
-import org.greenrobot.eventbus.Subscribe;
 
 /**
  * Created by lingxiao on 17-6-28.
@@ -36,6 +34,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private TextView tv_regist_now;
     private Button bt_login;
     private LoginPresenter loginPresenter;
+    private String username;
+    private String psd;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,10 +46,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         bt_login.setOnClickListener(this);
 
         //获取缓存用户名密码
-        if (PreUtils.getUserName(UIUtils.getContext())!=null&&PreUtils.getUserName(UIUtils.getContext()).trim().length()>0)
-            et_login_username.setText(PreUtils.getUserName(UIUtils.getContext()));
-        if (PreUtils.getPsd(UIUtils.getContext())!=null&&PreUtils.getPsd(UIUtils.getContext()).trim().length()>0)
-            et_login_psd.setText(PreUtils.getPsd(UIUtils.getContext()));
+        username = SpUtils.getString(UIUtils.getContext(), ContentValue.KEY_USERNAME,"");
+        psd = SpUtils.getString(UIUtils.getContext(), ContentValue.KEY_PSD,"");
+        et_login_username.setText(username);
+        et_login_psd.setText(psd);
 
         loginPresenter = new LoginPresenterImpl(this);
     }
@@ -69,10 +69,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         //获取缓存用户名密码
-        if (PreUtils.getUserName(this)!=null&&PreUtils.getUserName(this).trim().length()>0)
-            et_login_username.setText(PreUtils.getUserName(this));
-        if (PreUtils.getPsd(this)!=null&&PreUtils.getPsd(this).trim().length()>0)
-            et_login_psd.setText(PreUtils.getPsd(this));
+        et_login_username.setText(username);
+        et_login_psd.setText(psd);
     }
 
     @Override

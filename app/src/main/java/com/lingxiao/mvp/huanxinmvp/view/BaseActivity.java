@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -22,9 +25,15 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.util.DateUtils;
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.event.ExitEvent;
+import com.lingxiao.mvp.huanxinmvp.event.SkinChangeEvent;
 import com.lingxiao.mvp.huanxinmvp.global.ActivityManager;
+import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.receiver.CallReceiver;
 import com.lingxiao.mvp.huanxinmvp.receiver.NetworkReceiver;
+import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.SpUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.liuguangqiang.cookie.CookieBar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -43,6 +52,9 @@ public class BaseActivity extends AppCompatActivity{
     private LocalBroadcastManager manager;
     private MyExitReciver reciver;
     private CallReceiver mCallReceiver;
+    private PackageManager mPmanager;
+    private int versionCode;
+    private String versionName = "1.0.0";
 
 
     @Override
@@ -55,6 +67,16 @@ public class BaseActivity extends AppCompatActivity{
 
         ActivityManager.getAppManager().addActivity(this);
         regCallReceiver();
+
+        if (isRegisterEventBus()){
+            EventBus.getDefault().register(this);
+        }
+
+        boolean isCheck = SpUtils
+                .getBoolean(this,ContentValue.UPDATE,true);
+        if (isCheck){
+            checkUpdate();
+        }
     }
 
     /**
@@ -105,18 +127,9 @@ public class BaseActivity extends AppCompatActivity{
         if (mCallReceiver != null){
             unregisterReceiver(mCallReceiver);
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
+        if (isRegisterEventBus()){
+            EventBus.getDefault().unregister(this);
+        }
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetExitEvent(ExitEvent exitEvent){
@@ -175,4 +188,74 @@ public class BaseActivity extends AppCompatActivity{
 
     }
 
+    /**
+     *检查更新
+     */
+    public boolean checkUpdate(){
+
+        mPmanager = getPackageManager();
+        int serverVersion = SpUtils
+                .getInt(BaseActivity.this, ContentValue.VERSION_CODE,1);
+        try {
+            PackageInfo info = mPmanager.getPackageInfo(getPackageName(),0);
+            versionCode = info.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            versionCode = serverVersion;
+        }
+        if (versionCode < serverVersion){
+            //服务器上面有新版本
+            String url = SpUtils.getString(BaseActivity.this,ContentValue.DOWNLOAD_URL,"");
+            showDialog(url);
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public String getVersionName(){
+        try {
+            PackageInfo info = mPmanager.getPackageInfo(getPackageName(),0);
+            versionName = info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return versionName;
+    }
+
+    private void showDialog(final String url) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("检测到新版本");
+        builder.setMessage(SpUtils.getString(this,ContentValue.VERSION_DES,""));
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //下载
+                goToInternet(UIUtils.getContext(),url);
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        builder.show();
+    }
+
+    //跳转到网页
+    public void goToInternet(Context context, String marketUrl){
+        Uri uri = Uri.parse(marketUrl);
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 是否注册事件分发
+     *
+     * @return true绑定EventBus事件分发，默认不绑定，子类需要绑定的话复写此方法返回true.
+     */
+    protected boolean isRegisterEventBus() {
+        return false;
+    }
 }

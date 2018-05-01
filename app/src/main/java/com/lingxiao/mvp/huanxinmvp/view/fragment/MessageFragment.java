@@ -19,10 +19,15 @@ import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.adapter.MessageAdapter;
+import com.lingxiao.mvp.huanxinmvp.event.MessageEvent;
+import com.lingxiao.mvp.huanxinmvp.event.SkinChangeEvent;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.MessagePresenterImpl;
 import com.lingxiao.mvp.huanxinmvp.presenter.MessagePresenter;
+import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 import com.lingxiao.mvp.huanxinmvp.view.ChatActivity;
 import com.lingxiao.mvp.huanxinmvp.view.MessageView;
+import com.lingxiao.mvp.huanxinmvp.widget.SwipeItemLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -43,6 +48,7 @@ public class MessageFragment extends BaseFragment implements MessageView{
 
     @Override
     public void initData() {
+        sf_message.setRefreshing(false);
     }
     @Override
     public View initView() {
@@ -58,9 +64,16 @@ public class MessageFragment extends BaseFragment implements MessageView{
                 intent.putExtra("name",username);
                 startActivity(intent);
             }
+
+            @Override
+            public void onMsgDelete(View view, int pos, String username) {
+                messagePresenter.deleteMessages(username,pos);
+            }
         });
         rv_message.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv_message.setAdapter(adapter);
+        rv_message.addOnItemTouchListener(new SwipeItemLayout.OnSwipeItemTouchListener(getActivity()));
+
         messagePresenter.getMessages();
         sf_message.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -68,15 +81,19 @@ public class MessageFragment extends BaseFragment implements MessageView{
                 messagePresenter.getMessages();
             }
         });
-
+        sf_message.setRefreshing(true);
+        sf_message.setColorSchemeResources(
+                R.color.colorPrimary,
+                R.color.colorAccent,
+                R.color.btnNormal);
         return view;
     }
 
     @Override
     public void onGetAllMessages(List<EMConversation> conversationList) {
-        sf_message.setRefreshing(false);
         adapter.setConversationList(conversationList);
         adapter.notifyDataSetChanged();
+        sf_message.setRefreshing(false);
         Log.i("fragment", "daxiao"+conversationList.size());
     }
 
@@ -85,19 +102,32 @@ public class MessageFragment extends BaseFragment implements MessageView{
         messagePresenter.getMessages();
     }
 
+    @Override
+    public void onDelete(boolean result, String msg) {
+        if (result){
+            adapter.notifyDataSetChanged();
+        }else {
+            ToastUtils.showToast("删除失败"+msg);
+        }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetMessageEvent(List<EMMessage> list){
         messagePresenter.getMessages();
     }
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
+
+    /**
+     * 订阅chatactivity发送过来的消息
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageResult(MessageEvent event){
+        messagePresenter.getMessages();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
+    protected boolean isRegisterEventBus() {
+        return true;
     }
 }

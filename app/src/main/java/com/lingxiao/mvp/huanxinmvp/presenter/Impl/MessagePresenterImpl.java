@@ -19,6 +19,8 @@ import java.util.Map;
 
 public class MessagePresenterImpl implements MessagePresenter{
     private MessageView messageView;
+    private ArrayList<EMConversation> messageList;
+
     public MessagePresenterImpl(MessageView messageView){
         this.messageView = messageView;
     }
@@ -30,7 +32,7 @@ public class MessagePresenterImpl implements MessagePresenter{
                         .getAllConversations();
         Collection<EMConversation> values = allMessages.values();
         //获取会话的集合
-        ArrayList<EMConversation> messageList = new ArrayList<>(values);
+        messageList = new ArrayList<>(values);
         //根据最近收到的消息时间的顺序对会话进行排序
         Collections.sort(messageList, new Comparator<EMConversation>() {
             @Override
@@ -45,5 +47,20 @@ public class MessagePresenterImpl implements MessagePresenter{
     public void clearAllUnreadMark() {
         EMClient.getInstance().chatManager().markAllConversationsAsRead();
         messageView.onClearAllUnreadMark();
+    }
+
+    @Override
+    public void deleteMessages(String username,int pos) {
+        try {
+            //删除和某个user会话，如果需要保留聊天记录，传false
+            EMClient.getInstance().chatManager().deleteConversation(username, true);
+            if (messageList != null || messageList.size() > 0){
+                messageList.remove(pos);
+            }
+            messageView.onDelete(true,null);
+        }catch (Exception e){
+            e.printStackTrace();
+            messageView.onDelete(false,e.getMessage());
+        }
     }
 }

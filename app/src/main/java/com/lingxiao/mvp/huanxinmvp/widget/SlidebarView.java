@@ -1,6 +1,7 @@
 package com.lingxiao.mvp.huanxinmvp.widget;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -14,9 +15,15 @@ import android.widget.TextView;
 
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.adapter.PhoneRecycleAdapter;
+import com.lingxiao.mvp.huanxinmvp.model.ContactsModel;
+import com.lingxiao.mvp.huanxinmvp.model.UserModel;
+import com.lingxiao.mvp.huanxinmvp.utils.ChineseCharToEnUtil;
+import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.StringUtils;
+import com.lingxiao.mvp.huanxinmvp.view.AddFriendActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by lingxiao on 17-7-12.
@@ -31,7 +38,7 @@ public class SlidebarView extends View{
     private RecyclerView rv_phone;
     private TextView tv_slidebar;
     private PhoneRecycleAdapter adapter;
-
+    private Context mContext;
     public SlidebarView(Context context) {
         this(context,null);
     }
@@ -39,6 +46,7 @@ public class SlidebarView extends View{
     public SlidebarView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
+        mContext = context;
     }
 
     public SlidebarView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -93,6 +101,9 @@ public class SlidebarView extends View{
             case MotionEvent.ACTION_UP:
                 tv_slidebar.setVisibility(GONE);
                 setBackgroundColor(getResources().getColor(R.color.slidebar_normal));
+                //跳转到搜索界面
+                str = sections[getIndex(event.getY())];
+                startSelectAct(str);
                 break;
         }
         return true;
@@ -102,14 +113,28 @@ public class SlidebarView extends View{
      *recycle滑动
      */
     private void scrollRecycleView(String str) {
-        ArrayList<String> contacts = adapter.getContacts();
+        str = str.toLowerCase();
+        LogUtils.i("进入滑动函数"+str);
+        List<ContactsModel> contacts = adapter.getContacts();
         if (contacts != null && contacts.size()>0){
             for (int i = 0; i < contacts.size(); i++) {
-                if (StringUtils.getFirstChar(contacts.get(i)).equals(str)){
+                if (ChineseCharToEnUtil.getFirstChar(contacts.get(i).nickName).equals(str)){
                     rv_phone.smoothScrollToPosition(i);
+                    LogUtils.i("recycle滑动:"+i);
                     break;
                 }
             }
+        }
+    }
+
+    /**
+     * 跳转到搜索界面
+     * @param str
+     */
+    private void startSelectAct(String str){
+        if (str.equalsIgnoreCase("搜")){
+            Intent intent = new Intent(mContext, AddFriendActivity.class);
+            mContext.startActivity(intent);
         }
     }
 
