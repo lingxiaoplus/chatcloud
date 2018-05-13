@@ -21,8 +21,11 @@ import com.lingxiao.mvp.huanxinmvp.model.ContactsModel_Table;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel_Table;
 import com.lingxiao.mvp.huanxinmvp.utils.GlideHelper;
+import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.sqk.emojirelease.EmojiUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,7 +37,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageHolder>{
-    private List<EMConversation> conversationList = new ArrayList<>();
+    private List<EMConversation> conversationList;
 
     public void setConversationList(List<EMConversation> conversationList){
         this.conversationList = conversationList;
@@ -50,7 +53,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageH
     }
 
     @Override
-    public void onBindViewHolder (MessageHolder holder, final int position){
+    public void onBindViewHolder (final MessageHolder holder, final int position){
         //获取一个会话
         EMConversation emConversation = conversationList.get(position);
         //获取最近一条消息
@@ -63,16 +66,19 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageH
                 .from(ContactsModel.class)
                 .where(ContactsModel_Table.contactUserName.eq(userName))
                 .querySingle();
-        if (!model.exists()){
-            //如果不存在这个条件，就返回
-            return;
-        }
+
         EMMessage.Type type = lastMessage.getType();
         if (type == EMMessage.Type.TXT){
             EMTextMessageBody textMessageBody = (EMTextMessageBody) lastMessage.getBody();
             //获取消息内容
             String message = textMessageBody.getMessage();
-            holder.message.setText(message);
+
+            try {
+                EmojiUtil.handlerEmojiText(holder.message,message, UIUtils.getContext());
+            } catch (IOException e) {
+                e.printStackTrace();
+                holder.message.setText(message);
+            }
         }else if (type == EMMessage.Type.IMAGE){
             holder.message.setText("图片");
         }else if (type == EMMessage.Type.VOICE){
@@ -107,6 +113,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageH
             @Override
             public void onClick(View v) {
                 if (listener != null){
+                    holder.unread.setVisibility(View.GONE);
                     listener.onMsgClick(v,userName);
                 }
             }

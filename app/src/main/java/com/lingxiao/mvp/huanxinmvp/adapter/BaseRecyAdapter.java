@@ -20,7 +20,7 @@ import java.util.Map;
  * Created by lingxiao on 2017/9/30.
  */
 
-public abstract class BaseRecyAdapter<T> extends RecyclerView.Adapter<BaseRecyAdapter.BaseViewHolder>{
+public abstract class BaseRecyAdapter<T> extends RecyclerView.Adapter<BaseHolder>{
     private List<T> mList;
     //private int headCount = 0; //头布局个数
     //private int footCount = 1; //尾布局个数
@@ -41,18 +41,18 @@ public abstract class BaseRecyAdapter<T> extends RecyclerView.Adapter<BaseRecyAd
 
     }
     @Override
-    public BaseRecyAdapter.BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         mLayoutInflater = LayoutInflater
                 .from(parent.getContext());
         View view = mLayoutInflater.inflate(getLayoutId(),parent,false);
-        final BaseViewHolder holder = new BaseViewHolder(view);
+        final BaseHolder holder = new BaseHolder(view);
 
         if (onItemClickListener != null){
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int poisition = holder.getAdapterPosition();
-                    onItemClickListener.onItemClick(holder.itemView,poisition);
+                    onItemClickListener.onItemClick(holder,poisition);
                 }
             });
         }
@@ -60,12 +60,12 @@ public abstract class BaseRecyAdapter<T> extends RecyclerView.Adapter<BaseRecyAd
     }
 
     @Override
-    public void onBindViewHolder(BaseRecyAdapter.BaseViewHolder holder, int position) {
+    public void onBindViewHolder(BaseHolder holder, int position) {
 
             bindData(holder,position,mList);
     }
 
-    public abstract void bindData(BaseViewHolder holder, int position, List<T> mList);
+    public abstract void bindData(BaseHolder holder, int position, List<T> mList);
     /**
      *获取布局文件
      */
@@ -80,26 +80,8 @@ public abstract class BaseRecyAdapter<T> extends RecyclerView.Adapter<BaseRecyAd
         return mList == null?0:mList.size();
     }
 
-    public class BaseViewHolder extends RecyclerView.ViewHolder{
-        private Map<Integer,View> mViewMap;
-        public BaseViewHolder(View itemView) {
-            super(itemView);
-            mViewMap = new HashMap<>();
-            mItemView = itemView;
-        }
-        public View getView(int id){
-            View view = mViewMap.get(id);
-            if (view == null){
-                view = itemView.findViewById(id);
-                mViewMap.put(id,view);
-            }
-            return view;
-        }
-    }
-
-
     public interface OnItemClickListener {
-        void onItemClick(View view, int position);
+        void onItemClick(BaseHolder holder, int position);
     }
 
     private OnItemClickListener onItemClickListener;

@@ -12,15 +12,22 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.example.skinlibrary.SkinLib;
 import com.lingxiao.mvp.huanxinmvp.R;
+import com.lingxiao.mvp.huanxinmvp.adapter.BaseHolder;
 import com.lingxiao.mvp.huanxinmvp.adapter.BaseRecyAdapter;
 import com.lingxiao.mvp.huanxinmvp.adapter.SkinAdapter;
 import com.lingxiao.mvp.huanxinmvp.event.SkinChangeEvent;
+import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.SpUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
+import com.lingxiao.mvp.huanxinmvp.widget.RippleAnimation;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -74,23 +81,27 @@ public class SkinActivity extends BaseActivity {
         colorName.add("blue300");
         colorName.add("indigo300");
         colorName.add("deepPurple300");
-
-        SkinAdapter adapter = new SkinAdapter(colorList,this);
+        final int pos = SpUtils.getInt(this,ContentValue.SKIN_POSITION,0);
+        final SkinAdapter adapter = new SkinAdapter(colorList,this);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recySkin.setLayoutManager(manager);
         recySkin.setAdapter(adapter);
+
+
         adapter.setOnItemClickListener(new BaseRecyAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
+            public void onItemClick(BaseHolder holder, int position) {
+                RippleAnimation.create(holder.itemView).setDuration(1000).start();
+                SpUtils.putInt(UIUtils.getContext(), ContentValue.SKIN_POSITION,position);
                 if (position == 0){
-                    SkinLib.restoreDefaultTheme();
+                    UIUtils.restoreDefaultTheme();
                 }else {
-                    SkinLib.changeSkinDef(colorName.get(position));
+                    UIUtils.changeSkinDef(colorName.get(position));
                 }
-                //发送换肤消息
                 EventBus.getDefault().post(new SkinChangeEvent(colorList.get(position)));
             }
         });
+
     }
 
     @Override

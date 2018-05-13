@@ -52,9 +52,14 @@ public class CallPhoneActivity extends BaseActivity implements CallView {
         presenter = new CallPresenterImpl(this);
         callTime = System.currentTimeMillis();
         Intent intent = getIntent();
+        initData(intent);
+    }
+
+    private void initData(Intent intent) {
         int type = intent.getIntExtra("type", 0);
         String name = intent.getStringExtra("name");
         mProtrait = intent.getStringExtra("protrait");
+        String nickName = intent.getStringExtra("nickname");
         if (type == 0) {
             presenter.callPhone(name);
         } else if (type == 1) {
@@ -63,6 +68,9 @@ public class CallPhoneActivity extends BaseActivity implements CallView {
         }
         if (null != mProtrait){
             GlideHelper.loadImageView(mProtrait,imgCallHead);
+        }
+        if (null != nickName){
+            tvCallName.setText(nickName);
         }
     }
 

@@ -31,12 +31,15 @@
         android:layout_weight="1">
 
     </FrameLayout>
-    <com.ashokvarma.bottomnavigation.BottomNavigationBar
+    <com.lingxiao.mvp.huanxinmvp.widget.BottomSkinNavView
         android:id="@+id/bm_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:bnbActiveColor="@color/colorPrimary"
+        app:bnbInactiveColor="@color/colorBottomNav"
+        app:bnbBackgroundColor="@color/white"
         app:bnbMode="mode_fixed">
-    </com.ashokvarma.bottomnavigation.BottomNavigationBar>
+    </com.lingxiao.mvp.huanxinmvp.widget.BottomSkinNavView>
 
 
 </LinearLayout>

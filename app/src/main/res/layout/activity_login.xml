@@ -3,13 +3,22 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_gradient">
     <ImageView
-        android:layout_marginTop="30dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:src="@mipmap/ic_launcher"
         android:layout_gravity="center"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textColor="@color/black_alpha_160"
+        android:textSize="@dimen/len_24"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"/>
     <android.support.design.widget.TextInputLayout
         android:id="@+id/tl_login_username"
         android:padding="5dp"
@@ -22,7 +31,9 @@
             android:id="@+id/et_login_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="请输入用户名"/>
+            android:hint="请输入用户名"
+            android:textColorHint="@color/black_alpha_160"
+            android:textColor="@color/black_alpha_208"/>
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
         android:id="@+id/tl_login_psd"
@@ -37,7 +48,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:hint="请输入密码"/>
+            android:hint="请输入密码"
+            android:textColorHint="@color/black_alpha_160"
+            android:textColor="@color/black_alpha_208"/>
     </android.support.design.widget.TextInputLayout>
     <Button
         android:id="@+id/bt_login"

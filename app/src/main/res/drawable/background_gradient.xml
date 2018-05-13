@@ -5,8 +5,8 @@
         android:thicknessRatio="18"
         android:useLevel="false">
         <gradient
-            android:endColor="@color/light_green_400"
-            android:startColor="@color/light_blue_100"
+            android:endColor="@color/green_300"
+            android:startColor="@color/light_green_300"
             android:angle="90"
             />
     </shape>

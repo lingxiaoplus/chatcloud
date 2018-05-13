@@ -80,7 +80,9 @@ public class ContentValue {
     public static final String VERSION_CODE = "version_code";
     public static final String DOWNLOAD_URL = "download_url";
     public static final String VERSION_DES = "version_des";
+    public static final String VERSION_NAME = "version_name";
     public static final String UPDATEURL = "http://chat.lingxiaosuse.cn/update/update.json";
 
 
+    public static final String SKIN_POSITION = "skin_position";
 }

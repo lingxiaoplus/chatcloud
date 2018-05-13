@@ -26,7 +26,7 @@ public class PopWindowAdapter extends BaseRecyAdapter{
 
     }
     @Override
-    public void bindData(BaseViewHolder holder, int position, List mList) {
+    public void bindData(BaseHolder holder, int position, List mList) {
         try {
             imageView = (AppCompatImageView) holder.getView(R.id.iv_pop);
             textView = (TextView) holder.getView(R.id.tv_pop);

@@ -3,6 +3,7 @@ package com.lingxiao.mvp.huanxinmvp.adapter;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +27,11 @@ import com.lingxiao.mvp.huanxinmvp.model.ContactsModel_Table;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel_Table;
 import com.lingxiao.mvp.huanxinmvp.utils.GlideHelper;
+import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.sqk.emojirelease.EmojiUtil;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -121,7 +125,12 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseHolder>{
         if (type == EMMessage.Type.TXT){
             EMTextMessageBody emMessageBody = (EMTextMessageBody) emMessage.getBody();
             msg = emMessageBody.getMessage();
-            holder.setText(R.id.txt_content,msg);
+            try {
+                EmojiUtil.handlerEmojiText((TextView) holder.getView(R.id.txt_content),msg, UIUtils.getContext());
+            } catch (IOException e) {
+                e.printStackTrace();
+                holder.setText(R.id.txt_content,msg);
+            }
         }else if (type == EMMessage.Type.IMAGE){
             EMImageMessageBody messageBody = (EMImageMessageBody) emMessage.getBody();
             picPath = messageBody.thumbnailLocalPath();

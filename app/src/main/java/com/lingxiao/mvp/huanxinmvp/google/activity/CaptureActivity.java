@@ -87,7 +87,7 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                CaptureActivity.this.finish();
             }
         });
 //		cancelScanButton = (Button) this.findViewById(R.id.btn_cancel_scan);

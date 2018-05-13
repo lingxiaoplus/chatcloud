@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BadgeItem;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
@@ -29,6 +30,8 @@ import com.avos.avoscloud.feedback.FeedbackAgent;
 import com.google.gson.Gson;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.exceptions.HyphenateException;
+import com.lingxiao.mvp.huanxinmvp.event.PhoneChangedEvent;
 import com.lingxiao.mvp.huanxinmvp.event.SkinChangeEvent;
 import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.google.activity.CaptureActivity;
@@ -37,6 +40,8 @@ import com.lingxiao.mvp.huanxinmvp.receiver.NetworkReceiver;
 import com.lingxiao.mvp.huanxinmvp.utils.HttpUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.SpUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.StringUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.ThreadUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.lingxiao.mvp.huanxinmvp.view.AddFriendActivity;
@@ -44,8 +49,10 @@ import com.lingxiao.mvp.huanxinmvp.view.BaseActivity;
 import com.lingxiao.mvp.huanxinmvp.view.WebViewActivity;
 import com.lingxiao.mvp.huanxinmvp.view.fragment.BaseFragment;
 import com.lingxiao.mvp.huanxinmvp.view.fragment.FragmentFactory;
+import com.lingxiao.mvp.huanxinmvp.widget.BottomSkinNavView;
 import com.liuguangqiang.cookie.CookieBar;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -60,7 +67,7 @@ public class MainActivity extends BaseActivity {
 
     private TextView tv_toolbar;
     private FrameLayout fl_main;
-    private BottomNavigationBar bm_bar;
+    private BottomSkinNavView bm_bar;
     private BadgeItem badgeItem;
     private String[] itemStr = {"消息","通讯录","发现","我"};
     /*private static final String TAG_MESSAGE = "TAG_MESSAGE";
@@ -132,22 +139,11 @@ public class MainActivity extends BaseActivity {
         isSnackBar = true;
 
         //检测版本
-        HttpUtils.doGet(ContentValue.UPDATEURL, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String result = response.body().string();
-                Gson gson = new Gson();
-                VersionModel modle = gson.fromJson(result, VersionModel.class);
-                SpUtils.putInt(UIUtils.getContext(), ContentValue.VERSION_CODE, modle.getVersionCode());
-                SpUtils.putString(UIUtils.getContext(), ContentValue.VERSION_DES, modle.getVersionDes());
-                SpUtils.putString(UIUtils.getContext(), ContentValue.DOWNLOAD_URL, modle.getDownloadUrl());
-            }
-        });
+        boolean isCheck = SpUtils
+                .getBoolean(this,ContentValue.UPDATE,true);
+        if (isCheck){
+            checkUpdate();
+        }
     }
 
     private void initBottomNavigationBar() {
@@ -166,10 +162,11 @@ public class MainActivity extends BaseActivity {
         bm_bar.addItem(item);
 
         //bottom总体状态的颜色
-        bm_bar.setBarBackgroundColor(R.color.white);
-        bm_bar.setActiveColor(R.color.colorPrimary);
+        //bm_bar.setBarBackgroundColor(R.color.white);
+        //bm_bar.setActiveColor(R.color.colorPrimary);
+
         //未选中颜色
-        bm_bar.setInActiveColor(R.color.colorBottomNav);
+        //bm_bar.setInActiveColor(R.color.colorBottomNav);
         //初始化
         bm_bar.initialise();
 
@@ -221,10 +218,10 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initView() {
-        tv_toolbar = (TextView) findViewById(R.id.tv_toolbar);
-        fl_main = (FrameLayout) findViewById(R.id.fl_main);
-        bm_bar = (BottomNavigationBar) findViewById(R.id.bm_bar);
-        tb_main = (Toolbar) findViewById(R.id.tb_main);
+        tv_toolbar = findViewById(R.id.tv_toolbar);
+        fl_main = findViewById(R.id.fl_main);
+        bm_bar = findViewById(R.id.bm_bar);
+        tb_main = findViewById(R.id.tb_main);
         tb_main.setTitle("");
         setSupportActionBar(tb_main);           //设置了才能添加menu
         /*badgeItem = new BadgeItem()
@@ -346,18 +343,23 @@ public class MainActivity extends BaseActivity {
     }
     //显示是否打开链接对话框
     private void showisOpenDialog(final String url){
+        if (!StringUtils.CheckUsername(url)) {
+            ToastUtils.showToast("没有这个用户！");
+            return;
+        }
         final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainActivity.this);
-        builder.setMessage("是否打开链接:"+url);
+        builder.setMessage("是否添加好友："+url);
         builder.setTitle("提示");
         builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(MainActivity.this,WebViewActivity.class);
+                /*Intent intent = new Intent(MainActivity.this,WebViewActivity.class);
 
                 if (url != null){
                     intent.putExtra("url", url);
                 }
-                startActivity(intent);
+                startActivity(intent);*/
+                addFriend(url);
 
             }
         });
@@ -387,7 +389,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 10) { //RESULT_OK = -1
+        if (requestCode == 10 && resultCode == CaptureActivity.RESULT_CODE_QR_SCAN) {
             Bundle bundle = data.getExtras();
             scanResult = bundle.getString(CaptureActivity.INTENT_EXTRA_KEY_QR_SCAN);
             //说明返回数据了，弹窗提示是否打开链接
@@ -411,36 +413,28 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onChangeSkin(SkinChangeEvent event) {
-        ToastUtils.showToast("换肤了:"+event.color);
-        bm_bar.setActiveColor(event.color);
-        LogUtils.i("换肤了act： event:"+event.color +
-                "bm:"+bm_bar.getActiveColor());
-    }
-
     @Override
     protected boolean isRegisterEventBus() {
         return true;
     }
 
-    /*//监听返回键按两次退出，这里不需要
-    private long PressedTime = 0;
-    @Override
-    public void onBackPressed() {
-        long nowTime = System.currentTimeMillis();
-        if ((nowTime - PressedTime) > 3000){
-            //当前移动网络连接可用
-            new CookieBar.Builder(MainActivity.this)
-                    .setTitle("提示")
-                    .setMessage("再按一次退出应用")
-                    .setIcon(R.mipmap.ic_net_prompting)
-                    .setLayoutGravity(Gravity.BOTTOM)
-                    .setBackgroundColor(R.color.colorPrimary)
-                    .show();
-            PressedTime = nowTime;
-        }else {
-            ActivityManager.getAppManager().AppExit(this);
-        }
-    }*/
+    private void addFriend(final String username){
+        ThreadUtils.runOnSonUIThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    EMClient.getInstance().contactManager().addContact(username,"申请添加好友");
+                    EventBus.getDefault().post(new PhoneChangedEvent(username,false));
+                } catch (final HyphenateException e) {
+                    e.printStackTrace();
+                    ThreadUtils.runOnMainThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ToastUtils.showToast("添加失败"+e);
+                        }
+                    });
+                }
+            }
+        });
+    }
 }

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/message_card"
+        style="@style/cardStyle"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardElevation="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_msg_head"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerInParent="true" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@id/iv_msg_head"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_msg_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="名字"
+                    android:textColor="#444"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:id="@+id/tv_msg_reson"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
+                    android:text="理由："
+                    android:textColor="#666"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_msg_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_margin="5dp"
+                android:text="2017/03/20"
+                android:textColor="#666"
+                android:textSize="16sp" />
+            <FrameLayout
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/tv_msg_time"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/bt_msg_agree"
+                    android:layout_width="70dp"
+                    android:layout_height="30dp"
+                    android:text="同意"
+                    android:layout_gravity="start"
+                    android:background="#11111111"/>
+                <Button
+                    android:id="@+id/bt_msg_disagree"
+                    android:layout_width="70dp"
+                    android:layout_height="30dp"
+                    android:text="拒绝"
+                    android:layout_gravity="end"
+                    android:background="#11111111"/>
+                <TextView
+                    android:id="@+id/tv_msg_status"
+                    android:visibility="invisible"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="状态"
+                    android:textColor="@color/black_alpha_160"
+                    android:textSize="@dimen/len_16"
+                    android:layout_gravity="center"
+                    />
+            </FrameLayout>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

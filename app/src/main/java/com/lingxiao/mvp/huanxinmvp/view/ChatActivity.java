@@ -3,6 +3,7 @@ package com.lingxiao.mvp.huanxinmvp.view;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -13,12 +14,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -30,11 +34,13 @@ import android.widget.TextView;
 import com.donkingliang.imageselector.utils.ImageSelectorUtils;
 import com.hyphenate.chat.EMMessage;
 import com.lingxiao.mvp.huanxinmvp.R;
+import com.lingxiao.mvp.huanxinmvp.adapter.BaseHolder;
 import com.lingxiao.mvp.huanxinmvp.adapter.BaseRecyAdapter;
 import com.lingxiao.mvp.huanxinmvp.adapter.ChatAdapter;
 import com.lingxiao.mvp.huanxinmvp.adapter.PopWindowAdapter;
 import com.lingxiao.mvp.huanxinmvp.event.AudioEvent;
 import com.lingxiao.mvp.huanxinmvp.event.MessageEvent;
+import com.lingxiao.mvp.huanxinmvp.event.PhoneChangedEvent;
 import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.model.ContactsModel;
 import com.lingxiao.mvp.huanxinmvp.model.ContactsModel_Table;
@@ -85,7 +91,7 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
     private FaceFragment faceFragment;
     private int faceNum = 0;
     private PopupWindow mPopWindow;
-    private ContactsModel contactModel;
+    private ContactsModel mContactModel;
     private int REQUEST_CODE = 1;
 
     @Override
@@ -95,7 +101,7 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
         ButterKnife.bind(this);
         chatPresenter = new ChatPresenterImpl(this);
         username = getIntent().getStringExtra("name");
-        contactModel = SQLite
+        mContactModel = SQLite
                 .select()
                 .from(ContactsModel.class)
                 .where(ContactsModel_Table.contactUserName.eq(username))
@@ -107,7 +113,7 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
     }
 
     private void initView() {
-        toolbar.setTitle(contactModel.nickName);
+        toolbar.setTitle(mContactModel.nickName);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null){
@@ -143,6 +149,20 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
             }
         });
 
+        editChat.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (faceFragment.isVisible()){
+                    FragmentTransaction transation = getSupportFragmentManager().beginTransaction();
+                    transation
+                            .hide(faceFragment)
+                            .commit();
+                    btnFace.setBackground(getResources().getDrawable(R.drawable.ic_face_normal));
+                    faceNum = 0;
+                }
+                return false;
+            }
+        });
         //初始化recycle
         recyChat.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ChatAdapter(null);
@@ -201,6 +221,8 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
                 adapter.notifyDataSetChanged();
             }
         });
+        //发送消息通知更新
+        EventBus.getDefault().post(new MessageEvent(username,null));
     }
 
     //订阅消息
@@ -258,13 +280,12 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
 
     @OnClick(R.id.bt_send)
     public void sendMessage(){
+
         String msg = editChat.getText().toString();
         //通过chatpresenter处理发送消息的逻辑
         chatPresenter.sendMessage(username,msg);
         editChat.setText("");
         //Log.i("username", "onClick: ");
-        //发送消息通知更新
-        EventBus.getDefault().post(new MessageEvent(username,msg));
     }
 
     @OnClick(R.id.bt_face)
@@ -303,6 +324,7 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
     }
 
     private void showPopupWindow(){
+        backgroundAlpha(0.5f);
         //设置contentView
         View contentView = LayoutInflater
                 .from(ChatActivity.this)
@@ -318,13 +340,14 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
         recyclerView.setAdapter(adapter);
         adapter.setOnItemClickListener(new BaseRecyAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View View, int position) {
-                Intent intent = intent = new Intent(UIUtils.getContext(),CallPhoneActivity.class);;
+            public void onItemClick(BaseHolder holder, int position) {
+                Intent intent = new Intent(UIUtils.getContext(),CallPhoneActivity.class);;
                 if (position == 0 || position == 1){
                     //打电话  视频
                     intent.putExtra("type",position);
                     intent.putExtra("name",username);
-                    intent.putExtra("protrait",contactModel.protrait);
+                    intent.putExtra("nickname",mContactModel.nickName);
+                    intent.putExtra("protrait",mContactModel.protrait);
                     startActivity(intent);
                 }else if (position == 2){
                     //发送语音消息
@@ -355,10 +378,29 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
                 .from(ChatActivity.this)
                 .inflate(R.layout.activity_chat, null);
         mPopWindow.setFocusable(true);
+        //点击外部消失
+        mPopWindow.setOutsideTouchable(true);
+        mPopWindow.setBackgroundDrawable(new BitmapDrawable());
         //mPopWindow.showAsDropDown(rootview);
         mPopWindow.showAtLocation(rootview, Gravity.BOTTOM, 0, 0);
+        mPopWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                backgroundAlpha(1);
+            }
+        });
     }
 
+    /**
+     * 设置添加屏幕的背景透明度
+     * @param bgAlpha
+     */
+    public void backgroundAlpha(float bgAlpha)
+    {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getWindow().setAttributes(lp);
+    }
     @Override
     protected boolean isRegisterEventBus() {
         return true;
@@ -378,6 +420,27 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
             ArrayList<String> images = data.getStringArrayListExtra(
                     ImageSelectorUtils.SELECT_RESULT);
             chatPresenter.sendPicMessage(username,false,images.get(0));
+        }
+    }
+
+    /**
+     * 监听返回按钮，隐藏表情和popwindow
+     * 先监听popwindow是否关闭，然后再考虑表情
+     */
+    @Override
+    public void onBackPressed() {
+        //可能pop还没有初始化
+        if (null != mPopWindow && mPopWindow.isShowing()){
+            mPopWindow.dismiss();
+        }else if (faceFragment.isVisible()){
+            FragmentTransaction transation = getSupportFragmentManager().beginTransaction();
+            transation
+                    .hide(faceFragment)
+                    .commit();
+            btnFace.setBackground(getResources().getDrawable(R.drawable.ic_face_normal));
+            faceNum = 0;
+        }else {
+            super.onBackPressed();
         }
     }
 }

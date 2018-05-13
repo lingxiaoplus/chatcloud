@@ -8,7 +8,6 @@
     android:layout_marginTop="@dimen/len_4"
     android:layout_marginEnd="@dimen/len_4"
     >
-
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,11 +25,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:text="sdsadasdsadasdsadsa"
             android:minHeight="@dimen/len_24"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/textPrimary"
             />
-
     </FrameLayout>
 
 
@@ -40,7 +39,7 @@
         android:layout_height="@dimen/portraitSize"
         android:layout_gravity="start"
         android:padding="1px"
-        android:src="@drawable/ic_img_protrait"
+        app:srcCompat="@drawable/ic_img_protrait"
         app:civ_border_color="@color/white"
         app:civ_border_width="2dp" />
 

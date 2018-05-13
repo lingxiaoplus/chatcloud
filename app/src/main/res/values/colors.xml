@@ -27,7 +27,7 @@
     <!--背景色-->
     <color name="windowsBackground">#f7f7f7</color>
     <color name="windowsBackgroundLight">#f8f8f8</color>
-    <color name="translate">#00000000</color>
+    <color name="translate">#33000000</color>
 
     <!--字体颜色-->
     <color name="textPrimary">#4e5864</color>

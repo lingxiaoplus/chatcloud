@@ -1,11 +1,16 @@
 package com.lingxiao.mvp.huanxinmvp;
 
+import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.Vibrator;
@@ -24,18 +29,24 @@ import java.util.List;
 
 public class NotifyService extends Service {
     private IBinder mBinder = new NotifyBinder();
+    private Context mContext;
+    private SoundPool soundPool;
+    private int foregroundSound;
+    private int backgroundSound;
     public NotifyService() {
-
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        mContext = this;
+        initSoundPool();
+        initGetMsgListener();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
 
@@ -89,5 +100,81 @@ public class NotifyService extends Service {
         manager.notify(1,notification);
         //启动为前台服务
         startForeground(1,notification);
+    }
+
+    private void initGetMsgListener() {
+        EMClient.getInstance().chatManager().addMessageListener(new EMMessageListener() {
+            @Override
+            public void onMessageReceived(List<EMMessage> list) {
+                //收到消息
+                EventBus.getDefault().post(list);
+                boolean messageRemind = SpUtils.getBoolean(mContext,ContentValue.MESSAGE_REMIND,true);
+                boolean messageVoice = SpUtils.getBoolean(mContext,ContentValue.MESSAGE_VOICE,true);
+                boolean messageShake = SpUtils.getBoolean(mContext,ContentValue.MESSAGE_SNAKE,true);
+                if (messageRemind){
+                    //语音提示
+                    if (messageVoice){
+                        if (isInBackground()){
+                            soundPool.play(backgroundSound,1,1,0,0,1);
+                            sendNotify(list.get(0));
+                        }else {
+                            soundPool.play(foregroundSound,1,1,0,0,1);
+                        }
+                    }
+                    //震动
+                    if (messageShake){
+                        Vibrator vibrator = (Vibrator)mContext
+                                .getSystemService(mContext.VIBRATOR_SERVICE);
+                        vibrator.vibrate(1000); //震动时间
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCmdMessageReceived(List<EMMessage> list) {
+
+            }
+
+            @Override
+            public void onMessageRead(List<EMMessage> list) {
+
+            }
+
+            @Override
+            public void onMessageDelivered(List<EMMessage> list) {
+
+            }
+
+            @Override
+            public void onMessageChanged(EMMessage emMessage, Object o) {
+
+            }
+        });
+    }
+
+    /**
+     *判断当前应用是否处于后台
+     */
+    private boolean isInBackground(){
+        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> runTacks = manager.getRunningTasks(50);
+        ActivityManager.RunningTaskInfo info = runTacks.get(0);
+        //获取栈顶的activity 的包名
+        ComponentName componentName = info.topActivity;
+        //判断包名是否相等
+        if (componentName.getPackageName().equals(getPackageName())){
+            return false;
+        }
+        return true;
+    }
+
+    private void initSoundPool() {
+        //soundpool 构造 第一个参数 这个池子中管理几个音频
+        //第二个参数 音频的类型 一般传入AudioManager.STREAM_MUSIC
+        //第三个参数 声音的采样频率 但是 没有用默认值使用0
+        soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC,0);
+        foregroundSound = soundPool.load(getApplicationContext(), R.raw.duan, 1);
+        backgroundSound = soundPool.load(getApplicationContext(), R.raw.yulu,1);
     }
 }

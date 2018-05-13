@@ -3,6 +3,7 @@ package com.lingxiao.mvp.huanxinmvp.view;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -19,6 +20,7 @@ import com.donkingliang.imageselector.utils.ImageSelectorUtils;
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.event.UserChangedEvent;
 import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
+import com.lingxiao.mvp.huanxinmvp.google.encoding.EncodingHandler;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.UserCardPresenterImpl;
 import com.lingxiao.mvp.huanxinmvp.presenter.UserCardPresenter;
@@ -52,6 +54,10 @@ public class UserInfoActivity extends BaseActivity implements UserCardView {
     SignalCardLayout infoDesc;
     @BindView(R.id.card_info_phone)
     SignalCardLayout infoPhone;
+    @BindView(R.id.iv_info_qrcode)
+    ImageView imgQrcode;
+    @BindView(R.id.card_info_username)
+    SignalCardLayout cardUsername;
 
     private int REQUEST_CODE = 1;
     private AlertDialog mDialog;
@@ -60,6 +66,7 @@ public class UserInfoActivity extends BaseActivity implements UserCardView {
     private UserCardPresenter presenter;
 
     private int sexPos; //记录性别
+    private String mUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +121,14 @@ public class UserInfoActivity extends BaseActivity implements UserCardView {
     @OnClick(R.id.card_info_phone)
     public void changePhone() {
         ToastUtils.showToast("无法修改绑定电话");
+    }
+
+    @OnClick(R.id.card_change_qrcode)
+    public void getQrCode() {
+        Intent intent = new Intent(getApplicationContext(), LocalPicActivity.class);
+        intent.putExtra("qrcode", true);
+        intent.putExtra("username", mUsername);
+        startActivity(intent);
     }
 
     @Override
@@ -235,7 +250,14 @@ public class UserInfoActivity extends BaseActivity implements UserCardView {
                 infoName.setRightText(model.getNickname());
             }
             infoPhone.setRightText(model.getPhone());
+            cardUsername.setRightText(model.getUsername());
             objId = model.getObjId();
+            //生成二维码
+            //300表示宽高
+            mUsername = model.getUsername();
+            Bitmap bitmap = EncodingHandler
+                    .createQRCode(mUsername, 20);
+            imgQrcode.setImageBitmap(bitmap);
         } catch (Exception e) {
             ToastUtils.showToast("获取信息失败，请尝试重新登录" + e.getMessage());
             LogUtils.i(e.getMessage());

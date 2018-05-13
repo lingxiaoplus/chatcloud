@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.lingxiao.mvp.huanxinmvp.MainActivity;
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.adapter.PhoneRecycleAdapter;
+import com.lingxiao.mvp.huanxinmvp.event.PhoneChangedEvent;
 import com.lingxiao.mvp.huanxinmvp.model.ContactsModel;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.PhonePresenterImpl;
@@ -26,6 +27,9 @@ import com.lingxiao.mvp.huanxinmvp.view.BaseActivity;
 import com.lingxiao.mvp.huanxinmvp.view.ChatActivity;
 import com.lingxiao.mvp.huanxinmvp.view.PhoneView;
 import com.lingxiao.mvp.huanxinmvp.widget.PhoneLayout;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -134,5 +138,18 @@ public class PhoneFragment extends BaseFragment implements PhoneView{
         }else {
             Snackbar.make(view,"删除失败!"+errorMsg,Snackbar.LENGTH_LONG);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUpdateContact(PhoneChangedEvent event){
+        //添加联系人更新
+        phoneLayout.setRefreshing(true);
+        ToastUtils.showToast("添加成功!");
+        phonePresenter.updateContact();
+    }
+
+    @Override
+    protected boolean isRegisterEventBus() {
+        return true;
     }
 }

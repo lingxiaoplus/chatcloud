@@ -72,11 +72,7 @@ public class BaseActivity extends AppCompatActivity{
             EventBus.getDefault().register(this);
         }
 
-        boolean isCheck = SpUtils
-                .getBoolean(this,ContentValue.UPDATE,true);
-        if (isCheck){
-            checkUpdate();
-        }
+        mPmanager = getPackageManager();
     }
 
     /**
@@ -192,8 +188,6 @@ public class BaseActivity extends AppCompatActivity{
      *检查更新
      */
     public boolean checkUpdate(){
-
-        mPmanager = getPackageManager();
         int serverVersion = SpUtils
                 .getInt(BaseActivity.this, ContentValue.VERSION_CODE,1);
         try {
@@ -247,6 +241,7 @@ public class BaseActivity extends AppCompatActivity{
     public void goToInternet(Context context, String marketUrl){
         Uri uri = Uri.parse(marketUrl);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 

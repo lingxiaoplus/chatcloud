@@ -29,6 +29,7 @@ import com.hyphenate.chat.EMTextMessageBody;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.NetUtils;
 import com.lingxiao.mvp.huanxinmvp.MainActivity;
+import com.lingxiao.mvp.huanxinmvp.NotifyService;
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.event.ExitEvent;
 import com.lingxiao.mvp.huanxinmvp.event.PhoneChangedEvent;
@@ -43,6 +44,11 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.Iterator;
 import java.util.List;
+
+import skin.support.SkinCompatManager;
+import skin.support.app.SkinCardViewInflater;
+import skin.support.constraint.app.SkinConstraintViewInflater;
+import skin.support.design.app.SkinMaterialViewInflater;
 
 /**
  * 全局的application
@@ -79,7 +85,7 @@ public class MyApplication extends Application{
         //初始化声音池
         initSoundPool();
 
-        initGetMsgListener();
+        //initGetMsgListener();
 
         //注册一个监听状态的listener
         EMClient.getInstance().addConnectionListener(new MyConnectionListener());
@@ -88,10 +94,21 @@ public class MyApplication extends Application{
         FlowManager.init(this);
 
         //初始化skin皮肤
-        SkinLib.init(this);
+        initSkinLib(this);
 
         //初始化mob短信验证
         MobSDK.init(this,"255ed51d720ec","a4a3fcb876482f2cf4c6065b6f32b8ca");
+    }
+
+    private void initSkinLib(MyApplication app) {
+        //初始化皮肤加载框架
+        SkinCompatManager.withoutActivity(app)                         // 基础控件换肤初始化
+                .addInflater(new SkinMaterialViewInflater())            // material design 控件换肤初始化[可选]
+                .addInflater(new SkinConstraintViewInflater())          // ConstraintLayout 控件换肤初始化[可选]
+                .addInflater(new SkinCardViewInflater())                // CardView v7 控件换肤初始化[可选]
+                .setSkinStatusBarColorEnable(true)                     // 关闭状态栏换肤，默认打开[可选]
+                .setSkinWindowBackgroundEnable(true)                   // 关闭windowBackground换肤，默认打开[可选]
+                .loadSkin();
     }
 
     private void initGetMsgListener() {

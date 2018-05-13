@@ -135,6 +135,11 @@ public class UserCardFragment extends BaseFragment implements UserCardView {
         SkinUtil.changeSVGColor(ivSetting,R.drawable.ic_img_setting,
                 event.color, UIUtils.getContext());
     }*/
+
+    /**
+     * 在settingact中修改了用户信息
+     * @param event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onChangeInfo(UserChangedEvent event) {
         tvMineUsername.setText(event.nickname);
@@ -145,6 +150,11 @@ public class UserCardFragment extends BaseFragment implements UserCardView {
                 .into(headImgView);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSkinChange(SkinChangeEvent event){
+        UIUtils.changeSVGColor(ivTheme,R.drawable.ic_img_theme,event.color);
+        UIUtils.changeSVGColor(ivSetting,R.drawable.ic_img_setting,event.color);
+    }
     @Override
     protected boolean isRegisterEventBus() {
         return true;

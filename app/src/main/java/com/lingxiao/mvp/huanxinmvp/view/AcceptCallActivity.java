@@ -11,6 +11,8 @@ import com.hyphenate.media.EMLocalSurfaceView;
 import com.hyphenate.media.EMOppositeSurfaceView;
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
+import com.lingxiao.mvp.huanxinmvp.model.ContactsModel;
+import com.lingxiao.mvp.huanxinmvp.model.ContactsModel_Table;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel_Table;
 import com.lingxiao.mvp.huanxinmvp.presenter.AcceptCallPresenter;
@@ -42,7 +44,7 @@ public class AcceptCallActivity extends BaseActivity implements AcceptCallView {
     EMLocalSurfaceView localSurface;
     private Intent intent;
     private AcceptCallPresenter presenter;
-    private UserModel userModel;
+    private ContactsModel mContactModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +63,14 @@ public class AcceptCallActivity extends BaseActivity implements AcceptCallView {
             String type = intent.getStringExtra("type");
             ToastUtils.showToast("类型：" + type);
 
-            userModel = SQLite
+            mContactModel = SQLite
                     .select()
-                    .from(UserModel.class)
-                    .where(UserModel_Table.username.eq(from))
+                    .from(ContactsModel.class)
+                    .where(ContactsModel_Table.contactUserName.eq(from))
                     .querySingle();
-            tvAcceptName.setText(userModel.getNickname());
+            tvAcceptName.setText(mContactModel.getNickName());
             if (type.equals("voice")) {
-                GlideHelper.loadImageView(userModel.getProtrait(), imgAcceptHead);
+                GlideHelper.loadImageView(mContactModel.getProtrait(), imgAcceptHead);
             } else {
                 imgAcceptHead.setVisibility(View.INVISIBLE);
                 initSurfaceView();

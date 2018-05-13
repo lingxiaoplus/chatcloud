@@ -15,6 +15,7 @@ import com.lingxiao.mvp.huanxinmvp.event.SkinChangeEvent;
 import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
+import com.lingxiao.mvp.huanxinmvp.widget.SkinTabLayout;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -30,7 +31,7 @@ import butterknife.Unbinder;
 public class FindFragment extends BaseFragment {
 
     @BindView(R.id.tablayout_find)
-    TabLayout tabLayout;
+    SkinTabLayout tabLayout;
     @BindView(R.id.vp_find)
     ViewPager vpFind;
     private String[] tabStr = new String[]{"文艺", "科技", "社会", "生活"};
@@ -92,15 +93,4 @@ public class FindFragment extends BaseFragment {
         }
     }
 
-    @Override
-    protected boolean isRegisterEventBus() {
-        return true;
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onChangeSkin(SkinChangeEvent event) {
-        ToastUtils.showToast("换肤了:"+event);
-        LogUtils.i("换肤了fragment");
-        tabLayout.setBackgroundColor(getResources().getColor(event.color));
-    }
 }

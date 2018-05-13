@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="欢迎您！"
-        android:textColor="@color/black_alpha_208"
+        android:textColor="@color/black_alpha_224"
         android:textSize="32sp"
         android:layout_margin="10dp"
         android:paddingTop="40dp"
@@ -20,9 +20,9 @@
     <android.support.v7.widget.CardView
         android:layout_below="@id/tv_regist_title"
         style="@style/cardStyle"
-        app:cardBackgroundColor="@color/translate"
-        app:cardElevation="8dp"
-        app:cardCornerRadius="5dp"
+        app:cardBackgroundColor="@color/white_alpha_208"
+        app:cardElevation="3dp"
+        app:cardCornerRadius="3dp"
         android:layout_margin="10dp"
         >
         <LinearLayout

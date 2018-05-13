@@ -44,7 +44,8 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:theme="@style/MyMainTheme" />
+            android:theme="@style/MyMainTheme"
+            android:launchMode="singleTask"/>
 
         <!-- 设置环信应用的AppKey -->
         <meta-data
@@ -75,7 +76,8 @@
         <activity
             android:name=".view.RegistActivity"
             android:theme="@style/NoTitleTranslucentTheme" />
-        <activity android:name=".view.LoginActivity" />
+        <activity android:name=".view.LoginActivity"
+            android:theme="@style/NoTitleTranslucentTheme"/>
         <activity
             android:name=".view.ChatActivity"
             android:theme="@style/MyMainTheme" />
@@ -127,7 +129,7 @@
             android:theme="@style/NoTitleTranslucentTheme" />
         <activity
             android:name=".view.LocalPicActivity"
-            android:theme="@style/FullScreenTheme" />
+            android:theme="@style/NoTitleTranslucentTheme" />
         <activity
             android:name=".view.SettingActivity"
             android:theme="@style/MyMainTheme" />

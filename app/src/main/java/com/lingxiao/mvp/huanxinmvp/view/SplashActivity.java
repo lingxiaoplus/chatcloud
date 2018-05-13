@@ -6,6 +6,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.app.Service;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -20,10 +21,23 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVObject;
+import com.avos.avoscloud.AVQuery;
+import com.avos.avoscloud.AVUser;
+import com.avos.avoscloud.FindCallback;
+import com.avos.avoscloud.GetCallback;
 import com.lingxiao.mvp.huanxinmvp.MainActivity;
+import com.lingxiao.mvp.huanxinmvp.NotifyService;
 import com.lingxiao.mvp.huanxinmvp.R;
+import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.SplashPresenterImpl;
 import com.lingxiao.mvp.huanxinmvp.presenter.SplashPresenter;
+import com.lingxiao.mvp.huanxinmvp.utils.SpUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,7 +65,13 @@ public class SplashActivity extends BaseActivity implements SplashView {
         //view层要持有presenter的引用
         splashPresenter = new SplashPresenterImpl(this);
 
-
+        if (UIUtils.isServiceRunning(this,getPackageName()+".NotifyService")){
+            ToastUtils.showToast("服务在运行");
+            //服务正在运行，说明已经登录了，跳转到主界面
+            startActivity(new Intent(getApplicationContext(),
+                    MainActivity.class));
+            finish();
+        }
         // 获取颜色
         int color = getResources().getColor(R.color.black_alpha_192);
         // 创建一个Drawable
@@ -59,8 +79,8 @@ public class SplashActivity extends BaseActivity implements SplashView {
         // 设置给背景
         llSplash.setBackground(drawable);
         mBgDrawable = drawable;
-
         tvVersion.setText("版本号：V"+getVersionName());
+        getUpdate();
         startAnim(1f, new Runnable() {
             @Override
             public void run() {
@@ -68,6 +88,29 @@ public class SplashActivity extends BaseActivity implements SplashView {
                 splashPresenter.checkLogin();
             }
         });
+    }
+
+    private void getUpdate() {
+        try {
+            AVQuery<AVObject> avQuery = new AVQuery<>("appinfo");
+            avQuery.getFirstInBackground(new GetCallback<AVObject>() {
+                @Override
+                public void done(AVObject avObj, AVException e) {
+                    if (e == null && avObj != null){
+                        String versionName = avObj.getString("VersionName");
+                        String desc = avObj.getString("description");
+                        String url = avObj.getString("DownloadUrl");
+                        int versionCode = avObj.getInt("VersionCode");
+                        SpUtils.putString(UIUtils.getContext(), ContentValue.VERSION_NAME,versionName);
+                        SpUtils.putString(UIUtils.getContext(), ContentValue.VERSION_DES,desc);
+                        SpUtils.putString(UIUtils.getContext(), ContentValue.DOWNLOAD_URL,url);
+                        SpUtils.putInt(UIUtils.getContext(), ContentValue.VERSION_CODE,versionCode);
+                    }
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -100,6 +143,7 @@ public class SplashActivity extends BaseActivity implements SplashView {
     @Override
     public void onGetLoginState(boolean isLogin) {
         if (isLogin) {
+            startService(new Intent(this, NotifyService.class));
             //如果登录过了，跳转到主界面
             startActivity(new Intent(getApplicationContext(),
                     MainActivity.class));

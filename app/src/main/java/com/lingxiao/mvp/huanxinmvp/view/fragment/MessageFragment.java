@@ -117,13 +117,13 @@ public class MessageFragment extends BaseFragment implements MessageView{
     }
 
     /**
-     * 订阅chatactivity发送过来的消息
+     * 订阅chatactivity发送过来的消息,通知消息列表刷新
      * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageResult(MessageEvent event){
         messagePresenter.getMessages();
-        adapter.notifyDataSetChanged();
+        ToastUtils.showToast("更新消息列表");
     }
 
     @Override
