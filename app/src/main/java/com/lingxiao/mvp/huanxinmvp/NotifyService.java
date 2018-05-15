@@ -8,6 +8,7 @@ import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -20,6 +21,7 @@ import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
+import com.lingxiao.mvp.huanxinmvp.receiver.CallReceiver;
 import com.lingxiao.mvp.huanxinmvp.utils.SpUtils;
 import com.lingxiao.mvp.huanxinmvp.view.ChatActivity;
 
@@ -33,6 +35,8 @@ public class NotifyService extends Service {
     private SoundPool soundPool;
     private int foregroundSound;
     private int backgroundSound;
+    private int callAcceptSound; //来电播放语音
+    private CallReceiver mCallReceiver;
     public NotifyService() {
     }
 
@@ -42,6 +46,8 @@ public class NotifyService extends Service {
         mContext = this;
         initSoundPool();
         initGetMsgListener();
+
+        regCallReceiver();
     }
 
     @Override
@@ -55,10 +61,6 @@ public class NotifyService extends Service {
         return mBinder;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
 
     public class NotifyBinder extends Binder{
         public NotifyService getService(){
@@ -102,6 +104,9 @@ public class NotifyService extends Service {
         startForeground(1,notification);
     }
 
+    /**
+     * 初始化消息监听
+     */
     private void initGetMsgListener() {
         EMClient.getInstance().chatManager().addMessageListener(new EMMessageListener() {
             @Override
@@ -118,6 +123,16 @@ public class NotifyService extends Service {
                             soundPool.play(backgroundSound,1,1,0,0,1);
                             sendNotify(list.get(0));
                         }else {
+                            /**
+                             * Play a sound from a sound ID.
+                             *
+                             * @param soundID     通过load方法返回的音频
+                             * @param leftVolume  左声道的音量
+                             * @param rightVolume 右声道的音量
+                             * @param priority    优先级，值越大，优先级越高
+                             * @param loop        循环的次数：0为不循环，-1为循环
+                             * @param rate        指定速率，正常位1，为地位0.5，最高位2
+                             */
                             soundPool.play(foregroundSound,1,1,0,0,1);
                         }
                     }
@@ -176,5 +191,26 @@ public class NotifyService extends Service {
         soundPool = new SoundPool(2, AudioManager.STREAM_MUSIC,0);
         foregroundSound = soundPool.load(getApplicationContext(), R.raw.duan, 1);
         backgroundSound = soundPool.load(getApplicationContext(), R.raw.yulu,1);
+
+    }
+
+    /**
+     * 注册电话监听
+     */
+    private void regCallReceiver() {
+        IntentFilter callFilter = new
+                IntentFilter(EMClient.getInstance()
+                .callManager()
+                .getIncomingCallBroadcastAction());
+        mCallReceiver = new CallReceiver();
+        registerReceiver(mCallReceiver, callFilter);
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mCallReceiver != null){
+            unregisterReceiver(mCallReceiver);
+        }
+
     }
 }

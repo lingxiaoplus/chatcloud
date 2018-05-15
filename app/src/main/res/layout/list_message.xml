@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     >
     <LinearLayout
-
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -14,7 +13,9 @@
             style="@style/cardStyle"
             android:id="@+id/message_card"
             card_view:cardCornerRadius="5dp"
-            card_view:cardElevation="5dp">
+            card_view:cardElevation="5dp"
+            card_view:cardBackgroundColor="@color/background"
+            >
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

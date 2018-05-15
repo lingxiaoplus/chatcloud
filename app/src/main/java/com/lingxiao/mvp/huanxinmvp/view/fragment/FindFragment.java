@@ -47,6 +47,22 @@ public class FindFragment extends BaseFragment {
         PagerAdapter adapter = new PagerAdapter(getFragmentManager());
         vpFind.setAdapter(adapter);
         tabLayout.setupWithViewPager(vpFind);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     @Override

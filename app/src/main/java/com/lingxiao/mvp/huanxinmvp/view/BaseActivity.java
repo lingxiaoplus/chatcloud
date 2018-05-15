@@ -51,7 +51,7 @@ public class BaseActivity extends AppCompatActivity{
     private ProgressDialog progressDialog;
     private LocalBroadcastManager manager;
     private MyExitReciver reciver;
-    private CallReceiver mCallReceiver;
+
     private PackageManager mPmanager;
     private int versionCode;
     private String versionName = "1.0.0";
@@ -66,7 +66,7 @@ public class BaseActivity extends AppCompatActivity{
         manager.registerReceiver(reciver,new IntentFilter("com.lingxiao.finishactivity"));
 
         ActivityManager.getAppManager().addActivity(this);
-        regCallReceiver();
+
 
         if (isRegisterEventBus()){
             EventBus.getDefault().register(this);
@@ -75,17 +75,6 @@ public class BaseActivity extends AppCompatActivity{
         mPmanager = getPackageManager();
     }
 
-    /**
-     * 注册电话监听
-     */
-    private void regCallReceiver() {
-        IntentFilter callFilter = new
-                IntentFilter(EMClient.getInstance()
-                .callManager()
-                .getIncomingCallBroadcastAction());
-        mCallReceiver = new CallReceiver();
-        registerReceiver(mCallReceiver, callFilter);
-    }
 
     public void StartActivity(Class clzz,boolean isFinish){
         startActivity(new Intent(getApplicationContext(),clzz));
@@ -120,9 +109,6 @@ public class BaseActivity extends AppCompatActivity{
             manager.unregisterReceiver(reciver);
         }
 
-        if (mCallReceiver != null){
-            unregisterReceiver(mCallReceiver);
-        }
         if (isRegisterEventBus()){
             EventBus.getDefault().unregister(this);
         }

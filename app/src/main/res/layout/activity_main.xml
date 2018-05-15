@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/background"
     tools:context="com.lingxiao.mvp.huanxinmvp.MainActivity">
 
     <android.support.v7.widget.Toolbar
@@ -37,7 +38,7 @@
         android:layout_height="wrap_content"
         app:bnbActiveColor="@color/colorPrimary"
         app:bnbInactiveColor="@color/colorBottomNav"
-        app:bnbBackgroundColor="@color/white"
+        app:bnbBackgroundColor="@color/background"
         app:bnbMode="mode_fixed">
     </com.lingxiao.mvp.huanxinmvp.widget.BottomSkinNavView>
 

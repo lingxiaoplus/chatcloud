@@ -25,6 +25,7 @@ import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 import com.lingxiao.mvp.huanxinmvp.view.AddFriendActivity;
 import com.lingxiao.mvp.huanxinmvp.view.BaseActivity;
 import com.lingxiao.mvp.huanxinmvp.view.ChatActivity;
+import com.lingxiao.mvp.huanxinmvp.view.FriendInfoActivity;
 import com.lingxiao.mvp.huanxinmvp.view.PhoneView;
 import com.lingxiao.mvp.huanxinmvp.widget.PhoneLayout;
 
@@ -83,7 +84,7 @@ public class PhoneFragment extends BaseFragment implements PhoneView{
             @Override
             public void onClick(View v, String username) {
                 //单击跳转到聊天界面
-                Intent intent = new Intent(getContext(),ChatActivity.class);
+                Intent intent = new Intent(getContext(),FriendInfoActivity.class);
                 intent.putExtra("name",username);
                 startActivity(intent);
             }

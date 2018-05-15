@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.hyphenate.chat.EMConversation;
 import com.hyphenate.chat.EMMessage;
 import com.lingxiao.mvp.huanxinmvp.R;
+import com.lingxiao.mvp.huanxinmvp.adapter.HeaderAndFooterWrapper;
 import com.lingxiao.mvp.huanxinmvp.adapter.MessageAdapter;
 import com.lingxiao.mvp.huanxinmvp.event.MessageEvent;
 import com.lingxiao.mvp.huanxinmvp.event.SkinChangeEvent;

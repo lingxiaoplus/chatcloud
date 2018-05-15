@@ -19,6 +19,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" /> <!-- 震动权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.DEVICE_POWER"/>
 
     <uses-feature android:name="android.hardware.camera" /> <!-- 使用照相机权限 -->
     <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 自动聚焦权限 -->
@@ -44,8 +45,8 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:theme="@style/MyMainTheme"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:theme="@style/MyMainTheme" />
 
         <!-- 设置环信应用的AppKey -->
         <meta-data
@@ -76,8 +77,9 @@
         <activity
             android:name=".view.RegistActivity"
             android:theme="@style/NoTitleTranslucentTheme" />
-        <activity android:name=".view.LoginActivity"
-            android:theme="@style/NoTitleTranslucentTheme"/>
+        <activity
+            android:name=".view.LoginActivity"
+            android:theme="@style/NoTitleTranslucentTheme" />
         <activity
             android:name=".view.ChatActivity"
             android:theme="@style/MyMainTheme" />
@@ -98,11 +100,10 @@
 
         <activity
             android:name=".view.CallPhoneActivity"
-            android:theme="@style/FullScreen"
-            />
+            android:theme="@style/FullScreen" />
         <activity
             android:name=".view.AcceptCallActivity"
-            android:launchMode="singleTop"
+            android:launchMode="singleInstance"
             android:theme="@style/FullScreen" />
         <activity
             android:name=".view.UserInfoActivity"
@@ -139,8 +140,11 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".view.regist.RegistInfoActivity"
-            android:theme="@style/NoTitleTranslucentTheme"></activity>
+        <activity
+            android:name=".view.regist.RegistInfoActivity"
+            android:theme="@style/NoTitleTranslucentTheme" />
+        <activity android:name=".view.FriendInfoActivity"
+            android:theme="@style/MyMainTheme"></activity>
     </application>
 
 </manifest>

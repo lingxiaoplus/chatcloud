@@ -22,6 +22,7 @@ import static skin.support.widget.SkinCompatHelper.INVALID_ID;
 
 public class BottomSkinNavView extends BottomNavigationBar implements SkinCompatSupportable{
     private int mActiviteColorResId = INVALID_ID;
+    private int mBackGroundColorResId = INVALID_ID;
     private SkinMaterialTabLayout tabLayout;
     public BottomSkinNavView(Context context) {
         this(context,null);
@@ -38,6 +39,10 @@ public class BottomSkinNavView extends BottomNavigationBar implements SkinCompat
                 defStyleAttr, 0);
         mActiviteColorResId = a.getResourceId(R.styleable.BottomNavigationBar_bnbActiveColor,
                 INVALID_ID);
+        if (a.hasValue(R.styleable.BottomNavigationBar_bnbBackgroundColor)){
+            mBackGroundColorResId = a.getResourceId(R.styleable.BottomNavigationBar_bnbBackgroundColor,
+                    INVALID_ID);
+        }
         a.recycle();
         applySkin();
     }
@@ -54,5 +59,9 @@ public class BottomSkinNavView extends BottomNavigationBar implements SkinCompat
     @Override
     public void applySkin() {
         applyActiviteColorResource();
+        mBackGroundColorResId = SkinCompatHelper.checkResourceId(mBackGroundColorResId);
+        if (mBackGroundColorResId != INVALID_ID){
+            setBarBackgroundColor(mBackGroundColorResId);
+        }
     }
 }

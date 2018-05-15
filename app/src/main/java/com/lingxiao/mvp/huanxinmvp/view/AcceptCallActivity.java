@@ -71,8 +71,12 @@ public class AcceptCallActivity extends BaseActivity implements AcceptCallView {
             tvAcceptName.setText(mContactModel.getNickName());
             if (type.equals("voice")) {
                 GlideHelper.loadImageView(mContactModel.getProtrait(), imgAcceptHead);
+                oppoSurface.setVisibility(View.GONE);
+                localSurface.setVisibility(View.GONE);
             } else {
                 imgAcceptHead.setVisibility(View.INVISIBLE);
+                oppoSurface.setVisibility(View.VISIBLE);
+                localSurface.setVisibility(View.VISIBLE);
                 initSurfaceView();
             }
         } catch (NullPointerException e) {

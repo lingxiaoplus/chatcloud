@@ -89,10 +89,14 @@ dependencies {
     //七牛对象存储
     implementation "com.qiniu:qiniu-android-sdk:$rootProject.ext.qiniuVersion"
     implementation "net.qiujuer.genius:ui:$rootProject.ext.geniusVersion"
-    implementation "skin.support:skin-support:$rootProject.ext.skinSupportVersion"                  // skin-support 基础控件支持
-    implementation "skin.support:skin-support-design:$rootProject.ext.skinSupportVersion"           // skin-support-design material design 控件支持[可选]
-    implementation "skin.support:skin-support-cardview:$rootProject.ext.skinSupportVersion"          // skin-support-cardview CardView 控件支持[可选]
-    implementation "skin.support:skin-support-constraint-layout:$rootProject.ext.skinSupportVersion" // skin-support-constraint-layout ConstraintLayout 控件支持[可选]
+    implementation "skin.support:skin-support:$rootProject.ext.skinSupportVersion"
+    // skin-support 基础控件支持
+    implementation "skin.support:skin-support-design:$rootProject.ext.skinSupportVersion"
+    // skin-support-design material design 控件支持[可选]
+    implementation "skin.support:skin-support-cardview:$rootProject.ext.skinSupportVersion"
+    // skin-support-cardview CardView 控件支持[可选]
+    implementation "skin.support:skin-support-constraint-layout:$rootProject.ext.skinSupportVersion"
+    // skin-support-constraint-layout ConstraintLayout 控件支持[可选]
 
     testCompile 'junit:junit:4.12'
     implementation project(':skinlibrary')
