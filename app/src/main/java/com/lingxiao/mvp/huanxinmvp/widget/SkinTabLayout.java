@@ -7,6 +7,8 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.content.res.AppCompatResources;
 import android.util.AttributeSet;
 
+import com.lingxiao.mvp.huanxinmvp.R;
+
 import skin.support.content.res.SkinCompatResources;
 import skin.support.design.widget.SkinMaterialTabLayout;
 import skin.support.widget.SkinCompatHelper;
@@ -66,7 +68,8 @@ public class SkinTabLayout extends TabLayout implements SkinCompatSupportable {
         mTabIndicatorColorResId = SkinCompatHelper.checkResourceId(mTabIndicatorColorResId);
         if (mTabIndicatorColorResId != INVALID_ID) {
             setBackgroundColor(SkinCompatResources.getColor(getContext(), mTabIndicatorColorResId));
-            setSelectedTabIndicatorColor(SkinCompatResources.getColor(getContext(), mTabIndicatorColorResId));
+            //setSelectedTabIndicatorColor(SkinCompatResources.getColor(getContext(), mTabIndicatorColorResId));
+            setSelectedTabIndicatorColor(getResources().getColor(R.color.white));
         }
         mTabTextColorsResId = SkinCompatHelper.checkResourceId(mTabTextColorsResId);
         if (mTabTextColorsResId != INVALID_ID) {

@@ -1,4 +1,4 @@
-package com.lingxiao.mvp.huanxinmvp;
+package com.lingxiao.mvp.huanxinmvp.service;
 
 import android.app.ActivityManager;
 import android.app.Notification;
@@ -20,6 +20,8 @@ import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
+import com.lingxiao.mvp.huanxinmvp.MainActivity;
+import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.receiver.CallReceiver;
 import com.lingxiao.mvp.huanxinmvp.utils.SpUtils;

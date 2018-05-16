@@ -195,11 +195,14 @@ public class CallPhoneActivity extends BaseActivity implements CallView {
             float[] its = event.values;
             ToastUtils.showToast("距离："+its[0]+"cm");
             if (its != null && event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
+                LogUtils.i("锁屏");
                 if (its[0] <= 3.0) {
                     if (mWakeLock.isHeld()) {
+                        LogUtils.i("锁屏1");
                         return;
                     } else {
                         mWakeLock.acquire();
+                        LogUtils.i("锁屏2");
                     }
 
                 } else {

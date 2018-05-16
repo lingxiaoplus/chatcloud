@@ -19,7 +19,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" /> <!-- 震动权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.DEVICE_POWER"/>
+    <uses-permission android:name="android.permission.DEVICE_POWER" />
 
     <uses-feature android:name="android.hardware.camera" /> <!-- 使用照相机权限 -->
     <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 自动聚焦权限 -->
@@ -136,15 +136,20 @@
             android:theme="@style/MyMainTheme" />
 
         <service
-            android:name=".NotifyService"
+            android:name=".service.NotifyService"
             android:enabled="true"
             android:exported="true" />
 
         <activity
             android:name=".view.regist.RegistInfoActivity"
             android:theme="@style/NoTitleTranslucentTheme" />
-        <activity android:name=".view.FriendInfoActivity"
-            android:theme="@style/MyMainTheme"></activity>
+        <activity
+            android:name=".view.FriendInfoActivity"
+            android:theme="@style/MyMainTheme" />
+
+        <service
+            android:name=".service.InitIalizeService"
+            android:exported="false"></service>
     </application>
 
 </manifest>
