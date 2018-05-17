@@ -29,7 +29,6 @@
             android:contentDescription="@string/app_name"
             android:maxWidth="@dimen/len_128"
             android:minWidth="@dimen/len_48"
-            android:background="@color/black"
             android:scaleType="fitCenter" />
 
     </FrameLayout>

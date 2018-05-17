@@ -30,14 +30,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="名字"
-                        android:textColor="#444"
+                        android:textColor="@color/textDark"
                         android:textSize="22sp" />
                     <TextView
                         android:id="@+id/tv_msg_message"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:maxLines="1"
-                        android:textColor="#666"
+                        android:textColor="@color/textPrimary"
                         android:textSize="16sp"
                         android:layout_marginTop="5dp"
                         android:text="lkkjflkgjlfkgjkdfd" />
@@ -59,7 +59,7 @@
                         android:id="@+id/tv_msg_time"
                         android:layout_toLeftOf="@id/iv_msg_head"
                         android:text="2017/03/20"
-                        android:textColor="#666"
+                        android:textColor="@color/textPrimary"
                         android:textSize="16sp"
                         android:layout_margin="5dp"
                         android:layout_width="wrap_content"

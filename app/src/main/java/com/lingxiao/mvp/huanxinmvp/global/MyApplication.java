@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Debug;
 import android.os.Handler;
 import android.os.Vibrator;
 
@@ -62,16 +63,13 @@ public class MyApplication extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
+        //Debug.startMethodTracing("GithubApp");
         mContext = getApplicationContext();
         mainThreadId = android.os.Process.myPid();
         mHandler = new Handler();
 
         InitIalizeService.startInit(this);
-        //初始化leancloud的sdk  只能在主线程初始化
-        // 初始化参数依次为 this, AppId, AppKey
-        AVOSCloud.initialize(this,"V8YIQ6I9vYpfNFUTKQPsSTGH-9Nh9j0Va","xOfaV4IJIzzCsCHIzU1zTBkE");
-        // 放在 SDK 初始化语句 AVOSCloud.initialize() 后面，只需要调用一次即可     开启调试日志
-        AVOSCloud.setDebugLogEnabled(true);
+        //Debug.stopMethodTracing();
     }
 
 

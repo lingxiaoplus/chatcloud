@@ -118,4 +118,11 @@
         <item name="android:activityCloseEnterAnimation">@anim/left_in</item>
         <item name="android:activityCloseExitAnimation">@anim/right_out</item>
     </style>
+
+    <!--加速app启动-->
+    <style name="LogoTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/logo_splash</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
 </resources>

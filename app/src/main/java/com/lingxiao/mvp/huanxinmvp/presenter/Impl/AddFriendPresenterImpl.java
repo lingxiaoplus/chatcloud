@@ -6,6 +6,8 @@ import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.FindCallback;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
+import com.lingxiao.mvp.huanxinmvp.model.ContactsModel;
+import com.lingxiao.mvp.huanxinmvp.model.ContactsModel_Table;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel_Table;
 import com.lingxiao.mvp.huanxinmvp.presenter.AddFriendPresenter;
@@ -23,7 +25,7 @@ import java.util.List;
 
 public class AddFriendPresenterImpl implements AddFriendPresenter{
     private AddFriendView addFriendView;
-    private List<UserModel> modelList;
+    private List<ContactsModel> modelList;
     private List<String> userList = new ArrayList<>();
     public AddFriendPresenterImpl(AddFriendView addFriendView){
         this.addFriendView = addFriendView;
@@ -69,11 +71,11 @@ public class AddFriendPresenterImpl implements AddFriendPresenter{
                             //ArrayList<String> users = DBUtils.initContact(currentuser);
                             modelList = SQLite
                                     .select()
-                                    .from(UserModel.class)
-                                    .where(UserModel_Table.username.isNot(currentuser))
+                                    .from(ContactsModel.class)
+                                    .where(ContactsModel_Table.contactUserName.isNot(currentuser))
                                     .queryList();
                             for (int i = 0; i < modelList.size(); i++) {
-                                userList.add(modelList.get(i).username);
+                                userList.add(modelList.get(i).contactUserName);
                             }
                             addFriendView.onQuerySuccess(list,userList,true,null);
                         }else {

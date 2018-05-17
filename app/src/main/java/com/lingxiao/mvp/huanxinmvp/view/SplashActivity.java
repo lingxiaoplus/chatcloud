@@ -8,12 +8,15 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Debug;
+import android.os.Handler;
 import android.util.Property;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.avos.avoscloud.AVException;
+import com.avos.avoscloud.AVOSCloud;
 import com.avos.avoscloud.AVObject;
 import com.avos.avoscloud.AVQuery;
 import com.avos.avoscloud.GetCallback;
@@ -44,22 +47,41 @@ public class SplashActivity extends BaseActivity implements SplashView {
 
     private ColorDrawable mBgDrawable;
 
+    private Handler mHandler = new Handler();
+    private Runnable mLoadingRunnable = new Runnable() {
+        @Override
+        public void run() {
+            getUpdate();
+            //初始化leancloud的sdk  只能在主线程初始化
+            // 初始化参数依次为 this, AppId, AppKey
+            AVOSCloud.initialize(UIUtils.getContext(),"V8YIQ6I9vYpfNFUTKQPsSTGH-9Nh9j0Va","xOfaV4IJIzzCsCHIzU1zTBkE");
+            // 放在 SDK 初始化语句 AVOSCloud.initialize() 后面，只需要调用一次即可     开启调试日志
+            AVOSCloud.setDebugLogEnabled(true);
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
-
         //view层要持有presenter的引用
         splashPresenter = new SplashPresenterImpl(this);
 
-        if (UIUtils.isServiceRunning(this,getPackageName()+".NotifyService")){
+       /* if (UIUtils.isServiceRunning(this,getPackageName()+".NotifyService")){
             ToastUtils.showToast("服务在运行");
             //服务正在运行，说明已经登录了，跳转到主界面
             startActivity(new Intent(getApplicationContext(),
                     MainActivity.class));
             finish();
-        }
+        }*/
+
+        //延迟加载 提升速度
+        getWindow().getDecorView().post(new Runnable() {
+            @Override
+            public void run() {
+                mHandler.post(mLoadingRunnable);
+            }
+        });
         // 获取颜色
         int color = getResources().getColor(R.color.black_alpha_192);
         // 创建一个Drawable
@@ -68,7 +90,6 @@ public class SplashActivity extends BaseActivity implements SplashView {
         llSplash.setBackground(drawable);
         mBgDrawable = drawable;
         tvVersion.setText("版本号：V"+getVersionName());
-        getUpdate();
         startAnim(1f, new Runnable() {
             @Override
             public void run() {

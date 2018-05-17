@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -41,6 +42,7 @@ import com.lingxiao.mvp.huanxinmvp.google.decoding.CaptureActivityHandler;
 import com.lingxiao.mvp.huanxinmvp.google.decoding.InactivityTimer;
 import com.lingxiao.mvp.huanxinmvp.google.decoding.RGBLuminanceSource;
 import com.lingxiao.mvp.huanxinmvp.google.view.ViewfinderView;
+import com.lingxiao.mvp.huanxinmvp.view.BaseActivity;
 
 import java.io.IOException;
 import java.util.Hashtable;
@@ -52,13 +54,13 @@ import java.util.Vector;
  *
  * @author Ryan.Tang
  */
-public class CaptureActivity extends AppCompatActivity implements Callback {
+public class CaptureActivity extends BaseActivity implements Callback {
 
     private static final int REQUEST_CODE_SCAN_GALLERY = 100;
 
     private CaptureActivityHandler handler;
     private ViewfinderView viewfinderView;
-    private ImageView back;
+    //private ImageView back;
     private boolean hasSurface;
     private Vector<BarcodeFormat> decodeFormats;
     private String characterSet;
@@ -83,19 +85,19 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
         //ViewUtil.addTopView(getApplicationContext(), this, R.string.scan_card);
         CameraManager.init(getApplication());
         viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_content);
-        back = (ImageView) findViewById(R.id.scanner_toolbar_back);
+        /*back = (ImageView) findViewById(R.id.scanner_toolbar_back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CaptureActivity.this.finish();
             }
-        });
+        });*/
 //		cancelScanButton = (Button) this.findViewById(R.id.btn_cancel_scan);
         hasSurface = false;
         inactivityTimer = new InactivityTimer(this);
 
         //添加toolbar
-//        addToolbar();
+        addToolbar();
     }
 
     private void addToolbar() {
@@ -109,6 +111,11 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
 //            }
 //        });
         setSupportActionBar(toolbar);
+
+        ActionBar actionBar  =getSupportActionBar();
+        if (actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     @Override
@@ -128,6 +135,11 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
 //                this.startActivityForResult(wrapperIntent, REQUEST_CODE_SCAN_GALLERY);
 //                return true;
 //        }
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
 

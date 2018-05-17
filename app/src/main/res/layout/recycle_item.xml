@@ -22,7 +22,8 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:text="A"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:textColor="@color/textPrimary"/>
         <RelativeLayout
             android:id="@+id/rl_card"
             android:layout_width="match_parent"
@@ -43,6 +44,7 @@
                 android:layout_height="wrap_content"
                 android:text="凌霄"
                 android:textSize="18sp"
+                android:textColor="@color/textPrimary"
                 android:layout_centerInParent="true"
                 android:layout_marginLeft="5dp"/>
         </RelativeLayout>
