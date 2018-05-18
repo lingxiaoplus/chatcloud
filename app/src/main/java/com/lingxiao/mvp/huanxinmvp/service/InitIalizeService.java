@@ -14,7 +14,6 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Vibrator;
 
-import com.avos.avoscloud.AVOSCloud;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMContactListener;
 import com.hyphenate.EMError;
@@ -30,7 +29,7 @@ import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.event.ExitEvent;
 import com.lingxiao.mvp.huanxinmvp.event.PhoneChangedEvent;
 import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
-import com.lingxiao.mvp.huanxinmvp.global.MyApplication;
+import com.lingxiao.mvp.huanxinmvp.global.App;
 import com.lingxiao.mvp.huanxinmvp.utils.DBUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.SpUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ThreadUtils;
@@ -114,13 +113,13 @@ public class InitIalizeService extends IntentService {
         FlowManager.init(this);
 
         //初始化skin皮肤
-        initSkinLib((MyApplication) mContext);
+        initSkinLib((App) mContext);
 
         //初始化mob短信验证
         MobSDK.init(this,"255ed51d720ec","a4a3fcb876482f2cf4c6065b6f32b8ca");
     }
 
-    private void initSkinLib(MyApplication app) {
+    private void initSkinLib(App app) {
         //初始化皮肤加载框架
         SkinCompatManager.withoutActivity(app)                         // 基础控件换肤初始化
                 .addInflater(new SkinMaterialViewInflater())            // material design 控件换肤初始化[可选]

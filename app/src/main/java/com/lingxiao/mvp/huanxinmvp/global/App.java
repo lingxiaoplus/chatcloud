@@ -53,13 +53,15 @@ import skin.support.design.app.SkinMaterialViewInflater;
  * 全局的application
  */
 
-public class MyApplication extends Application{
+public class App extends Application{
 
     private static Handler mHandler;
     private static Context mContext;
     private static int mainThreadId;
-
-
+    /**
+     * 判断app是否被杀
+     */
+    private static int appStatus = -1;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -83,5 +85,10 @@ public class MyApplication extends Application{
     public static Handler getmHandler(){
         return mHandler;
     }
-
+    public static int getAppStatus(){
+        return appStatus;
+    }
+    public static void setAppStatus(int status){
+        appStatus = status;
+    }
 }

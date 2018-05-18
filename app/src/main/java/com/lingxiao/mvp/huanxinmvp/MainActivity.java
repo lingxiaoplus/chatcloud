@@ -5,13 +5,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
@@ -143,6 +146,19 @@ public class MainActivity extends BaseActivity {
                 .getBoolean(this,ContentValue.UPDATE,true);
         if (isCheck){
             checkUpdate();
+        }
+
+        //判断是否有通知栏显示权限
+        NotificationManagerCompat manager = NotificationManagerCompat.from(this);
+        boolean isOpened = manager.areNotificationsEnabled();
+        if (!isOpened){
+            ToastUtils.showToast("为了您更好地体验，请开启通知栏消息提示");
+            // 根据isOpened结果，判断是否需要提醒用户跳转AppInfo页面，去打开App通知权限
+            Intent intent = new Intent();
+            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package", getPackageName(), null);
+            intent.setData(uri);
+            startActivity(intent);
         }
     }
 

@@ -13,10 +13,8 @@ import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.ashokvarma.bottomnavigation.BottomNavigationItem;
-import com.lingxiao.mvp.huanxinmvp.global.MyApplication;
+import com.lingxiao.mvp.huanxinmvp.global.App;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import skin.support.SkinCompatManager;
@@ -27,13 +25,19 @@ import skin.support.SkinCompatManager;
 
 public class UIUtils {
     public static Context getContext(){
-        return MyApplication.getContext();
+        return App.getContext();
     }
     public static int getMainThreadId(){
-        return MyApplication.getMainThreadId();
+        return App.getMainThreadId();
     }
     public static Handler getHandler(){
-        return MyApplication.getmHandler();
+        return App.getmHandler();
+    }
+    public static int getAppStatus(){
+        return App.getAppStatus();
+    }
+    public static void setAppStatus(int status){
+        App.setAppStatus(status);
     }
     public static View inflateView(int inflate){
         View view = View.inflate(getContext(),inflate,null);

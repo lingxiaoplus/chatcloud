@@ -51,12 +51,12 @@ public class SplashActivity extends BaseActivity implements SplashView {
     private Runnable mLoadingRunnable = new Runnable() {
         @Override
         public void run() {
-            getUpdate();
             //初始化leancloud的sdk  只能在主线程初始化
             // 初始化参数依次为 this, AppId, AppKey
             AVOSCloud.initialize(UIUtils.getContext(),"V8YIQ6I9vYpfNFUTKQPsSTGH-9Nh9j0Va","xOfaV4IJIzzCsCHIzU1zTBkE");
             // 放在 SDK 初始化语句 AVOSCloud.initialize() 后面，只需要调用一次即可     开启调试日志
             AVOSCloud.setDebugLogEnabled(true);
+            getUpdate();
         }
     };
     @Override
@@ -64,9 +64,12 @@ public class SplashActivity extends BaseActivity implements SplashView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
+        //说明应用不是第一次启动了/未被强杀/notifyservice还存活着
+        if (UIUtils.getAppStatus() == 0){
+            StartActivity(MainActivity.class,true);
+        }
         //view层要持有presenter的引用
         splashPresenter = new SplashPresenterImpl(this);
-
        /* if (UIUtils.isServiceRunning(this,getPackageName()+".NotifyService")){
             ToastUtils.showToast("服务在运行");
             //服务正在运行，说明已经登录了，跳转到主界面
@@ -74,7 +77,6 @@ public class SplashActivity extends BaseActivity implements SplashView {
                     MainActivity.class));
             finish();
         }*/
-
         //延迟加载 提升速度
         getWindow().getDecorView().post(new Runnable() {
             @Override
@@ -156,6 +158,7 @@ public class SplashActivity extends BaseActivity implements SplashView {
             //如果登录过了，跳转到主界面
             startActivity(new Intent(getApplicationContext(),
                     MainActivity.class));
+            UIUtils.setAppStatus(0);
         } else {
             startActivity(new Intent(getApplicationContext(),
                     LoginActivity.class));

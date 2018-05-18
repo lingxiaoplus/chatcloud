@@ -25,6 +25,7 @@ import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.receiver.CallReceiver;
 import com.lingxiao.mvp.huanxinmvp.utils.SpUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.lingxiao.mvp.huanxinmvp.view.ChatActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -213,6 +214,7 @@ public class NotifyService extends Service {
         if (mCallReceiver != null){
             unregisterReceiver(mCallReceiver);
         }
-
+        //如果service被销毁了，将status重置为-1
+        UIUtils.setAppStatus(-1);
     }
 }
