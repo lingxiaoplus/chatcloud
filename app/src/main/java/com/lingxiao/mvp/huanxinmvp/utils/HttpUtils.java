@@ -1,5 +1,7 @@
 package com.lingxiao.mvp.huanxinmvp.utils;
 
+import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 

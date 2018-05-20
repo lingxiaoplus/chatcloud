@@ -13,6 +13,7 @@ import com.lingxiao.mvp.huanxinmvp.listener.MyRecycleListener;
 import com.lingxiao.mvp.huanxinmvp.model.FindBean;
 import com.lingxiao.mvp.huanxinmvp.presenter.FindPresenter;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.FindPresenterImpl;
+import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ThreadUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.lingxiao.mvp.huanxinmvp.view.FindView;
@@ -55,6 +56,7 @@ public class NewsFragment extends BaseFragment implements FindView {
         adapter.setOnFindClickListener(new FindAdapter.onFindClickListener() {
             @Override
             public void onFindClick(View v ,String url,int position) {
+                LogUtils.i("新闻详情url："+url);
                 Intent intent = new Intent(mActivity, WebViewActivity.class);
                 intent.putExtra("findUrl",url);
                 intent.putExtra("title",mList.get(position).title);

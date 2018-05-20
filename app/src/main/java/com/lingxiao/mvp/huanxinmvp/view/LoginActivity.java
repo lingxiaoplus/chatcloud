@@ -19,6 +19,7 @@ import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.LoginPresenterImpl;
 import com.lingxiao.mvp.huanxinmvp.presenter.LoginPresenter;
+import com.lingxiao.mvp.huanxinmvp.service.NotifyService;
 import com.lingxiao.mvp.huanxinmvp.utils.SpUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
@@ -119,6 +120,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void onGetLoginState(String usernme, boolean isLogin, String erroMsg) {
         cancleProgressDialog();
         if (isLogin){
+            startService(new Intent(this, NotifyService.class));
             StartActivity(MainActivity.class,true);
         }else {
             ToastUtils.showToast("登录失败"+erroMsg);

@@ -1,6 +1,12 @@
 package com.lingxiao.mvp.huanxinmvp.utils;
 
+import android.content.res.Resources;
 import android.text.TextUtils;
+
+import com.lingxiao.mvp.huanxinmvp.R;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import java.sql.Time;
 import java.text.ParsePosition;
@@ -52,5 +58,19 @@ public class StringUtils {
         Date date = new Date(Long.valueOf(strDate)*1000);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(date);
+    }
+
+    /**
+     * 生成去除广告的js代码
+     * @return
+     */
+    public static String getClearAdDivJs(){
+        String js = "javascript:";
+        Resources res = UIUtils.getContext().getResources();
+        String[] adDivs = res.getStringArray(R.array.adBlockDiv);
+        for(int i=0;i<adDivs.length;i++){
+            js += "var adDiv"+i+"= document.getElementsByClassName('"+adDivs[i]+"')[0];if(adDiv"+i+" != null)adDiv"+i+".parentNode.removeChild(adDiv"+i+");";
+        }
+        return js;
     }
 }

@@ -23,12 +23,16 @@ public class SkinAdapter extends BaseRecyAdapter{
     private TextView textView;
     private Button button;
     private List<Integer> list;
+    private List<Boolean> isClicks = new ArrayList<>();
     private String[] strings = {"默认绿","激情红","知乎蓝","颐缇蓝","基佬紫"};
     private Context mContext;
     private String[] colors = {"#4CAF50","#E57373","#64B5F6","#7986CB","#9575CD"};
     public SkinAdapter(List<Integer> colorList, Context context) {
         super(colorList);
         mContext = context;
+        for (int i = 0; i < colorList.size(); i++) {
+            isClicks.add(false);
+        }
     }
 
     @Override

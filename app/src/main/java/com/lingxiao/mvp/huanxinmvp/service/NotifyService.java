@@ -11,24 +11,36 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
+import android.media.RingtoneManager;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.support.v4.app.NotificationCompat;
 
+import com.hyphenate.EMError;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMTextMessageBody;
 import com.lingxiao.mvp.huanxinmvp.MainActivity;
 import com.lingxiao.mvp.huanxinmvp.R;
+import com.lingxiao.mvp.huanxinmvp.event.ExitEvent;
 import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
+import com.lingxiao.mvp.huanxinmvp.model.ContactsModel;
+import com.lingxiao.mvp.huanxinmvp.model.ContactsModel_Table;
 import com.lingxiao.mvp.huanxinmvp.receiver.CallReceiver;
+import com.lingxiao.mvp.huanxinmvp.receiver.NotificationBroadcastReceiver;
+import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.SpUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.lingxiao.mvp.huanxinmvp.view.ChatActivity;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -49,8 +61,9 @@ public class NotifyService extends Service {
         mContext = this;
         initSoundPool();
         initGetMsgListener();
-
         regCallReceiver();
+        EventBus.getDefault().register(this);
+        LogUtils.i("NotifyService启动");
     }
 
     @Override
@@ -71,6 +84,12 @@ public class NotifyService extends Service {
         }
     }
     private void sendNotify(EMMessage msg){
+        ContactsModel model = SQLite
+                .select()
+                .from(ContactsModel.class)
+                .where(ContactsModel_Table.contactUserName.eq(msg.getUserName()))
+                .querySingle();
+
         Notification.Builder builder = new Notification.Builder(getApplicationContext());
         //设置通知点击之后消失
         builder.setAutoCancel(true);
@@ -82,8 +101,14 @@ public class NotifyService extends Service {
         //内容加进来
         builder.setContentText(body.getMessage());
         //设置大图标
-        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.avatar3));
-        builder.setContentInfo("来自"+msg.getUserName());
+        builder.setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher));
+        if (model.exists()){
+            builder.setContentInfo("来自"+model.getContactUserName());
+        }else {
+            builder.setContentInfo("来自"+msg.getUserName());
+        }
+
+
 
         //创建要打开的activity意图
         Intent main = new Intent(getApplicationContext(), MainActivity.class);
@@ -98,6 +123,9 @@ public class NotifyService extends Service {
                 PendingIntent.FLAG_UPDATE_CURRENT);
         //给通知设置点击事件
         builder.setContentIntent(pendingIntent);
+        //点击之后消失
+        builder.setAutoCancel(true);
+        builder.setDeleteIntent(pendingIntent);
         //创建notifiction
         Notification notification = builder.build();
         //发送通知
@@ -105,6 +133,28 @@ public class NotifyService extends Service {
         manager.notify(1,notification);
         //启动为前台服务
         startForeground(1,notification);
+        manager.cancel(1);
+        /*Intent intentClick = new Intent(this, NotificationBroadcastReceiver.class);
+        intentClick.setAction("notification_clicked");
+        intentClick.putExtra(NotificationBroadcastReceiver.TYPE, 1);
+        PendingIntent pendingIntentClick = PendingIntent.getBroadcast(this, 0, intentClick, PendingIntent.FLAG_ONE_SHOT);
+
+        Intent intentCancel = new Intent(this, NotificationBroadcastReceiver.class);
+        intentCancel.setAction("notification_cancelled");
+        intentCancel.putExtra(NotificationBroadcastReceiver.TYPE, 1);
+        PendingIntent pendingIntentCancel = PendingIntent.getBroadcast(this, 0, intentCancel, PendingIntent.FLAG_ONE_SHOT);
+
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle("您有一条新的消息")
+                .setContentText(body.getMessage())
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntentClick)
+                .setDeleteIntent(pendingIntentCancel);
+        //这就是那个type，相同的update，不同add
+        manager.notify(1, notificationBuilder.build());*/
+
     }
 
     /**
@@ -216,5 +266,19 @@ public class NotifyService extends Service {
         }
         //如果service被销毁了，将status重置为-1
         UIUtils.setAppStatus(-1);
+        EventBus.getDefault().unregister(this);
+        LogUtils.i("销毁了service");
+    }
+
+    /**
+     * 监听用户注销事件 如果注销，则销毁自己
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onGetExitEvent(ExitEvent event){
+        if (event.exitType == EMError.USER_ALREADY_EXIST){
+            stopSelf();
+            LogUtils.i("收到消息需要销毁了service");
+        }
     }
 }

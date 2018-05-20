@@ -10,6 +10,8 @@ public class ContentValue {
     public static final String NEWS_URL = "http://reader.smartisan.com" +
             "/index.php?r=find" +
             "/GetArticleList&";
+    public static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.134 Safari/537.36" +
+            "AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/55.0.2883.91 Mobile Safari/537.36";
     //文艺
     public static final String art_url = NEWS_URL +"cate_id=10&" +
             "art_id=&" +

@@ -8,6 +8,7 @@ import com.lingxiao.mvp.huanxinmvp.db.CacheNewsDao;
 import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.presenter.FindPresenter;
 import com.lingxiao.mvp.huanxinmvp.utils.HttpUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.lingxiao.mvp.huanxinmvp.view.FindView;
 

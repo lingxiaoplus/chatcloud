@@ -115,6 +115,7 @@ public class BaseActivity extends AppCompatActivity{
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onGetExitEvent(ExitEvent exitEvent){
+        LogUtils.i("收到退出消息："+exitEvent.exitType);
         String msg = null;
         switch (exitEvent.exitType){
             case EMError.USER_REMOVED:

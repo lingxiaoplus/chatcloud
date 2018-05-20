@@ -17,6 +17,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lingxiao.mvp.huanxinmvp.R;
+import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
+import com.lingxiao.mvp.huanxinmvp.widget.NoAdWebViewClient;
+
+import java.util.HashMap;
 
 public class WebViewActivity extends BaseActivity {
 
@@ -37,6 +41,7 @@ public class WebViewActivity extends BaseActivity {
         findUrl = getIntent().getStringExtra("findUrl");
         title = getIntent().getStringExtra("title");
         tv_title_bar.setText(title);
+
         WebSettings settings = wv_code.getSettings();
         settings.setBuiltInZoomControls(true); //显示缩放按钮
         settings.setUseWideViewPort(true); 	//支持双击缩放
@@ -48,7 +53,7 @@ public class WebViewActivity extends BaseActivity {
             wv_code.loadUrl(findUrl);
         }
 
-        wv_code.setWebViewClient(new WebViewClient(){
+        wv_code.setWebViewClient(new NoAdWebViewClient(){
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);

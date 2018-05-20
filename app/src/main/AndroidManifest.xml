@@ -152,6 +152,12 @@
         <service
             android:name=".service.InitIalizeService"
             android:exported="false" />
+        <receiver android:name=".receiver.NotificationBroadcastReceiver">
+            <intent-filter>
+                <action android:name="notification_cancelled"/>
+                <action android:name="notification_clicked"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

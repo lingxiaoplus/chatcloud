@@ -12,9 +12,11 @@ import android.view.View;
 import android.widget.Button;
 
 import com.hyphenate.EMCallBack;
+import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMConversation;
 import com.lingxiao.mvp.huanxinmvp.R;
+import com.lingxiao.mvp.huanxinmvp.event.ExitEvent;
 import com.lingxiao.mvp.huanxinmvp.global.ActivityManager;
 import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel;
@@ -24,6 +26,8 @@ import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.lingxiao.mvp.huanxinmvp.widget.SettingCardView;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -161,6 +165,7 @@ public class SettingActivity extends BaseActivity {
                 //退出登录，删除表  同步方法
                 SQLite.delete()
                         .from(UserModel.class).execute();
+                EventBus.getDefault().post(new ExitEvent(EMError.USER_ALREADY_EXIST));
                 ActivityManager.getAppManager().AppExit(getApplicationContext());
             }
 
