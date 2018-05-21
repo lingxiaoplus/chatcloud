@@ -14,6 +14,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
+        String userName = intent.getStringExtra("username");
         int type = intent.getIntExtra(TYPE, -1);
 
         if (type != -1) {
@@ -26,13 +27,16 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver{
             //创建要打开的activity意图
             Intent main = new Intent(context, MainActivity.class);
             Intent chat = new Intent(context, ChatActivity.class);
-            //chat.putExtra("name",msg.getUserName());
+            chat.putExtra("name",userName);
             //延期意图  处理通知的点击事件
             Intent[] intents = new Intent[]{main,chat};
             PendingIntent pendingIntent = PendingIntent.getActivities(
                     context,
                     1,intents,
                     PendingIntent.FLAG_UPDATE_CURRENT);
+            main.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            chat.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivities(intents);
 
         }
 

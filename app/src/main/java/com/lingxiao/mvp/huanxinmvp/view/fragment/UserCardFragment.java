@@ -14,10 +14,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.event.SkinChangeEvent;
 import com.lingxiao.mvp.huanxinmvp.event.UserChangedEvent;
+import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.UserCardPresenterImpl;
 import com.lingxiao.mvp.huanxinmvp.presenter.UserCardPresenter;
 import com.lingxiao.mvp.huanxinmvp.utils.SkinUtil;
+import com.lingxiao.mvp.huanxinmvp.utils.SpUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.lingxiao.mvp.huanxinmvp.view.BaseActivity;
@@ -63,6 +65,11 @@ public class UserCardFragment extends BaseFragment implements UserCardView {
     @Override
     public void initData() {
         presenter.getUserInfo();
+        int color = SpUtils.getInt(getActivity(),ContentValue.SKIN_SVG,-1);
+        if (color != -1){
+            UIUtils.changeSVGColor(ivTheme,R.drawable.ic_img_theme,color);
+            UIUtils.changeSVGColor(ivSetting,R.drawable.ic_img_setting,color);
+        }
     }
 
     @Override
@@ -152,6 +159,7 @@ public class UserCardFragment extends BaseFragment implements UserCardView {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onSkinChange(SkinChangeEvent event){
+        SpUtils.putInt(UIUtils.getContext(), ContentValue.SKIN_SVG,event.color);
         UIUtils.changeSVGColor(ivTheme,R.drawable.ic_img_theme,event.color);
         UIUtils.changeSVGColor(ivSetting,R.drawable.ic_img_setting,event.color);
     }

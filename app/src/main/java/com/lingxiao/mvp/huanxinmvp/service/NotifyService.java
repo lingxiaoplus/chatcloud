@@ -90,9 +90,7 @@ public class NotifyService extends Service {
                 .where(ContactsModel_Table.contactUserName.eq(msg.getUserName()))
                 .querySingle();
 
-        Notification.Builder builder = new Notification.Builder(getApplicationContext());
-        //设置通知点击之后消失
-        builder.setAutoCancel(true);
+  /*      Notification.Builder builder = new Notification.Builder(getApplicationContext());
         //设置小图标
         builder.setSmallIcon(R.mipmap.message);
         //设置标题
@@ -132,11 +130,12 @@ public class NotifyService extends Service {
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         manager.notify(1,notification);
         //启动为前台服务
-        startForeground(1,notification);
-        manager.cancel(1);
-        /*Intent intentClick = new Intent(this, NotificationBroadcastReceiver.class);
+        startForeground(1,notification);*/
+
+        Intent intentClick = new Intent(this, NotificationBroadcastReceiver.class);
         intentClick.setAction("notification_clicked");
         intentClick.putExtra(NotificationBroadcastReceiver.TYPE, 1);
+        intentClick.putExtra("username",msg.getUserName());
         PendingIntent pendingIntentClick = PendingIntent.getBroadcast(this, 0, intentClick, PendingIntent.FLAG_ONE_SHOT);
 
         Intent intentCancel = new Intent(this, NotificationBroadcastReceiver.class);
@@ -144,16 +143,20 @@ public class NotifyService extends Service {
         intentCancel.putExtra(NotificationBroadcastReceiver.TYPE, 1);
         PendingIntent pendingIntentCancel = PendingIntent.getBroadcast(this, 0, intentCancel, PendingIntent.FLAG_ONE_SHOT);
 
+        EMTextMessageBody body = (EMTextMessageBody) msg.getBody();
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.message)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher))
                 .setContentTitle("您有一条新的消息")
                 .setContentText(body.getMessage())
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntentClick)
                 .setDeleteIntent(pendingIntentCancel);
         //这就是那个type，相同的update，不同add
-        manager.notify(1, notificationBuilder.build());*/
+        //发送通知
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        manager.notify(1, notificationBuilder.build());
 
     }
 

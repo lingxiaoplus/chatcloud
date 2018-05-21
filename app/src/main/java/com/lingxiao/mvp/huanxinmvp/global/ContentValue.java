@@ -87,4 +87,5 @@ public class ContentValue {
 
 
     public static final String SKIN_POSITION = "skin_position";
+    public static final String SKIN_SVG = "skin_svg";
 }
