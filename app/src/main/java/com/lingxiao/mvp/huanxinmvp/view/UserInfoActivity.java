@@ -16,6 +16,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.StringSignature;
 import com.donkingliang.imageselector.utils.ImageSelectorUtils;
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.event.UserChangedEvent;
@@ -24,6 +25,7 @@ import com.lingxiao.mvp.huanxinmvp.google.encoding.EncodingHandler;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.UserCardPresenterImpl;
 import com.lingxiao.mvp.huanxinmvp.presenter.UserCardPresenter;
+import com.lingxiao.mvp.huanxinmvp.utils.GlideHelper;
 import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
@@ -228,11 +230,11 @@ public class UserInfoActivity extends BaseActivity implements UserCardView {
     @Override
     public void onGetUserInfo(UserModel model) {
         try {
-            Glide.with(UserInfoActivity.this)
-                    .load(model.getProtrait())
-                    .skipMemoryCache(true) // 不使用内存缓存
-                    .diskCacheStrategy(DiskCacheStrategy.NONE) // 不使用磁盘缓存
-                    .into(ivInfoHead);
+
+            GlideHelper.loadImageWithData(
+                    model.getProtrait(),
+                    ivInfoHead,
+                    model.getUpdateTime());
             int sex = model.getSex();
             if (sex == 0) {
                 infoSex.setRightText("男");

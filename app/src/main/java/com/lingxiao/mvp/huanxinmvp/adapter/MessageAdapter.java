@@ -93,9 +93,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageH
         holder.time.setText(dateStr);
         try {
             //有可能为空
-            GlideHelper.realTimeLoading(
+            GlideHelper.loadImageWithData(
                     model.getProtrait(),
-                    holder.headImage);
+                    holder.headImage,
+                    model.updateAt);
             holder.name.setText(model.getNickName());
         }catch (NullPointerException e){
             e.printStackTrace();

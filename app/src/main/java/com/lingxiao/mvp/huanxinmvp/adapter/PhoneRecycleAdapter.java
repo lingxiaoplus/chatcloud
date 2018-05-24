@@ -10,10 +10,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.StringSignature;
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.model.ContactsModel;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.utils.ChineseCharToEnUtil;
+import com.lingxiao.mvp.huanxinmvp.utils.GlideHelper;
 import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.StringUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
@@ -49,12 +51,11 @@ public class PhoneRecycleAdapter extends RecyclerView.Adapter<PhoneRecycleAdapte
         holder.textSelect.setText(ChineseCharToEnUtil
                 .getFirstChar(model.nickName));
         holder.textName.setText(model.nickName);
-        Glide.with(UIUtils.getContext())
-                .load(model.protrait)
-                .skipMemoryCache(true) // 不使用内存缓存
-                .diskCacheStrategy(DiskCacheStrategy.NONE) // 不使用磁盘缓存
-                .into(holder.imgHead);
 
+        GlideHelper.loadImageWithData(
+                model.getProtrait(),
+                holder.imgHead,
+                model.getUpdateAt());
         if (position == 0){
             holder.textSelect.setVisibility(View.GONE);
         }else {

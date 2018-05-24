@@ -33,6 +33,27 @@ public class UserModel extends BaseModel{
     @Column
     public String nickname;
 
+    @Column
+    public long createTime;
+    @Column
+    public long updateTime;
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
+
+    public long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(long updateTime) {
+        this.updateTime = updateTime;
+    }
+
     public String getNickname() {
         return nickname;
     }

@@ -39,6 +39,8 @@ public class LoginPresenterImpl implements LoginPresenter{
                     model.setObjId(avUser.getObjectId());
                     model.setPhone(avUser.getMobilePhoneNumber());
                     model.setToken(avUser.getSessionToken());
+                    model.setCreateTime(avUser.getCreatedAt().getTime());
+                    model.setUpdateTime(avUser.getUpdatedAt().getTime());
                     model.save();
                     SpUtils.putString(UIUtils.getContext(),
                             ContentValue.OBJECTID,avUser.getObjectId());

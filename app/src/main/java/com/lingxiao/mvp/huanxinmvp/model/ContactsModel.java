@@ -37,6 +37,27 @@ public class ContactsModel extends BaseModel{
     @Column
     public int age;
 
+    @Column
+    public long createAt;
+    @Column
+    public long updateAt;
+
+    public long getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(long createAt) {
+        this.createAt = createAt;
+    }
+
+    public long getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(long updateAt) {
+        this.updateAt = updateAt;
+    }
+
     public int getId() {
         return id;
     }

@@ -150,6 +150,8 @@ public class PhonePresenterImpl implements PhonePresenter {
                                     model.setNickName(user.getString(ContentValue.NICKNAME));
                                     model.setAge(user.getInt(ContentValue.AGE));
                                     model.setPhone(user.getMobilePhoneNumber());
+                                    model.setCreateAt(user.getCreatedAt().getTime());
+                                    model.setUpdateAt(user.getUpdatedAt().getTime());
                                     model.save();
                                     modelList.add(model);
                                 }

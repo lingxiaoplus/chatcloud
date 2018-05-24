@@ -5,6 +5,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.StringSignature;
 
 public class GlideHelper {
     /**
@@ -15,6 +16,19 @@ public class GlideHelper {
     public static void loadImageView(String url, ImageView view) {
         Glide.with(UIUtils.getContext())
                 .load(url)
+                .into(view);
+    }
+
+    /**
+     * 添加一个标识用来更新图片
+     * @param url 图片地址
+     * @param view imageview
+     * @param updateTime 更新时间
+     */
+    public static void loadImageWithData(String url, ImageView view,long updateTime) {
+        Glide.with(UIUtils.getContext())
+                .load(url)
+                .signature(new StringSignature(String.valueOf(updateTime)))
                 .into(view);
     }
     /**

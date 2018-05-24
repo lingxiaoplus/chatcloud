@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.StringSignature;
 import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.event.SkinChangeEvent;
 import com.lingxiao.mvp.huanxinmvp.event.UserChangedEvent;
@@ -18,6 +19,7 @@ import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.UserCardPresenterImpl;
 import com.lingxiao.mvp.huanxinmvp.presenter.UserCardPresenter;
+import com.lingxiao.mvp.huanxinmvp.utils.GlideHelper;
 import com.lingxiao.mvp.huanxinmvp.utils.SkinUtil;
 import com.lingxiao.mvp.huanxinmvp.utils.SpUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
@@ -96,11 +98,10 @@ public class UserCardFragment extends BaseFragment implements UserCardView {
     public void onGetUserInfo(UserModel model) {
         try {
             tvMineUsername.setText(model.getNickname());
-            Glide.with(getActivity())
-                    .load(model.getProtrait())
-                    .skipMemoryCache(true) // 不使用内存缓存
-                    .diskCacheStrategy(DiskCacheStrategy.NONE) // 不使用磁盘缓存
-                    .into(headImgView);
+            GlideHelper.loadImageWithData(
+                    model.getProtrait(),
+                    headImgView,
+                    model.getUpdateTime());
         } catch (Exception e) {
             ToastUtils.showToast("获取信息失败，请重新登录");
         }

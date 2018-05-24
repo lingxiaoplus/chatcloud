@@ -64,7 +64,10 @@ public class FriendInfoActivity extends BaseActivity {
                 .querySingle();
 
         if (model.exists()) {
-            GlideHelper.loadImageView(model.protrait, imgFriend);
+            GlideHelper.loadImageWithData(
+                    model.getProtrait(),
+                    imgFriend,
+                    model.getUpdateAt());
             friendInfoSex.setRightText(model.sex == 0 ? "男" : "女");
             friendInfoDesc.setRightText(model.desc);
             friendInfoPhone.setRightText(model.phone);
