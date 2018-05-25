@@ -102,6 +102,7 @@ public class RegistActivity extends BaseActivity implements RegistView {
                     RegistInfoActivity.class);
             intent.putExtra("objectid", objcectId);
             startActivity(intent);
+            finish();
             /*ToastUtils.showToast("注册成功");
             StartActivity(LoginActivity.class,true);*/
         } else {

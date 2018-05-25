@@ -97,8 +97,8 @@ public class CallPhoneActivity extends BaseActivity implements CallView {
      * 初始化声音
      */
     private void initSoundPool() {
-        mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC,0);
-        callSound = mSoundPool.load(getApplicationContext(),R.raw.em_outgoing,1);
+        mSoundPool = new SoundPool(1, AudioManager.STREAM_RING,0);
+        callSound = mSoundPool.load(this,R.raw.ipcall_phonering,1);
     }
 
     private void initData(Intent intent) {
@@ -118,6 +118,14 @@ public class CallPhoneActivity extends BaseActivity implements CallView {
         if (null != nickName){
             tvCallName.setText(nickName);
         }
+        mSoundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+            @Override
+            public void onLoadComplete(SoundPool soundPool, int i, int i1) {
+                //等对方响应 loop为-1 循环播放
+                mSoundPool.play(callSound,1,1,0,-1,1);
+            }
+        });
+
     }
 
     @OnClick(R.id.bt_call_end)
@@ -131,9 +139,8 @@ public class CallPhoneActivity extends BaseActivity implements CallView {
             @Override
             public void run() {
                 if (null == msg) {
-                    if (status == ContentValue.CALL_CONNECTING) {
-                        //等对方响应 loop为-1 循环播放
-                        mSoundPool.play(callSound,1,1,0,-1,1);
+                    if (status == ContentValue.CALL_CONNECTED) {
+
                     } else if (status == ContentValue.CALL_ACCEPTED) {
                         //接听了
                         //opSurfaceview.setVisibility(View.VISIBLE);
@@ -141,6 +148,7 @@ public class CallPhoneActivity extends BaseActivity implements CallView {
                         ToastUtils.showToast("接通电话了");
                         mSoundPool.autoPause();
                     } else if (status == ContentValue.CALL_DISCONNECTED) {
+                        mSoundPool.autoPause();
                         long time = System.currentTimeMillis();
                         if (time - callTime < 1000) {
                             //说明对方不在线
@@ -150,6 +158,7 @@ public class CallPhoneActivity extends BaseActivity implements CallView {
                         }
                     }
                 } else {
+                    mSoundPool.autoPause();
                     ToastUtils.showToast("对方可能不在线" );
                 }
             }

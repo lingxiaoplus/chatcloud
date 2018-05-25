@@ -1,6 +1,8 @@
 package com.lingxiao.mvp.huanxinmvp.view;
 
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
@@ -46,17 +48,26 @@ public class AcceptCallActivity extends BaseActivity implements AcceptCallView {
     private AcceptCallPresenter presenter;
     private ContactsModel mContactModel;
 
+    private SoundPool mSoundPool;
+    private int callSound;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accept_call);
         ButterKnife.bind(this);
         presenter = new AcceptCallPresenterImpl(this);
+        initSoundPool();
         intent = getIntent();
         initData();
         presenter.callListener();
     }
 
+
+    private void initSoundPool() {
+        mSoundPool = new SoundPool(1, AudioManager.STREAM_RING,0);
+        callSound = mSoundPool.load(this,R.raw.phonering,1);
+    }
     private void initData() {
         try {
             String from = intent.getStringExtra("from");
@@ -79,6 +90,14 @@ public class AcceptCallActivity extends BaseActivity implements AcceptCallView {
                 localSurface.setVisibility(View.VISIBLE);
                 initSurfaceView();
             }
+
+            mSoundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+                @Override
+                public void onLoadComplete(SoundPool soundPool, int i, int i1) {
+                    //等对方响应 loop为-1 循环播放
+                    mSoundPool.play(callSound,1,1,0,-1,1);
+                }
+            });
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
@@ -94,16 +113,19 @@ public class AcceptCallActivity extends BaseActivity implements AcceptCallView {
 
     @OnClick(R.id.bt_accept_ensure)
     public void onAnswer() {
+        mSoundPool.autoPause();
         presenter.answerCall();
     }
 
     @OnClick(R.id.bt_accept_cancel)
     public void onCancel() {
+        mSoundPool.autoPause();
         presenter.cancelCall();
     }
 
     @OnClick(R.id.bt_accept_end)
     public void onEnd() {
+        mSoundPool.autoPause();
         presenter.endCall();
     }
 
