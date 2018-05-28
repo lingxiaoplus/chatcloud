@@ -56,19 +56,26 @@
     <color name="blue600">#1E88E5</color>
     <color name="blue700">#1976D2</color>
 
+    <!--toolbar颜色-->
     <color name="colorPrimary_default">#4CAF50</color>
     <color name="colorPrimary_red300">@color/red_300</color>
     <color name="colorPrimary_blue300">@color/blue300</color>
     <color name="colorPrimary_indigo300">@color/indigo300</color>
     <color name="colorPrimary_deepPurple300">@color/deepPurple300</color>
 
+    <!--状态栏和开关颜色-->
     <color name="colorPrimaryDark_default">#388E3C</color>
     <color name="colorPrimaryDark_red300">@color/red_500</color>
     <color name="colorPrimaryDark_blue300">@color/blue500</color>
     <color name="colorPrimaryDark_indigo300">@color/indigo500</color>
     <color name="colorPrimaryDark_deepPurple300">@color/deepPurple500</color>
 
-
+    <!--skinact背景颜色-->
+    <color name="skinBackground_default">#ffffffff</color>
+    <color name="skinBackground_red300">@color/red_300</color>
+    <color name="skinBackground_blue300">@color/blue300</color>
+    <color name="skinBackground_indigo300">@color/indigo300</color>
+    <color name="skinBackground_deepPurple300">@color/deepPurple300</color>
 
 
     <color name="amber_100">#ffecb3</color>

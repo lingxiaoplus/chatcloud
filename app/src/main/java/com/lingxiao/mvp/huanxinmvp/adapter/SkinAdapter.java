@@ -41,7 +41,8 @@ public class SkinAdapter extends BaseRecyAdapter{
         imageView = (CircleImageView) holder.getView(R.id.img_skin);
         textView = (TextView) holder.getView(R.id.tv_skin);
         button = (Button) holder.getView(R.id.bt_skin_use);
-        imageView.setBackgroundColor(mContext.getResources().getColor(list.get(position)));
+        //imageView.setBackgroundResource(list.get(position));
+        imageView.setImageDrawable(new ColorDrawable(Color.parseColor(colors[position])));
         textView.setTextColor(Color.parseColor(colors[position]));
         textView.setText(strings[position]);
     }

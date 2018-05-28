@@ -280,7 +280,7 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    public void upDateBadgeItem(){
+    public void upDateBadgeItem() throws NullPointerException{
         //获取所有的未读条目数量
         int unreadMessageCount = EMClient.getInstance().chatManager().getUnreadMessageCount();
         if(unreadMessageCount==0){

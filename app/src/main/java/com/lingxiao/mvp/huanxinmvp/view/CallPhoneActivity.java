@@ -2,6 +2,7 @@ package com.lingxiao.mvp.huanxinmvp.view;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -26,6 +27,8 @@ import com.lingxiao.mvp.huanxinmvp.utils.GlideHelper;
 import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ThreadUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
+
+import java.text.Collator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,9 +63,9 @@ public class CallPhoneActivity extends BaseActivity implements CallView {
      */
     private SensorManager sm;
     //设备的电源控制器
-    private PowerManager mPowerManager;
+    //private PowerManager mPowerManager;
     //唤醒锁
-    private PowerManager.WakeLock mWakeLock;
+    //private PowerManager.WakeLock mWakeLock;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,13 +78,13 @@ public class CallPhoneActivity extends BaseActivity implements CallView {
         initSoundPool();
         Intent intent = getIntent();
         initData(intent);
-        initPowerManager();
+        //initPowerManager();
     }
 
     private void initPowerManager() {
         sm = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         //获取系统服务POWER_SERVICE，返回一个PowerManager对象
-        mPowerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        //mPowerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         //获取PowerManager.WakeLock对象
         /**
          * 参数一是PowerManager提供的的四种唤醒锁
@@ -90,7 +93,7 @@ public class CallPhoneActivity extends BaseActivity implements CallView {
          * SCREEN_BRIGHT_WAKE_LOCK  （level 17  deprecated）
          * FULL_WAKE_LOCK  （level 17  deprecated）
          */
-        mWakeLock = this.mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MyWake");
+        //mWakeLock = this.mPowerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "MyWake");
     }
 
     /**
@@ -111,6 +114,7 @@ public class CallPhoneActivity extends BaseActivity implements CallView {
         } else if (type == 1) {
             presenter.callVideo(name);
             initSurfaceView();
+            tvCallName.setTextColor(Color.WHITE);
         }
         if (null != mProtrait){
             GlideHelper.loadImageView(mProtrait,imgCallHead);
@@ -122,7 +126,7 @@ public class CallPhoneActivity extends BaseActivity implements CallView {
             @Override
             public void onLoadComplete(SoundPool soundPool, int i, int i1) {
                 //等对方响应 loop为-1 循环播放
-                mSoundPool.play(callSound,1,1,0,-1,1);
+                //mSoundPool.play(callSound,1,1,0,-1,1);
             }
         });
 
@@ -146,9 +150,7 @@ public class CallPhoneActivity extends BaseActivity implements CallView {
                         //opSurfaceview.setVisibility(View.VISIBLE);
                         //localSurface.release();
                         ToastUtils.showToast("接通电话了");
-                        mSoundPool.autoPause();
                     } else if (status == ContentValue.CALL_DISCONNECTED) {
-                        mSoundPool.autoPause();
                         long time = System.currentTimeMillis();
                         if (time - callTime < 1000) {
                             //说明对方不在线
@@ -158,7 +160,6 @@ public class CallPhoneActivity extends BaseActivity implements CallView {
                         }
                     }
                 } else {
-                    mSoundPool.autoPause();
                     ToastUtils.showToast("对方可能不在线" );
                 }
             }
@@ -197,12 +198,12 @@ public class CallPhoneActivity extends BaseActivity implements CallView {
     /**
      * 感应器监听
      */
-    private SensorEventListener mSensorListener = new SensorEventListener() {
+    /*private SensorEventListener mSensorListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
 
             float[] its = event.values;
-            ToastUtils.showToast("距离："+its[0]+"cm");
+            //ToastUtils.showToast("距离："+its[0]+"cm");
             if (its != null && event.sensor.getType() == Sensor.TYPE_PROXIMITY) {
                 LogUtils.i("锁屏");
                 if (its[0] <= 3.0) {
@@ -229,29 +230,29 @@ public class CallPhoneActivity extends BaseActivity implements CallView {
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
         }
-    };
+    };*/
     //注册黑屏亮屏监听
     @Override
     protected void onResume() {
         super.onResume();
-        Sensor s = sm.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        /*Sensor s = sm.getDefaultSensor(Sensor.TYPE_PROXIMITY);
         if (s != null) {
             sm.registerListener(mSensorListener, s, SensorManager.SENSOR_DELAY_NORMAL);
-        }
+        }*/
     }
 
     /**
      * 取消注册
      */
-    public synchronized void stopSensor() {
+    /*public synchronized void stopSensor() {
         if (sm != null) {
             mWakeLock.release();//释放电源锁
             sm.unregisterListener(mSensorListener);//注销传感器监听
         }
-    }
+    }*/
     @Override
     protected void onDestroy() {
-        stopSensor();
+        //stopSensor();
         super.onDestroy();
         if (mSoundPool !=null){
             mSoundPool.autoPause();

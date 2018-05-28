@@ -10,16 +10,28 @@ import android.os.Build;
 import java.io.IOException;
 
 public class SoundUtils {
+
+    private static SoundUtils mSoundUtils;
+    private SoundUtils(){
+
+    }
+    public static SoundUtils getInstance(){
+        if (null == mSoundUtils){
+            mSoundUtils = new SoundUtils();
+        }
+        return mSoundUtils;
+    }
     /**
      * 播放声音 不能同时播放多种音频
      * 消耗资源较大
      * @param path
      */
-    public static void playSoundByMedia(String path) {
+    public MediaPlayer playSoundByMedia(String path) {
+        MediaPlayer mediaPlayer = null;
         try {
-            MediaPlayer mediaPlayer = new MediaPlayer();
+            mediaPlayer = new MediaPlayer();
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setOnCompletionListener(beepListener);
+            //mediaPlayer.setOnCompletionListener(beepListener);
             try {
                 mediaPlayer.setDataSource(path);
                 mediaPlayer.setVolume(0.50f, 0.50f);
@@ -27,19 +39,23 @@ public class SoundUtils {
                 mediaPlayer.start();
             } catch (IOException e) {
                 mediaPlayer = null;
+                e.printStackTrace();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        return mediaPlayer;
     }
 
-    private static final MediaPlayer.OnCompletionListener beepListener = new MediaPlayer.OnCompletionListener() {
+    /*private MediaPlayer.OnCompletionListener beepListener = new MediaPlayer.OnCompletionListener() {
         public void onCompletion(MediaPlayer mediaPlayer) {
             mediaPlayer.seekTo(0);
+            LogUtils.i("播放结束");
         }
-    };
 
+    };*/
+
+    //public abstract void onPlayCompleted();
 
     /**
      * 适合播放声音短，文件小

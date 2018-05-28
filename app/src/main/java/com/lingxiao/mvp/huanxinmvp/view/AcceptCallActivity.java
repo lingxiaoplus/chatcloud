@@ -72,8 +72,6 @@ public class AcceptCallActivity extends BaseActivity implements AcceptCallView {
         try {
             String from = intent.getStringExtra("from");
             String type = intent.getStringExtra("type");
-            ToastUtils.showToast("类型：" + type);
-
             mContactModel = SQLite
                     .select()
                     .from(ContactsModel.class)
@@ -84,18 +82,21 @@ public class AcceptCallActivity extends BaseActivity implements AcceptCallView {
                 GlideHelper.loadImageView(mContactModel.getProtrait(), imgAcceptHead);
                 oppoSurface.setVisibility(View.GONE);
                 localSurface.setVisibility(View.GONE);
+                ToastUtils.showToast("语音来电：" + mContactModel.getNickName());
             } else {
                 imgAcceptHead.setVisibility(View.INVISIBLE);
                 oppoSurface.setVisibility(View.VISIBLE);
                 localSurface.setVisibility(View.VISIBLE);
                 initSurfaceView();
+                tvAcceptName.setTextColor(getResources().getColor(R.color.white));
+                ToastUtils.showToast("视频来电：" + mContactModel.getNickName());
             }
 
             mSoundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
                 @Override
                 public void onLoadComplete(SoundPool soundPool, int i, int i1) {
                     //等对方响应 loop为-1 循环播放
-                    mSoundPool.play(callSound,1,1,0,-1,1);
+                    //mSoundPool.play(callSound,1,1,0,-1,1);
                 }
             });
         } catch (NullPointerException e) {
@@ -113,19 +114,19 @@ public class AcceptCallActivity extends BaseActivity implements AcceptCallView {
 
     @OnClick(R.id.bt_accept_ensure)
     public void onAnswer() {
-        mSoundPool.autoPause();
+
         presenter.answerCall();
     }
 
     @OnClick(R.id.bt_accept_cancel)
     public void onCancel() {
-        mSoundPool.autoPause();
+
         presenter.cancelCall();
     }
 
     @OnClick(R.id.bt_accept_end)
     public void onEnd() {
-        mSoundPool.autoPause();
+
         presenter.endCall();
     }
 
@@ -143,6 +144,7 @@ public class AcceptCallActivity extends BaseActivity implements AcceptCallView {
     @Override
     public void onRejectCall(boolean result, String msg) {
         if (result) {
+
             finish();
         } else {
             ToastUtils.showToast(msg);
@@ -152,6 +154,7 @@ public class AcceptCallActivity extends BaseActivity implements AcceptCallView {
     @Override
     public void onEndCall(boolean result, String msg) {
         if (result) {
+
             finish();
         } else {
             ToastUtils.showToast(msg);
@@ -161,6 +164,7 @@ public class AcceptCallActivity extends BaseActivity implements AcceptCallView {
     @Override
     public void onGetCallStatus(int status) {
         if (status == ContentValue.CALL_DISCONNECTED) {
+
             finish();
         }
     }

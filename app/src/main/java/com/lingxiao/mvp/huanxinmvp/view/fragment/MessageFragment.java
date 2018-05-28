@@ -124,7 +124,7 @@ public class MessageFragment extends BaseFragment implements MessageView{
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageResult(MessageEvent event){
         messagePresenter.getMessages();
-        ToastUtils.showToast("更新消息列表");
+
     }
 
     @Override

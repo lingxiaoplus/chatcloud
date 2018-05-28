@@ -51,6 +51,16 @@ public class StringUtils {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         return format.format(date);
     }
+
+    /**
+     * 把long 转换成 日期 再转换成String类型
+     */
+    public static String transferLongToDate(Long millSec) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date(millSec);
+        return sdf.format(date);
+    }
+
     /**
      *将date格式字符串转换为时间
      */

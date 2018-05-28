@@ -43,9 +43,9 @@ public class BaseHolder extends RecyclerView.ViewHolder{
         return this;
     }
 
-    public BaseHolder setImageUrl(int viewId, String picPath) {
+    public BaseHolder setImageUrl(int viewId, String picPath,long time) {
         ImageView view = getView(viewId);
-        GlideHelper.loadImageView(picPath, view);
+        GlideHelper.loadImageWithData(picPath,view,time);
         return this;
     }
 

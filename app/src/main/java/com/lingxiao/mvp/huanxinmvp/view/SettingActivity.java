@@ -115,7 +115,7 @@ public class SettingActivity extends BaseActivity {
 
     @OnClick(R.id.set_upadte)
     public void setUpdate(View v){
-        SkinCompatManager.getInstance().loadSkin("skin_night.skin", SkinCompatManager.SKIN_LOADER_STRATEGY_ASSETS);
+        //SkinCompatManager.getInstance().loadSkin("skin_night.skin", SkinCompatManager.SKIN_LOADER_STRATEGY_ASSETS);
         boolean ischeked = setUpadte.getChecked();
         setUpadte.setChecked(!ischeked);
         SpUtils.putBoolean(UIUtils.getContext(),ContentValue.UPDATE,!ischeked);

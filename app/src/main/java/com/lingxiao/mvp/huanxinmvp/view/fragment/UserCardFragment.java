@@ -20,8 +20,10 @@ import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.UserCardPresenterImpl;
 import com.lingxiao.mvp.huanxinmvp.presenter.UserCardPresenter;
 import com.lingxiao.mvp.huanxinmvp.utils.GlideHelper;
+import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.SkinUtil;
 import com.lingxiao.mvp.huanxinmvp.utils.SpUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.StringUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.lingxiao.mvp.huanxinmvp.view.BaseActivity;
@@ -102,6 +104,8 @@ public class UserCardFragment extends BaseFragment implements UserCardView {
                     model.getProtrait(),
                     headImgView,
                     model.getUpdateTime());
+            String data = StringUtils.transferLongToDate(model.getUpdateTime());
+            LogUtils.i("获取本地更新用户信息的时间"+data);
         } catch (Exception e) {
             ToastUtils.showToast("获取信息失败，请重新登录");
         }

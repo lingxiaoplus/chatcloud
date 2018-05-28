@@ -157,10 +157,13 @@ public class UserCardPresenterImpl implements UserCardPresenter,QiNiuSdkHelper.u
     @Override
     public void onSuccess(final String url) {
         LogUtils.i("成功的回调"+url);
+
         final UserModel model = SQLite
                 .select()
                 .from(UserModel.class)
                 .querySingle();
+        //保存当前时间戳
+        model.setUpdateTime(System.currentTimeMillis());
         AVUser.getCurrentUser().saveInBackground(new SaveCallback() {
             @Override
             public void done(AVException e) {
@@ -176,6 +179,7 @@ public class UserCardPresenterImpl implements UserCardPresenter,QiNiuSdkHelper.u
                 }
             }
         });
+
     }
 
     @Override

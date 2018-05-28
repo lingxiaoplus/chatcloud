@@ -81,7 +81,7 @@
             android:theme="@style/NoTitleTranslucentTheme" />
         <activity
             android:name=".view.LoginActivity"
-            android:theme="@style/NoTitleTranslucentTheme" />
+             />
         <activity
             android:name=".view.ChatActivity"
             android:theme="@style/MyMainTheme" />

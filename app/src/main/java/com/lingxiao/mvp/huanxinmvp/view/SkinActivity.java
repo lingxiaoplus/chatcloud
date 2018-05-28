@@ -91,13 +91,14 @@ public class SkinActivity extends BaseActivity {
         adapter.setOnItemClickListener(new BaseRecyAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseHolder holder, int position) {
-                RippleAnimation.create(holder.itemView).setDuration(1000).start();
+                RippleAnimation.create(holder.getView(R.id.bt_skin_use)).setDuration(2000).start();
                 SpUtils.putInt(UIUtils.getContext(), ContentValue.SKIN_POSITION,position);
                 if (position == 0){
                     UIUtils.restoreDefaultTheme();
                 }else {
                     UIUtils.changeSkinDef(colorName.get(position));
                 }
+
                 EventBus.getDefault().post(new SkinChangeEvent(colorList.get(position)));
             }
         });

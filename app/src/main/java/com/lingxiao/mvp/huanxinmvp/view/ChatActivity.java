@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaPlayer;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -48,6 +49,7 @@ import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel_Table;
 import com.lingxiao.mvp.huanxinmvp.presenter.ChatPresenter;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.ChatPresenterImpl;
+import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.PermissionHelper;
 import com.lingxiao.mvp.huanxinmvp.utils.SoundUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
@@ -177,16 +179,29 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
 
             @Override
             public void onPictureClick(View view, int position, String picPath) {
-                ToastUtils.showToast("图片信息："+picPath);
+                ToastUtils.showToast("图片");
                 Intent intent = new Intent(getApplicationContext(),LocalPicActivity.class);
                 intent.putExtra("path",picPath);
                 startActivity(intent);
             }
 
             @Override
-            public void onVoiceClick(View view, int position, String voicePath,int len) {
-                ToastUtils.showToast("语音信息："+voicePath);
-                SoundUtils.playSoundByMedia(voicePath);
+            public void onVoiceClick(final View view, final View voiceIcon,int position, String voicePath, int len) {
+                ToastUtils.showToast("语音消息");
+                view.setEnabled(false);
+                voiceIcon.setVisibility(View.VISIBLE);
+                SoundUtils.getInstance()
+                        .playSoundByMedia(voicePath)
+                        .setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                            @Override
+                            public void onCompletion(MediaPlayer mediaPlayer) {
+                                mediaPlayer.seekTo(0);
+                                LogUtils.i("播放结束");
+                                view.setEnabled(true);
+                                voiceIcon.setVisibility(View.INVISIBLE);
+                            }
+                        });
+
             }
         });
     }

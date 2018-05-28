@@ -11,6 +11,8 @@
     <color name="colorAccentAlpha">#801572fc</color>
 
     <color name="background">#ffffffff</color>
+
+    <color name="skinBackground">#ffffffff</color>
     <!-- QRCode scanner color begin -->
     <color name="viewfinder_mask">#60000000</color>
     <color name="result_view">#B0000000</color>

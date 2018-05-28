@@ -2,6 +2,7 @@ package com.lingxiao.mvp.huanxinmvp.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.MediaPlayer;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.view.LayoutInflater;
@@ -27,6 +28,8 @@ import com.lingxiao.mvp.huanxinmvp.model.ContactsModel_Table;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel_Table;
 import com.lingxiao.mvp.huanxinmvp.utils.GlideHelper;
+import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.SoundUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.sqk.emojirelease.EmojiUtil;
@@ -68,7 +71,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseHolder>{
     public BaseHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
         BaseHolder holder = null;
-        if (viewType == TYPE_VOICE_RECEIVER){
+        if (viewType == TYPE_TEXT_RECEIVER){
             //接收方 文本
             view = inflateView(parent,R.layout.cell_chat_text_left);
         }else if (viewType == TYPE_TEXT_SEND){
@@ -84,6 +87,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseHolder>{
         else if (viewType == TYPE_VOICE_SEND){
             view = inflateView(parent,R.layout.cell_chat_audio_right);
         }else {
+            LogUtils.i("对方未知，默认文字"+viewType);
             view = inflateView(parent,R.layout.cell_chat_text_left);
         }
         holder = new BaseHolder(view);
@@ -134,7 +138,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseHolder>{
         }else if (type == EMMessage.Type.IMAGE){
             EMImageMessageBody messageBody = (EMImageMessageBody) emMessage.getBody();
             picPath = messageBody.thumbnailLocalPath();
-            holder.setImageUrl(R.id.im_image,picPath);
+            holder.setImageUrl(R.id.im_image,picPath,0);
         }else if (type == EMMessage.Type.VOICE){
             EMVoiceMessageBody voiceMessageBody = (EMVoiceMessageBody) emMessage.getBody();
             mVoiceLen = voiceMessageBody.getLength();
@@ -166,7 +170,23 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseHolder>{
                 }
             });
         }else if (itemViewType == TYPE_VOICE_RECEIVER || itemViewType == TYPE_VOICE_SEND){
-            holder.setOnClickListener(R.id.txt_content, new View.OnClickListener() {
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int length = ((EMVoiceMessageBody)messages
+                            .get(position).getBody()).getLength();
+                    String voicepath = ((EMVoiceMessageBody)messages
+                            .get(position).getBody()).getLocalUrl();
+                    if (onItemClickListener != null){
+                        onItemClickListener
+                                .onVoiceClick(view,holder.getView(R.id.im_audio_track),position,voicepath,length);
+                    }
+
+                }
+            });
+
+            /*holder.setOnClickListener(holder.itemView.getId(), new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int length = ((EMVoiceMessageBody)messages
@@ -178,7 +198,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseHolder>{
                                 .onVoiceClick(view,position,voicepath,length);
                     }
                 }
-            });
+            });*/
         }
 
         //获取消息内容
@@ -194,12 +214,12 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseHolder>{
                         .from(ContactsModel.class)
                         .where(ContactsModel_Table.contactUserName.eq(name))
                         .querySingle();
-                holder.setImageUrl(R.id.im_portrait,model.protrait);
+                holder.setImageUrl(R.id.im_portrait,model.protrait,model.getUpdateAt());
             }else {
                 UserModel userModel = SQLite
                         .select()
                         .from(UserModel.class).querySingle();
-                holder.setImageUrl(R.id.im_portrait,userModel.protrait);
+                holder.setImageUrl(R.id.im_portrait,userModel.protrait,userModel.getUpdateTime());
             }
         //如果是发送的消息，需要处理发送的状态
         EMMessage.Status status = emMessage.status();
@@ -209,7 +229,8 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseHolder>{
                     holder.getView(R.id.loading).setVisibility(View.GONE);
                     break;
                 case FAIL:
-                    //holder.progressBar.setImageResource(R.drawable.error);
+                    holder.getView(R.id.loading).setVisibility(View.GONE);
+                    holder.setImageResource(R.id.im_portrait,R.drawable.ic_message_error);
                     break;
                 case INPROGRESS:
                     holder.getView(R.id.loading).setVisibility(View.VISIBLE);
@@ -274,7 +295,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseHolder>{
     public interface OnItemClickListener {
         void onTextClick(View view, int position,String msg);
         void onPictureClick(View view,int position,String picPath);
-        void onVoiceClick(View view,int position,String voicePath,int lenth);
+        void onVoiceClick(View view,View voiceIcon,int position,String voicePath,int lenth);
     }
 
     private OnItemClickListener onItemClickListener;
