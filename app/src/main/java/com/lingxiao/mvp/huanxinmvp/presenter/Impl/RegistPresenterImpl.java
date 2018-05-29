@@ -8,8 +8,12 @@ import com.avos.avoscloud.SignUpCallback;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
 import com.lingxiao.mvp.huanxinmvp.presenter.RegistPresenter;
+import com.lingxiao.mvp.huanxinmvp.utils.MD5Util;
 import com.lingxiao.mvp.huanxinmvp.utils.ThreadUtils;
 import com.lingxiao.mvp.huanxinmvp.view.RegistView;
+
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
@@ -23,15 +27,25 @@ public class RegistPresenterImpl implements RegistPresenter{
     //view的引用
     private RegistView mRegistView;
     private static final String TAG = "RegistPresenterImpl";
+    private String md5Psd;
 
     public RegistPresenterImpl(RegistView registView){
         this.mRegistView = registView;
     }
     @Override
     public void registUser(final String username, final String psd,final String phone) {
+        //注册时加密
+        md5Psd = psd;
+        try {
+            md5Psd = MD5Util.getEncryptedPwd(psd);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         final AVUser user = new AVUser();// 新建 AVUser 对象实例
         user.setUsername(username);// 设置用户名
-        user.setPassword(psd);// 设置密码
+        user.setPassword(md5Psd);// 设置密码
         user.setMobilePhoneNumber(phone); //设置手机号
         //在子线程中进行
         user.signUpInBackground(new SignUpCallback() {
@@ -47,14 +61,13 @@ public class RegistPresenterImpl implements RegistPresenter{
                         @Override
                         public void run() {
                             try {
-                                EMClient.getInstance().createAccount(username, psd);//同步方法
+                                EMClient.getInstance().createAccount(username, md5Psd);//同步方法
                                 //说明注册成功
                                 //在主线程中通知界面跳转
                                 ThreadUtils.runOnMainThread(new Runnable() {
                                     @Override
                                     public void run() {
-
-                                        mRegistView.onGetRegistState(objId,username,psd,true,null);
+                                        mRegistView.onGetRegistState(objId,username,md5Psd,true,null);
                                     }
                                 });
                             } catch (HyphenateException e1) {
@@ -66,7 +79,7 @@ public class RegistPresenterImpl implements RegistPresenter{
                                     e2.printStackTrace();
                                 }
                                 //环信注册失败    通知界面显示注册失败
-                                mRegistView.onGetRegistState(objId,username,psd,false,e1.getDescription());
+                                mRegistView.onGetRegistState(objId,username,md5Psd,false,e1.getDescription());
                                 Log.i(TAG, "环信注册失败");
                             }
                         }

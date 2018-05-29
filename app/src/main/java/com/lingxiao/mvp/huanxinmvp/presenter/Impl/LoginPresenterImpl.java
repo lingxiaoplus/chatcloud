@@ -9,10 +9,14 @@ import com.lingxiao.mvp.huanxinmvp.callback.MyEmCallBack;
 import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.presenter.LoginPresenter;
+import com.lingxiao.mvp.huanxinmvp.utils.MD5Util;
 import com.lingxiao.mvp.huanxinmvp.utils.SpUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.lingxiao.mvp.huanxinmvp.view.LoginView;
+
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Created by lingxiao on 17-6-28.
@@ -20,12 +24,21 @@ import com.lingxiao.mvp.huanxinmvp.view.LoginView;
 
 public class LoginPresenterImpl implements LoginPresenter{
     private LoginView loginView;
+    private String mDecodePsd;
     public LoginPresenterImpl(LoginView loginView){
         this.loginView = loginView;
     }
     @Override
     public void login(final String username, final String pwd) {
-        AVUser.logInInBackground(username, pwd, new LogInCallback<AVUser>() {
+        mDecodePsd = pwd;
+        try {
+            mDecodePsd = MD5Util.getEncryptedPwd(pwd);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        AVUser.logInInBackground(username, mDecodePsd, new LogInCallback<AVUser>() {
             @Override
             public void done(final AVUser avUser, AVException e) {
                 if (e == null){
@@ -44,7 +57,7 @@ public class LoginPresenterImpl implements LoginPresenter{
                     model.save();
                     SpUtils.putString(UIUtils.getContext(),
                             ContentValue.OBJECTID,avUser.getObjectId());
-                    EMClient.getInstance().login(username, pwd, new MyEmCallBack() {
+                    EMClient.getInstance().login(username, mDecodePsd, new MyEmCallBack() {
                         @Override
                         public void success() {
                             loginView.onGetLoginState(username,true,null);

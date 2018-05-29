@@ -42,11 +42,11 @@ public class LocalPicActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }else {
-            if (null != path) {
-                GlideHelper.loadImageView(path,ivLocal);
-            } else {
-                ToastUtils.showToast("无法查看原图");
-            }
+            GlideHelper.loadImageViewLoding(
+                    path,
+                    ivLocal,
+                    R.drawable.ic_img_loading,
+                    R.drawable.ic_message_error);
         }
         ivLocal.setOnClickListener(new View.OnClickListener() {
             @Override

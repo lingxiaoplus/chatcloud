@@ -27,6 +27,7 @@ import com.lingxiao.mvp.huanxinmvp.presenter.Impl.UserCardPresenterImpl;
 import com.lingxiao.mvp.huanxinmvp.presenter.UserCardPresenter;
 import com.lingxiao.mvp.huanxinmvp.utils.GlideHelper;
 import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.MD5Util;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.lingxiao.mvp.huanxinmvp.widget.SignalCardLayout;
@@ -34,6 +35,8 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import butterknife.BindView;

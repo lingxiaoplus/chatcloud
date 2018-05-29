@@ -50,6 +50,7 @@ import com.lingxiao.mvp.huanxinmvp.model.UserModel_Table;
 import com.lingxiao.mvp.huanxinmvp.presenter.ChatPresenter;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.ChatPresenterImpl;
 import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.MD5Util;
 import com.lingxiao.mvp.huanxinmvp.utils.PermissionHelper;
 import com.lingxiao.mvp.huanxinmvp.utils.SoundUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
@@ -64,6 +65,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,6 +115,7 @@ public class ChatActivity extends BaseActivity implements ChatView,FaceFragment.
         initView();
 
         faceFragment = FaceFragment.Instance();
+
     }
 
     private void initView() {

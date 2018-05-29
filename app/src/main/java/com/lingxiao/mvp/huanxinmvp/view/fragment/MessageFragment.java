@@ -25,6 +25,7 @@ import com.lingxiao.mvp.huanxinmvp.event.SkinChangeEvent;
 import com.lingxiao.mvp.huanxinmvp.presenter.Impl.MessagePresenterImpl;
 import com.lingxiao.mvp.huanxinmvp.presenter.MessagePresenter;
 import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.MD5Util;
 import com.lingxiao.mvp.huanxinmvp.utils.ToastUtils;
 import com.lingxiao.mvp.huanxinmvp.view.ChatActivity;
 import com.lingxiao.mvp.huanxinmvp.view.MessageView;
@@ -34,6 +35,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 /**

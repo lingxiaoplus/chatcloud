@@ -23,12 +23,17 @@ eventbus 应用内各个线程之间的通讯
 
 # 开发记录：
 
-v1.0.1
+#####v1.0.0
 
-全局material design实现
+1. 全局material design实现
+2. RecyclerView + CardView 展示新闻列表
+3. 自定义组合控件展示联系人列表
+4. toolbar替代actionbar
 
-RecyclerView + CardView 展示新闻列表
+##### 1.0.1
 
-自定义组合控件展示联系人列表
+1. 主题换肤实现
+2. 支持个人信息修改，头像、昵称、个人描述等修改
+3. 添加语音、视频通话
+4. 程序更新实现
 
-toolbar替代actionbar

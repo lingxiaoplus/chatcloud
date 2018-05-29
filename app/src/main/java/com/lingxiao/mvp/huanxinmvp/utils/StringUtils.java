@@ -8,6 +8,9 @@ import com.lingxiao.mvp.huanxinmvp.R;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Time;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
