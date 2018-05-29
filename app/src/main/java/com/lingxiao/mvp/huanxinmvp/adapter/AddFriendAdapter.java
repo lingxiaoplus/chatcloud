@@ -14,11 +14,13 @@ import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel_Table;
 import com.lingxiao.mvp.huanxinmvp.utils.GlideHelper;
+import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.SkinUtil;
 import com.lingxiao.mvp.huanxinmvp.utils.StringUtils;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -70,8 +72,10 @@ public class AddFriendAdapter extends RecyclerView.Adapter<AddFriendAdapter.MyVi
         GlideHelper.realTimeLoading(
                 (String) avUsers.get(position).get(ContentValue.PROTRAIT),
                     holder.imageView);
+        LogUtils.i("查询好友列表  "+ Arrays.toString(contacts.toArray()));
         if (contacts.contains(username)) {
             //已经是好友了
+            LogUtils.i("已经是好友了  "+username);
             holder.addImage.setImageResource(R.drawable.ic_img_friend);
             holder.addImage.setEnabled(false);
         } else {

@@ -7,9 +7,12 @@ import com.avos.avoscloud.AVUser;
 import com.avos.avoscloud.SignUpCallback;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
+import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
 import com.lingxiao.mvp.huanxinmvp.presenter.RegistPresenter;
 import com.lingxiao.mvp.huanxinmvp.utils.MD5Util;
+import com.lingxiao.mvp.huanxinmvp.utils.SpUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ThreadUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.UIUtils;
 import com.lingxiao.mvp.huanxinmvp.view.RegistView;
 
 import java.io.UnsupportedEncodingException;
@@ -67,6 +70,10 @@ public class RegistPresenterImpl implements RegistPresenter{
                                 ThreadUtils.runOnMainThread(new Runnable() {
                                     @Override
                                     public void run() {
+                                        SpUtils.putString(UIUtils.getContext(),
+                                                ContentValue.KEY_USERNAME, username);
+                                        SpUtils.putString(UIUtils.getContext(),
+                                                ContentValue.KEY_PSD, psd);
                                         mRegistView.onGetRegistState(objId,username,md5Psd,true,null);
                                     }
                                 });

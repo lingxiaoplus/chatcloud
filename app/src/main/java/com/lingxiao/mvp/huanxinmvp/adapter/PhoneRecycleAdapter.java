@@ -57,7 +57,7 @@ public class PhoneRecycleAdapter extends RecyclerView.Adapter<PhoneRecycleAdapte
                 holder.imgHead,
                 model.getUpdateAt());
         if (position == 0){
-            holder.textSelect.setVisibility(View.GONE);
+            //holder.textSelect.setVisibility(View.GONE);
         }else {
             String current = ChineseCharToEnUtil
                     .getFirstChar(model.nickName);
@@ -69,6 +69,7 @@ public class PhoneRecycleAdapter extends RecyclerView.Adapter<PhoneRecycleAdapte
                 holder.textSelect.setVisibility(View.VISIBLE);
             }
         }
+
         //给条目设置点击事件
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

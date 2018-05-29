@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:hint="昵称"
             android:maxLines="1"
-            android:textColorHint="@color/black_alpha_208"
+            android:textColorHint="@color/textSecond"
             android:gravity="center"
             />
         <EditText
@@ -71,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="个人描述"
-            android:textColorHint="@color/black_alpha_208"
+            android:textColorHint="@color/textSecond"
             android:gravity="center"
             />
     </LinearLayout>

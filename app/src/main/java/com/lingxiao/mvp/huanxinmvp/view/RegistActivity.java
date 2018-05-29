@@ -93,11 +93,6 @@ public class RegistActivity extends BaseActivity implements RegistView {
             btSendCode.setText("发送验证码");
         }
         if (isRegist) {
-
-            SpUtils.putString(UIUtils.getContext(),
-                    ContentValue.KEY_USERNAME, username);
-            SpUtils.putString(UIUtils.getContext(),
-                    ContentValue.KEY_PSD, pswd);
             Intent intent = new Intent(UIUtils.getContext(),
                     RegistInfoActivity.class);
             intent.putExtra("objectid", objcectId);

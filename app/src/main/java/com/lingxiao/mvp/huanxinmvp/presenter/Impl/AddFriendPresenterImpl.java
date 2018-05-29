@@ -12,6 +12,7 @@ import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel_Table;
 import com.lingxiao.mvp.huanxinmvp.presenter.AddFriendPresenter;
 import com.lingxiao.mvp.huanxinmvp.utils.DBUtils;
+import com.lingxiao.mvp.huanxinmvp.utils.LogUtils;
 import com.lingxiao.mvp.huanxinmvp.utils.ThreadUtils;
 import com.lingxiao.mvp.huanxinmvp.view.AddFriendView;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -75,6 +76,7 @@ public class AddFriendPresenterImpl implements AddFriendPresenter{
                                     .where(ContactsModel_Table.contactUserName.isNot(currentuser))
                                     .queryList();
                             for (int i = 0; i < modelList.size(); i++) {
+                                LogUtils.i("数据库中存在的好友 "+modelList.get(i).contactUserName);
                                 userList.add(modelList.get(i).contactUserName);
                             }
                             addFriendView.onQuerySuccess(list,userList,true,null);

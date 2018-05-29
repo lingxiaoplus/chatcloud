@@ -19,6 +19,7 @@ import com.lingxiao.mvp.huanxinmvp.R;
 import com.lingxiao.mvp.huanxinmvp.event.ExitEvent;
 import com.lingxiao.mvp.huanxinmvp.global.ActivityManager;
 import com.lingxiao.mvp.huanxinmvp.global.ContentValue;
+import com.lingxiao.mvp.huanxinmvp.model.ContactsModel;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel;
 import com.lingxiao.mvp.huanxinmvp.model.UserModel_Table;
 import com.lingxiao.mvp.huanxinmvp.utils.SpUtils;
@@ -165,6 +166,7 @@ public class SettingActivity extends BaseActivity {
                 //退出登录，删除表  同步方法
                 SQLite.delete()
                         .from(UserModel.class).execute();
+                SQLite.delete().from(ContactsModel.class).execute();
                 EventBus.getDefault().post(new ExitEvent(EMError.USER_ALREADY_EXIST));
                 ActivityManager.getAppManager().AppExit(getApplicationContext());
             }
