@@ -117,7 +117,8 @@ public class CallPhoneActivity extends BaseActivity implements CallView {
             tvCallName.setTextColor(Color.WHITE);
         }
         if (null != mProtrait){
-            GlideHelper.loadImageView(mProtrait,imgCallHead);
+            GlideHelper.loadImageWithData(mProtrait,imgCallHead,callTime);
+            //GlideHelper.loadImageView(mProtrait,imgCallHead);
         }
         if (null != nickName){
             tvCallName.setText(nickName);

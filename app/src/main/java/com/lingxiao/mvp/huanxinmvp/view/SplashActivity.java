@@ -53,7 +53,9 @@ public class SplashActivity extends BaseActivity implements SplashView {
         public void run() {
             //初始化leancloud的sdk  只能在主线程初始化
             // 初始化参数依次为 this, AppId, AppKey
-            AVOSCloud.initialize(UIUtils.getContext(),"V8YIQ6I9vYpfNFUTKQPsSTGH-9Nh9j0Va","xOfaV4IJIzzCsCHIzU1zTBkE");
+            AVOSCloud.initialize(UIUtils.getContext(),
+                    UIUtils.getString(R.string.LeanCloudId),
+                    UIUtils.getString(R.string.LeanCloudKey));
             // 放在 SDK 初始化语句 AVOSCloud.initialize() 后面，只需要调用一次即可     开启调试日志
             AVOSCloud.setDebugLogEnabled(true);
             getUpdate();

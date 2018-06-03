@@ -29,7 +29,7 @@ public class NewsFragment extends BaseFragment implements FindView {
     private LinearLayoutManager manager;
     private FindPresenter findPresenter;
     private String url;
-    private List<FindBean.DetailMsg> mList = new ArrayList<>();
+    private ArrayList<FindBean.DetailMsg> mList = new ArrayList<>();
     @Override
     public void initData() {
         Bundle bundle = getArguments();

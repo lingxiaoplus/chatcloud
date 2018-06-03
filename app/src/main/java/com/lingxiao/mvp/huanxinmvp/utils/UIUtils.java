@@ -85,6 +85,15 @@ public class UIUtils {
     }
 
     /**
+     * 通过id获取字符串
+     * @param id
+     * @return
+     */
+    public static String getString(int id){
+        String res = App.getContext().getString(id);
+        return res;
+    }
+    /**
      * 改变SVG图片着色
      * @param imageView
      * @param iconResId svg资源id

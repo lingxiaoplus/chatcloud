@@ -10,6 +10,9 @@
     <string name="AccessKey">V_ZleIlYzHPjekmAuRvDkkXLdV_MDkk69VZWM12f</string>
     <string name="SecretKey">U8SndxcceqMZGIKvhfPL3gEPkYRN_NhrP75cJlOH</string>
 
+    <string name="LeanCloudId">V8YIQ6I9vYpfNFUTKQPsSTGH-9Nh9j0Va</string>
+    <string name="LeanCloudKey">xOfaV4IJIzzCsCHIzU1zTBkE</string>
+
     <string name="str_recorder_normal">按住说话</string>
     <string name="str_recorder_recording">松开结束</string>
     <string name="str_recorder_want_cancel">松开手指，取消发送</string>

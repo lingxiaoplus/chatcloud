@@ -42,7 +42,7 @@ public class FindPresenterImpl implements FindPresenter{
         HttpUtils.doGet(url+initPage+currentPage, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                LogUtils.i("更新数据错误："+e.getMessage());
             }
 
             @Override
