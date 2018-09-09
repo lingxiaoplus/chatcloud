@@ -49,6 +49,6 @@ ext{
     geniusVersion = '2.0.0'
     skinSupportVersion = "3.0.0"
     appcompatVersion = "26.1.0"
-    qiniuVersion = "7.3.+"
+    qiniuVersion = "7.3.4"
     imageSelectorVersion = "1.4.0"
 }

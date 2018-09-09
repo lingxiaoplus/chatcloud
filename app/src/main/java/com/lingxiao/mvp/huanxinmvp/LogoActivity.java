@@ -11,7 +11,6 @@ public class LogoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         StartActivity(SplashActivity.class,true);
     }
 }
